@@ -1,11 +1,11 @@
 import Menu from '../components/Menu.jsx'
-import FrontPage from '../components/FrontPage.jsx'
+import MainPage from '../components/MainPage.jsx'
 
 export default function Home() {
   return (
     <div>
       <Menu></Menu>
-    <FrontPage></FrontPage>
+      <MainPage></MainPage>
     </div>
   )
 }
