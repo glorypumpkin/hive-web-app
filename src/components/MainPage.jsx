@@ -1,11 +1,11 @@
-export default function FrontPage() {
+export default function MainPage() {
   return (
     <div
       id="FrontPageRoot"
       className="overflow-hidden bg-[rgba(224,_187,_55,_0.1)] flex flex-row gap-5 w-full items-center pt-12 px-16 justify-center"
     >
       <img
-        src="https://file.rendit.io/n/pATthcwzrnHECNN5jeJw.png"
+        src="https://file.rendit.io/n/pATthcwzrnHECNN5jeJw.png" //problem with pic
         id="Image1"
         className="mb-12"
       />

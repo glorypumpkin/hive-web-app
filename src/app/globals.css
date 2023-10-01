@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+
+    .input-container {
+        @apply flex flex-col gap-2 mb-8 ml-12 mr-10
+    }
+
+    .reg-form-input {
+        @apply border-solid border-[#c6beaa] overflow-hidden bg-white self-stretch pl-4 h-12 border rounded-lg placeholder:font-bold placeholder-[#756d58] placeholder-opacity-[0.22];
+    }
+
+    .small-header {
+        @apply text-sm font-bold;
+    }
+
+    .line {
+        @apply border-solid border-[#c6beaa] w-48 shrink-0 h-px border-t border-b-0 border-x-0;
+    }
+}
