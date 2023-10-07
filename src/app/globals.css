@@ -19,4 +19,16 @@
     .line {
         @apply border-solid border-[#c6beaa] w-48 shrink-0 h-px border-t border-b-0 border-x-0;
     }
+
+    .main-page {
+        @apply overflow-hidden flex flex-row gap-5 w-full items-center px-16 justify-center h-[100vh]
+    }
+
+    .container-text {
+        @apply text-center text-2xl font-semibold
+    }
+
+    .idea-bubble {
+        @apply bg-white flex justify-center items-center rounded-[50px] w-1/2 h-20
+    }
 }
