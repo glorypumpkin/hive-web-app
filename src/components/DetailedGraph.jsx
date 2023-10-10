@@ -3,7 +3,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Responsi
 import { useState } from 'react';
 
 
-export default function BigGraphPage() {
+export default function DetailedGraph() {
 
     const [showDots, setShowDots] = useState(true);
 

@@ -1,87 +1,87 @@
-
+'use client'
+import { Weather } from "./Weather"
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Rectangle } from 'recharts';
+import Link from 'next/link';
 
 export default function Dashboard() {
     return (
-        <div className="bg-[#fffae7] flex flex-col gap-16 w-full px-6 pt-16 pb-10">
+        <div className="bg-[##1976d214] flex flex-col gap-16 w-full px-6 pt-16 pb-10">
             <div className="flex flex-row mr-1 gap-12 items-start">
                 <Weather> </Weather>
-                <div className=" bg-[#e7ecff] w-2/5 h-[340px] rounded-[50px]" />
+                <DataPrediction> </DataPrediction>
             </div>
             <div className="flex flex-row mr-1 gap-12 items-start">
-                <div className=" bg-[#e7ecff] w-1/2 h-[380px] rounded-[50px]" />
-                <div className=" bg-[#e7ecff] w-1/2 h-[380px] rounded-[50px]" />
+                <SmallWeightGraph> </SmallWeightGraph>
+                <SmallTemperatureGraph> </SmallTemperatureGraph>
             </div>
         </div>
     )
 }
 
-export function Weather() {
+const data = [
+    { month: 'January', weight: 2 },
+    { month: 'Februrary', weight: 16 },
+    { month: 'March', weight: 10 },
+    { month: 'April', weight: 15 },
+    { month: 'May', weight: 3 },
+    { month: 'June', weight: 5 },
+    { month: 'July', weight: 20 },
+    { month: 'August', weight: 16 },
+    { month: 'September', weight: 12 },
+    { month: 'October', weight: 15 },
+    { month: 'November', weight: 18 },
+    { month: 'December', weight: 20 }];
+// fix data later (from main page to dashboard)
 
-    const weatherIcons = {
-        sunny: "/sunny.png",
-        partialcloud: "/partial-cloudy.png",
-        mostlycloudy: "/mostly-cloudly.png",
-        stormy: "/stormy.png",
-        rainyday: "/rainy.png",
-        snow: "/snowfell.png",
-        heavywind: "/heavy-wind.png",
-        hailstorm: "/hailstorm.png"
-    }
-
-    const tempText = {
-        day: "Day: 20 C",
-        night: "Night: 20 C"
-    }
-
-    function WeatherElement({ weatherType, tempText }) {
-        const imageSrc = weatherIcons[weatherType];
-
-        return (
-            <div className="">
-                <img
-                    src={imageSrc}
-                    alt={weatherType}
-                    className=""
-                />
-                {tempText.day}
-                <br />
-                {tempText.night}
-            </div>
-        )
-    }
+export function DataPrediction() {
 
     return (
-        <div
-            id="WeatherApiRoot"
-            className=" bg-[#e7ecff] grid grid-rows-2 w-3/5 px-3 rounded-[50px] h-[340px]">
-            <div className="grid grid-flow-col-dense">
-                <div className="flex items-center justify-center">
-                    <img
-                        src={weatherIcons.sunny}
-                        id="Sunny"
-                        className="top-0 left-0"
-                    />
-                </div>
-                <div className="text-xs col-span-3 flex items-center">
-                    {/* temporary solution */}
-                    Temperature:
-                    <br />
-                    Humidity:
-                    <br />
-                    Wind:
-                </div>
+        <div className="dashboard-shadow bg-[#e7ecff] w-2/5 h-[340px] rounded-[50px] flex flex-row justify-evenly items-center">
+            <div className=" ml-5">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti quo, pariatur optio culpa eligendi dignissimos perspiciatis, recusandae dolores earum sequi dolorum, sapiente error animi! Eius voluptatum quas nobis consectetur. Dolorem!</p>
             </div>
-            <div
-                id="WeatherPrediction"
-                className="grid grid-cols-7">
-                {WeatherElement({ weatherType: "partialcloud", tempText: tempText })}
-                {WeatherElement({ weatherType: "mostlycloudy", tempText: tempText })}
-                {WeatherElement({ weatherType: "stormy", tempText: tempText })}
-                {WeatherElement({ weatherType: "rainyday", tempText: tempText })}
-                {WeatherElement({ weatherType: "snow", tempText: tempText })}
-                {WeatherElement({ weatherType: "heavywind", tempText: tempText })}
-                {WeatherElement({ weatherType: "hailstorm", tempText: tempText })}
+            <div className="">
+                <LineChart width={400} height={300} data={data}>
+                    <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+                    <CartesianGrid stroke="#ccc" />
+                    <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
+                    <YAxis tick={{ fontSize: 10 }} />
+                </LineChart>
             </div>
+        </div>
+    )
+}
+
+export function SmallWeightGraph() {
+    return (
+        <div className="dashboard-shadow bg-[#e7ecff] w-1/2 h-[380px] rounded-[50px] items-center justify-center" >
+            <h2>Weight</h2>
+            <div>
+                <LineChart width={800} height={300} data={data}>
+                    <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+                    <CartesianGrid stroke="#ccc" />
+                    <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
+                    <YAxis tick={{ fontSize: 10 }} />
+                </LineChart>
+            </div>
+            <Link href="/dashboard/detailed-graph">More info</Link>
+        </div>
+    )
+}
+
+export function SmallTemperatureGraph() {
+    return (
+        <div className="dashboard-shadow bg-[#e7ecff] w-1/2 h-[380px] rounded-[50px] items-center justify-center" >
+            <h2>Temperature</h2>
+            <div>
+                <LineChart width={800} height={300} data={data}>
+                    <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+                    <CartesianGrid stroke="#ccc" />
+                    <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
+                    <YAxis tick={{ fontSize: 10 }} />
+                </LineChart>
+            </div>
+            <Link href="/dashboard/detailed-graph">More info</Link>
         </div>
     )
 }
