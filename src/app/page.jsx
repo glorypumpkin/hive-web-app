@@ -2,7 +2,6 @@ import Menu from '@/components/Menu'
 import MainPage from '@/components/MainPage'
 import RegistrationForm from '../components/RegistrationForm.jsx'
 import GraphExample from '@/components/GraphExample'
-import BigGraphPage from '@/components/BigGraphPage.jsx'
 import Link from 'next/link'
 
 export default function Home() {

@@ -20,7 +20,7 @@ export default function MainPage() {
               sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
               qui ratione voluptatem sequi nesciunt. Aliquam ante. Mauris suscipit,
               ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis
-              velit mauris vel metus. In rutrum. Maecenas libero.{" "}
+              velit mauris vel metus. In rutrum. Maecenas libero.
             </p>
           </div>
         </div>

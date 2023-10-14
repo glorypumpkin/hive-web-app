@@ -35,4 +35,20 @@
     .dashboard-shadow {
         @apply shadow-[0px_0px_50px_5px_#4541332e]
     }
+
+    .history-container {
+        @apply bg-[#1976d214] flex flex-col justify-center w-full items-center hover:bg-[#3877b53b] cursor-pointer
+    }
+
+    .graph-type-container {
+        @apply bg-[#1976d214] self-stretch flex flex-col justify-center gap-3 h-32 rounded-[50px] pl-16 items-start
+    }
+
+    .type-button {
+        @apply rounded-[5px] bg-gray-300 w-4 h-4 hover:bg-gray-400 cursor-pointer
+    }
+
+    .graph-checkbox {
+        @apply flex flex-row items-center gap-1
+    }
 }

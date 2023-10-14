@@ -1,10 +1,11 @@
 'use client'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Rectangle } from 'recharts';
 import { useState } from 'react';
-
+import Calendar from './Calendar';
 
 export default function DetailedGraph() {
 
+    const periods = ['This day', '7 days', '21 days', 'Month', '1 cvartal', '2 cvartal', '3 cvartal', '4 cvartal', 'Year'];
     const [showDots, setShowDots] = useState(true);
 
     const data = [
@@ -22,7 +23,7 @@ export default function DetailedGraph() {
         { month: 'December', weight: 20 }];
 
     const renderLineChart = (
-        <ResponsiveContainer width={850} height={600}>
+        <ResponsiveContainer width={1200} height={750}>
             <LineChart
                 data={data}
                 margin={{
@@ -42,10 +43,57 @@ export default function DetailedGraph() {
         </ResponsiveContainer>
     );
 
+
+
     return (
-        <div className="bg-[rgba(224,_187,_55,_0.1)]">
-            {renderLineChart}
+        <div className=" bg-[rgba(25,_118,_210,_0.08)] flex pt-10">
+            <div className="flex flex-col gap-5 mt-6">
+                {renderLineChart}
+                <div className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden flex flex-row mx-2 rounded-[50px] h-16">
+                    {periods.map((period, index) => (
+                        <div key={index} className="history-container">
+                            <button className="font-sans font-light">{period}</button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="flex flex-col gap-16 w-full items-center">
+                <div className="flex flex-col gap-6 w-[250px]">
+                    <div className="text-center text-xl font-sans font-semibold">
+                        Select graph type
+                    </div>
+                    <div className="graph-type-container shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)]">
+                        {['Weight', 'Temperature', 'Weather'].map((type, index) => (
+                            <div key={index} className="graph-checkbox">
+                                <button className="type-button"></button>
+                                <div className="font-sans font-light">{type}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className=" flex flex-col gap-12 w-[377px] items-center">
+                    <div className="self-stretch flex flex-col gap-4 items-center">
+                        <div className="text-center text-xl font-sans font-semibold">
+                            Select needed date or interval
+                        </div>
+                        <Calendar></Calendar>
+                    </div>
+                    <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden bg-[rgba(25,_118,_210,_0.08)] flex flex-row justify-center gap-3 w-3/5 h-12 shrink-0 items-center rounded-[50px] hover:bg-[#3877b53b] cursor-pointer">
+                        <img
+                            src="https://file.rendit.io/n/tCph0baGyDvCMUzNZVzt.svg"
+                            className="w-6 shrink-0"
+                        />
+                        <div className="text-center text-xl font-sans font-semibold">
+                            Add extra graph
+                        </div>
+                    </button>
+                </div>
+            </div>
         </div>
+
+
+
+
     )
 }
 
