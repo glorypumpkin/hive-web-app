@@ -7,8 +7,10 @@ export default function DetailedGraph() {
 
     const periods = ['This day', '7 days', '21 days', 'Month', '1 cvartal', '2 cvartal', '3 cvartal', '4 cvartal', 'Year'];
     const [showDots, setShowDots] = useState(true);
+    const [dataKeyXA, setDataKeyXA] = useState('month');
+    const [dataKeyYA, setDataKeyYA] = useState('weight');
 
-    const data = [
+    const dataYear = [
         { month: 'January', weight: 2 },
         { month: 'Februrary', weight: 16 },
         { month: 'March', weight: 10 },
@@ -22,40 +24,85 @@ export default function DetailedGraph() {
         { month: 'November', weight: 18 },
         { month: 'December', weight: 20 }];
 
+    const [data, setData] = useState(dataYear);
+
+    const dataWeek = [
+        { day: 'Monday', weight: 2 },
+        { day: 'Tuesday', weight: 16 },
+        { day: 'Wednesday', weight: 10 },
+        { day: 'Thursday', weight: 15 },
+        { day: 'Friday', weight: 3 },
+        { day: 'Saturday', weight: 5 },
+        { day: 'Sunday', weight: 20 }
+    ];
+
+    const dataDay = [
+        { hour: '00:00', weight: 2 },
+        { hour: '06:00', weight: 16 },
+        { hour: '12:00', weight: 10 },
+        { hour: '18:00', weight: 15 }
+    ];
+
     const renderLineChart = (
-        <ResponsiveContainer width={1200} height={750}>
-            <LineChart
-                data={data}
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 0,
-                    bottom: 5
-                }}
-            >
-                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                <Line type="monotone" dataKey="weight" stroke="#8884d8" dot={<CustomDot showDots={showDots} setShowDots={setShowDots} />} />
-                <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 14 }} />
-                <YAxis dataKey="weight" />
-                <Legend />
-                {/* <Tooltip content={<CustomTooltip />} /> */}
-            </LineChart>
-        </ResponsiveContainer>
+
+        <LineChart
+            data={data}
+            margin={{
+                top: 5,
+                right: 30,
+                left: 0,
+                bottom: 5
+            }}
+            width={1200} height={750}
+        >
+            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+            <Line type="monotone" dataKey="weight" stroke="#8884d8" dot={<CustomDot showDots={showDots} setShowDots={setShowDots} />} />
+            <XAxis dataKey={dataKeyXA} angle={-35} textAnchor="end" tick={{ fontSize: 14 }} />
+            <YAxis dataKey={dataKeyYA} />
+            <Legend />
+            {/* <Tooltip content={<CustomTooltip />} /> */}
+        </LineChart>
+
     );
 
 
+    function OnPeriodClicked(period) {
+        if (period === 'This day') {
+            setData(dataDay);
+            setDataKeyXA('hour');
+            setDataKeyYA('weight');
+        }
+        else if (period === '7 days') {
+            setData(dataWeek);
+            setDataKeyXA('day');
+            setDataKeyYA('weight');
+            console.log('clicked');
+        }
+        else if (period === 'Year') {
+            setData(dataYear);
+            setDataKeyXA('month');
+            setDataKeyYA('weight');
+        }
+
+    }
+
+    const historyLine = (
+        <div className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden flex flex-row mx-2 rounded-[50px] h-16">
+            {periods.map((period, index) => (
+                <div key={index} className="history-container">
+                    <button className="font-sans font-light"
+                        onClick={() => OnPeriodClicked(period)}
+                    >{period}</button>
+                </div>
+            ))}
+        </div>
+    )
 
     return (
         <div className=" bg-[rgba(25,_118,_210,_0.08)] flex pt-10">
             <div className="flex flex-col gap-5 mt-6">
                 {renderLineChart}
-                <div className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden flex flex-row mx-2 rounded-[50px] h-16">
-                    {periods.map((period, index) => (
-                        <div key={index} className="history-container">
-                            <button className="font-sans font-light">{period}</button>
-                        </div>
-                    ))}
-                </div>
+                {historyLine}
             </div>
             <div className="flex flex-col gap-16 w-full items-center">
                 <div className="flex flex-col gap-6 w-[250px]">
@@ -98,8 +145,8 @@ export default function DetailedGraph() {
 }
 
 export function CustomDot(props) {
-    console.log(props);
-    const { cx, cy, value, label, payload, width: graphWidth, height: graphHeight, showDots, setShowDots } = props;
+
+    const { cx, cy, payload, width: graphWidth, height: graphHeight, showDots, setShowDots } = props;
     const { month, weight } = payload;
     const tooltipWidth = 160;
     const tooltipHeight = 100;
@@ -117,6 +164,10 @@ export function CustomDot(props) {
     const handleDotEnter = () => {
         setShowDots(false);
         setInsideRect(true);
+        console.log(payload);
+        for (let i = 0; i < payload.weight; i++) {
+            console.log('a');
+        } // TODO: add arrows to show weight change
     }
 
     const handleDotLeave = () => {
@@ -136,6 +187,7 @@ export function CustomDot(props) {
 
         </g>
     )
+
 
 
     const handleNoteChange = (e) => {
@@ -170,19 +222,21 @@ export function CustomDot(props) {
             {
                 showTooltip &&
                 <foreignObject x={tooltipPosition.x} y={tooltipPosition.y} width={tooltipWidth} height={tooltipHeight}>
-                    <div className="bg-gray-400 rounded-lg" onMouseEnter={handleTooltipEnter}
+                    <div className="bg-[#1976d214] rounded-[15px] flex flex-col items-center font-sans font-light" onMouseEnter={handleTooltipEnter}
                         onMouseLeave={handleTooltipLeave}
                     >
-                        <p className="label">{`${month} : ${weight}kg`}</p>
-                        <div>
-                            <textarea
-                                value={note}
-                                placeholder='Add a note...'
-                                onChange={handleNoteChange}
-                                className="w-full"
-                            ></textarea>
-                            <button>Save</button>
-                        </div>
+                        <p className="label">
+                            {month} {weight} kg {/*fix how label shows data */}
+                        </p>
+
+                        <textarea
+                            value={note}
+                            placeholder='Add a note...'
+                            onChange={handleNoteChange}
+                            className="w-full"
+                        ></textarea>
+                        <button>Save</button>
+
                     </div>
                 </foreignObject>
             }
