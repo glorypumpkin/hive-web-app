@@ -1,7 +1,22 @@
 'use client'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Rectangle } from 'recharts';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Calendar from './Calendar';
+
+const dataYear = [
+    { month: 'January', weight: 2, temperature: 10 },
+    { month: 'Februrary', weight: 16, temperature: 15 },
+    { month: 'March', weight: 10, temperature: 20 },
+    { month: 'April', weight: 15, temperature: 25 },
+    { month: 'May', weight: 3, temperature: 30 },
+    { month: 'June', weight: 5, temperature: 35 },
+    { month: 'July', weight: 20, temperature: 40 },
+    { month: 'August', weight: 16, temperature: 15 },
+    { month: 'September', weight: 12, temperature: 20 },
+    { month: 'October', weight: 15, temperature: 25 },
+    { month: 'November', weight: 18, temperature: 30 },
+    { month: 'December', weight: 20, temperature: 35 }];
+// fix data!!!!
 
 export default function DetailedGraph() {
 
@@ -9,31 +24,27 @@ export default function DetailedGraph() {
     const [showDots, setShowDots] = useState(true);
     const [dataKeyXA, setDataKeyXA] = useState('month');
     const [dataKeyYA, setDataKeyYA] = useState('weight');
-
-    const dataYear = [
-        { month: 'January', weight: 2 },
-        { month: 'Februrary', weight: 16 },
-        { month: 'March', weight: 10 },
-        { month: 'April', weight: 15 },
-        { month: 'May', weight: 3 },
-        { month: 'June', weight: 5 },
-        { month: 'July', weight: 20 },
-        { month: 'August', weight: 16 },
-        { month: 'September', weight: 12 },
-        { month: 'October', weight: 15 },
-        { month: 'November', weight: 18 },
-        { month: 'December', weight: 20 }];
-
+    const [hydrated, setHydrated] = useState(false);
     const [data, setData] = useState(dataYear);
+    const [activeType, setActiveType] = useState([]);
+
+
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+    if (!hydrated) {
+        return null;
+    }
+
 
     const dataWeek = [
-        { day: 'Monday', weight: 2 },
-        { day: 'Tuesday', weight: 16 },
-        { day: 'Wednesday', weight: 10 },
-        { day: 'Thursday', weight: 15 },
-        { day: 'Friday', weight: 3 },
-        { day: 'Saturday', weight: 5 },
-        { day: 'Sunday', weight: 20 }
+        { day: 'Monday', weight: 2, temperature: 10 },
+        { day: 'Tuesday', weight: 16, temperature: 15 },
+        { day: 'Wednesday', weight: 10, temperature: 20 },
+        { day: 'Thursday', weight: 15, temperature: 25 },
+        { day: 'Friday', weight: 3, temperature: 30 },
+        { day: 'Saturday', weight: 5, temperature: 35 },
+        { day: 'Sunday', weight: 20, temperature: 40 }
     ];
 
     const dataDay = [
@@ -46,6 +57,7 @@ export default function DetailedGraph() {
     const renderLineChart = (
 
         <LineChart
+            id='detailed-graph'
             data={data}
             margin={{
                 top: 5,
@@ -53,36 +65,47 @@ export default function DetailedGraph() {
                 left: 0,
                 bottom: 5
             }}
-            width={1200} height={750}
+            width={1200} height={800}
         >
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-            <Line type="monotone" dataKey="weight" stroke="#8884d8" dot={<CustomDot showDots={showDots} setShowDots={setShowDots} />} />
+            <Line type="monotone" dataKey={dataKeyYA} stroke="#8884d8" dot={<CustomDot showDots={showDots} setShowDots={setShowDots} />} /> {/*TODO: add more smooth line animation when changing types*/}
+            {console.log('i work')}
             <XAxis dataKey={dataKeyXA} angle={-35} textAnchor="end" tick={{ fontSize: 14 }} />
-            <YAxis dataKey={dataKeyYA} />
+            <YAxis />
             <Legend />
-            {/* <Tooltip content={<CustomTooltip />} /> */}
         </LineChart>
 
     );
 
 
     function OnPeriodClicked(period) {
+
         if (period === 'This day') {
             setData(dataDay);
             setDataKeyXA('hour');
-            setDataKeyYA('weight');
         }
         else if (period === '7 days') {
             setData(dataWeek);
             setDataKeyXA('day');
-            setDataKeyYA('weight');
             console.log('clicked');
         }
         else if (period === 'Year') {
             setData(dataYear);
             setDataKeyXA('month');
-            setDataKeyYA('weight');
         }
+        // else if (period === '21 days') {
+        //     setData(dataWeek);
+        //     setDataKeyXA('day');
+        // }
+        // else if (period === 'Month') {
+        //     setData(dataWeek);
+        //     setDataKeyXA('day');
+        // }
+        // else if (period === '1 cvartal') {
+        //     setData(dataWeek);
+        //     setDataKeyXA('day');
+        //     setDataKeyYA('weight');
+        // }
 
     }
 
@@ -98,10 +121,43 @@ export default function DetailedGraph() {
         </div>
     )
 
+    function TypeButton({ type, onTypeClicked }) {
+
+        return (
+            <div className="graph-checkbox">
+                <button className={"type-button " + (activeType.includes(type) ? 'bg-black' : '')} //TODO: default the weight button is active
+                    onClick={() => { onTypeClicked(type) }
+                    }
+                ></button>
+                <div className="font-sans font-light">{type}</div>
+            </div>
+        )
+    }
+
+    function onTypeClicked(type) {
+        if (activeType.includes(type)) {
+            // If the clicked button is already active, deactivate it
+            setActiveType(activeType.filter((active) => active !== type));
+        } else {
+            // Otherwise, activate the button
+            setActiveType([...activeType, type]);
+        }
+        console.log(activeType);
+        // Handle other logic based on the selected type here
+        if (type === 'Weight') {
+            setDataKeyYA('weight');
+        } else if (type === 'Temperature') {
+            setDataKeyYA('temperature');
+        } else if (type === 'Weather') {
+            console.log('clicked Weather');
+        }
+
+    }
+
     return (
         <div className=" bg-[rgba(25,_118,_210,_0.08)] flex pt-10">
-            <div className="flex flex-col gap-5 mt-6">
-                {renderLineChart}
+            <div className="flex flex-col gap-5 mt-3">
+                {hydrated && renderLineChart}
                 {historyLine}
             </div>
             <div className="flex flex-col gap-16 w-full items-center">
@@ -111,10 +167,7 @@ export default function DetailedGraph() {
                     </div>
                     <div className="graph-type-container shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)]">
                         {['Weight', 'Temperature', 'Weather'].map((type, index) => (
-                            <div key={index} className="graph-checkbox">
-                                <button className="type-button"></button>
-                                <div className="font-sans font-light">{type}</div>
-                            </div>
+                            <TypeButton key={index} type={type} onTypeClicked={onTypeClicked} />
                         ))}
                     </div>
                 </div>

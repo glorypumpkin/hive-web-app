@@ -2,6 +2,7 @@
 import { Weather } from "./Weather"
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Rectangle } from 'recharts';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 export default function Dashboard() {
     return (
@@ -34,35 +35,56 @@ const data = [
 // fix data later (from main page to dashboard)
 
 export function DataPrediction() {
+    const [hydrated, setHydrated] = useState(false);
 
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+    if (!hydrated) {
+        return null;
+    }
     return (
         <div className="dashboard-shadow bg-[#e7ecff] w-2/5 h-[340px] rounded-[50px] flex flex-row justify-evenly items-center">
             <div className=" ml-5">
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti quo, pariatur optio culpa eligendi dignissimos perspiciatis, recusandae dolores earum sequi dolorum, sapiente error animi! Eius voluptatum quas nobis consectetur. Dolorem!</p>
             </div>
             <div className="">
-                <LineChart width={400} height={300} data={data}>
-                    <Line type="monotone" dataKey="weight" stroke="#8884d8" />
-                    <CartesianGrid stroke="#ccc" />
-                    <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
-                    <YAxis tick={{ fontSize: 10 }} />
-                </LineChart>
+                {hydrated && (
+
+                    <LineChart id="data-prediction-graph" width={400} height={300} data={data}>
+                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                        <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+                        <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
+                        <YAxis tick={{ fontSize: 10 }} />
+                    </LineChart>
+                )}
             </div>
         </div>
     )
 }
 
 export function SmallWeightGraph() {
+    const [hydrated, setHydrated] = useState(false);
+
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+    if (!hydrated) {
+        return null;
+    }
     return (
         <div className="dashboard-shadow bg-[#e7ecff] w-1/2 h-[380px] rounded-[50px] items-center justify-center" >
             <h2>Weight</h2>
             <div>
-                <LineChart width={800} height={300} data={data}>
-                    <Line type="monotone" dataKey="weight" stroke="#8884d8" />
-                    <CartesianGrid stroke="#ccc" />
-                    <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
-                    <YAxis tick={{ fontSize: 10 }} />
-                </LineChart>
+                {hydrated && (
+
+                    <LineChart id="small-weight-graph" width={800} height={300} data={data}>
+                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                        <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+                        <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
+                        <YAxis tick={{ fontSize: 10 }} />
+                    </LineChart>
+                )}
             </div>
             <Link href="/dashboard/detailed-graph">More info</Link>
         </div>
@@ -70,16 +92,28 @@ export function SmallWeightGraph() {
 }
 
 export function SmallTemperatureGraph() {
+    const [hydrated, setHydrated] = useState(false);
+
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+    if (!hydrated) {
+        return null;
+    }
     return (
         <div className="dashboard-shadow bg-[#e7ecff] w-1/2 h-[380px] rounded-[50px] items-center justify-center" >
             <h2>Temperature</h2>
             <div>
-                <LineChart width={800} height={300} data={data}>
-                    <Line type="monotone" dataKey="weight" stroke="#8884d8" />
-                    <CartesianGrid stroke="#ccc" />
-                    <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
-                    <YAxis tick={{ fontSize: 10 }} />
-                </LineChart>
+                {hydrated && (
+
+                    <LineChart id="small-temperature-graph" width={800} height={300} data={data}>
+                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                        <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+                        <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
+                        <YAxis tick={{ fontSize: 10 }} />
+                    </LineChart>
+                )}
+
             </div>
             <Link href="/dashboard/detailed-graph">More info</Link>
         </div>
