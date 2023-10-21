@@ -1,4 +1,27 @@
-export default function Calendar() {
+import { DayPicker } from "react-day-picker"
+import "react-day-picker/dist/style.css"
+import React, { useState } from 'react';
+
+export function Calendar() {
+    const [range, setRange] = useState();
+
+
+    return (
+        <div className="shadow-[11px_11px_26px_-2px_rgba(46,_55,_84,_0.08)] bg-[rgba(25,_118,_210,_0.08)] pb-4 px-6 rounded-[50px]">
+            <DayPicker
+                mode="range"
+                selected={range}
+                onSelect={setRange}
+                toMonth={new Date()}
+                captionLayout="dropdown-buttons"
+                fromMonth={new Date(2021, 0)} //TODO: change later
+                showOutsideDays
+            />
+        </div>
+    )
+}
+
+export default function TestCalendar() {
     return (
 
 

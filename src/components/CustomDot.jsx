@@ -1,0 +1,108 @@
+import { useState, useEffect } from 'react';
+
+const units = {
+    weight: 'kg',
+    temperature: 'celsius'
+};
+
+export function CustomDot(props) {
+
+    const { cx, cy, payload, width: graphWidth, height: graphHeight, showDots, setShowDots, type } = props;
+    const { month, weight } = payload;
+    const tooltipWidth = 160;
+    const tooltipHeight = 100;
+
+    const renderLeft = cx + tooltipWidth > graphWidth; //add padding later
+    const renderBottom = cy + tooltipHeight > graphHeight; //add padding later
+
+    const [insideRect, setInsideRect] = useState(false);
+    const [insideTooltip, setInsideTooltip] = useState(false);
+    const [note, setNote] = useState('');
+
+    const showTooltip = insideRect || insideTooltip;
+    const showDot = showDots || showTooltip;
+
+    const handleDotEnter = () => {
+        setShowDots(false);
+        setInsideRect(true);
+        console.log(payload);
+        for (let i = 0; i < payload.weight; i++) {
+            console.log('a');
+        } // TODO: add arrows to show weight change
+    }
+
+    const handleDotLeave = () => {
+        setShowDots(true);
+        setInsideRect(false);
+    }
+
+    const dotDesign = (
+        <g onMouseEnter={handleDotEnter}
+            onMouseLeave={handleDotLeave}>
+            <rect width="32" height="32" x={cx - 16} y={cy - 16} fillOpacity={0} />
+
+            <circle cx={cx} cy={cy} r={5} fill={type === 'weight' ? '#8884d8' : '#82ca9d'}
+                // fillOpacity={showDot ? 1 : 0}
+                className={'duration-200 ease-in-out transition-opacity ' + (showDot ? 'opacity-100' : 'opacity-0')}
+            />
+
+        </g>
+    )
+
+
+
+    const handleNoteChange = (e) => {
+        setNote(e.target.value);
+    };
+
+    let tooltipPosition;
+
+    if (renderLeft && renderBottom) {
+        tooltipPosition = { x: cx - tooltipWidth, y: cy - tooltipHeight }
+    } else if (renderLeft) {
+        tooltipPosition = { x: cx - tooltipWidth, y: cy }
+    } else if (renderBottom) {
+        tooltipPosition = { x: cx, y: cy - tooltipHeight }
+    } else {
+        tooltipPosition = { x: cx, y: cy }
+    }
+
+    const handleTooltipEnter = () => {
+        setShowDots(false);
+        setInsideTooltip(true);
+    }
+
+    const handleTooltipLeave = () => {
+        setShowDots(true);
+        setInsideTooltip(false);
+    }
+
+    return (
+        <g>
+
+            {
+                showTooltip &&
+                <foreignObject x={tooltipPosition.x} y={tooltipPosition.y} width={tooltipWidth} height={tooltipHeight}>
+                    <div className="bg-[#1976d214] rounded-[15px] flex flex-col items-center font-sans font-light" onMouseEnter={handleTooltipEnter}
+                        onMouseLeave={handleTooltipLeave}
+                    >
+                        <p className="label">
+                            {units[type]} {/*fix how label shows data */}
+                        </p>
+
+                        <textarea
+                            value={note}
+                            placeholder='Add a note...'
+                            onChange={handleNoteChange}
+                            className="w-full"
+                        ></textarea>
+                        <button>Save</button>
+
+                    </div>
+                </foreignObject>
+            }
+            {dotDesign}
+        </g>
+
+    )
+}
