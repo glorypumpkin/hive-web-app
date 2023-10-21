@@ -18,16 +18,40 @@ const dataYear = [
     { month: 'December', weight: 20, temperature: 35 }];
 // fix data!!!!
 
+const dataWeek = [
+    { day: 'Monday', weight: 2, temperature: 10 },
+    { day: 'Tuesday', weight: 16, temperature: 15 },
+    { day: 'Wednesday', weight: 10, temperature: 20 },
+    { day: 'Thursday', weight: 15, temperature: 25 },
+    { day: 'Friday', weight: 3, temperature: 30 },
+    { day: 'Saturday', weight: 5, temperature: 35 },
+    { day: 'Sunday', weight: 20, temperature: 40 }
+];
+
+const dataDay = [
+    { hour: '00:00', weight: 2 },
+    { hour: '06:00', weight: 16 },
+    { hour: '12:00', weight: 10 },
+    { hour: '18:00', weight: 15 }
+];
+
+const periods = ['This day', '7 days', '21 days', 'Month', '1 cvartal', '2 cvartal', '3 cvartal', '4 cvartal', 'Year'];
+
+const types = ['Weight', 'Temperature', 'Weather'];
+
+const units = {
+    weight: 'kg',
+    temperature: 'celsius'
+};
+
 export default function DetailedGraph() {
 
-    const periods = ['This day', '7 days', '21 days', 'Month', '1 cvartal', '2 cvartal', '3 cvartal', '4 cvartal', 'Year'];
     const [showDots, setShowDots] = useState(true);
     const [dataKeyXA, setDataKeyXA] = useState('month');
     const [dataKeyYA, setDataKeyYA] = useState('weight');
     const [hydrated, setHydrated] = useState(false);
     const [data, setData] = useState(dataYear);
-    const [activeType, setActiveType] = useState([]);
-
+    const [activeType, setActiveType] = useState(['weight']);
 
     useEffect(() => {
         setHydrated(true);
@@ -36,26 +60,7 @@ export default function DetailedGraph() {
         return null;
     }
 
-
-    const dataWeek = [
-        { day: 'Monday', weight: 2, temperature: 10 },
-        { day: 'Tuesday', weight: 16, temperature: 15 },
-        { day: 'Wednesday', weight: 10, temperature: 20 },
-        { day: 'Thursday', weight: 15, temperature: 25 },
-        { day: 'Friday', weight: 3, temperature: 30 },
-        { day: 'Saturday', weight: 5, temperature: 35 },
-        { day: 'Sunday', weight: 20, temperature: 40 }
-    ];
-
-    const dataDay = [
-        { hour: '00:00', weight: 2 },
-        { hour: '06:00', weight: 16 },
-        { hour: '12:00', weight: 10 },
-        { hour: '18:00', weight: 15 }
-    ];
-
     const renderLineChart = (
-
         <LineChart
             id='detailed-graph'
             data={data}
@@ -68,13 +73,20 @@ export default function DetailedGraph() {
             width={1200} height={800}
         >
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-            <Line type="monotone" dataKey={dataKeyYA} stroke="#8884d8" dot={<CustomDot showDots={showDots} setShowDots={setShowDots} />} /> {/*TODO: add more smooth line animation when changing types*/}
-            {console.log('i work')}
+            {
+                activeType.map((type, index) => (
+                    <Line key={index} type="monotone" dataKey={type}
+                        stroke={type === 'weight' ? '#8884d8' : '#82ca9d'}
+                        dot={<CustomDot showDots={showDots} setShowDots={setShowDots} type={type} />}
+                        yAxisId={units[type]} />
+                ))
+            }
+            {/*TODO: add more smooth line animation when changing types*/}
             <XAxis dataKey={dataKeyXA} angle={-35} textAnchor="end" tick={{ fontSize: 14 }} />
-            <YAxis />
+            <YAxis yAxisId="kg" />
+            <YAxis yAxisId="celsius" orientation="right" />
             <Legend />
         </LineChart>
-
     );
 
 
@@ -122,11 +134,12 @@ export default function DetailedGraph() {
     )
 
     function TypeButton({ type, onTypeClicked }) {
-
+        console.log(type);
+        const typeLowerCase = type.toLowerCase();
         return (
             <div className="graph-checkbox">
-                <button className={"type-button " + (activeType.includes(type) ? 'bg-black' : '')} //TODO: default the weight button is active
-                    onClick={() => { onTypeClicked(type) }
+                <button className={"type-button " + (activeType.includes(typeLowerCase) ? 'bg-black' : '')} //change to checkbox
+                    onClick={() => { onTypeClicked(typeLowerCase) }
                     }
                 ></button>
                 <div className="font-sans font-light">{type}</div>
@@ -142,15 +155,15 @@ export default function DetailedGraph() {
             // Otherwise, activate the button
             setActiveType([...activeType, type]);
         }
-        console.log(activeType);
         // Handle other logic based on the selected type here
-        if (type === 'Weight') {
+        if (type === 'weight') {
             setDataKeyYA('weight');
-        } else if (type === 'Temperature') {
+        } else if (type === 'temperature') {
             setDataKeyYA('temperature');
-        } else if (type === 'Weather') {
+        } else if (type === 'weather') {
             console.log('clicked Weather');
         }
+        console.log(activeType);
 
     }
 
@@ -199,7 +212,7 @@ export default function DetailedGraph() {
 
 export function CustomDot(props) {
 
-    const { cx, cy, payload, width: graphWidth, height: graphHeight, showDots, setShowDots } = props;
+    const { cx, cy, payload, width: graphWidth, height: graphHeight, showDots, setShowDots, type } = props;
     const { month, weight } = payload;
     const tooltipWidth = 160;
     const tooltipHeight = 100;
@@ -233,7 +246,7 @@ export function CustomDot(props) {
             onMouseLeave={handleDotLeave}>
             <rect width="32" height="32" x={cx - 16} y={cy - 16} fillOpacity={0} />
 
-            <circle cx={cx} cy={cy} r={5} fill="#8884d8"
+            <circle cx={cx} cy={cy} r={5} fill={type === 'weight' ? '#8884d8' : '#82ca9d'}
                 // fillOpacity={showDot ? 1 : 0}
                 className={'duration-200 ease-in-out transition-opacity ' + (showDot ? 'opacity-100' : 'opacity-0')}
             />
@@ -279,7 +292,7 @@ export function CustomDot(props) {
                         onMouseLeave={handleTooltipLeave}
                     >
                         <p className="label">
-                            {month} {weight} kg {/*fix how label shows data */}
+                            {units[type]} {/*fix how label shows data */}
                         </p>
 
                         <textarea
