@@ -139,10 +139,11 @@ export default function DetailedGraph() {
         const typeLowerCase = type.toLowerCase();
         return (
             <div className="graph-checkbox">
-                <button className={"type-button " + (activeType.includes(typeLowerCase) ? 'bg-black' : '')} //change to checkbox
+                <input type="checkbox" className="type-button"  //change to checkbox
+                    checked={activeType.includes(typeLowerCase)}
                     onClick={() => { onTypeClicked(typeLowerCase) }
                     }
-                ></button>
+                ></input>
                 <div className="font-sans font-light">{type}</div>
             </div>
         )
@@ -169,7 +170,7 @@ export default function DetailedGraph() {
     }
 
     return (
-        <div className=" bg-[rgba(25,_118,_210,_0.08)] flex pt-10">
+        <div className=" bg-[rgba(25,118,210,0.08)] flex pt-10">
             <div className="flex flex-col gap-5 mt-3">
                 {hydrated && renderLineChart}
                 {historyLine}
@@ -186,12 +187,7 @@ export default function DetailedGraph() {
                     </div>
                 </div>
                 <div className=" flex flex-col gap-12 w-[377px] items-center">
-                    <div className="self-stretch flex flex-col gap-4 items-center">
-                        <div className="text-center text-xl font-sans font-semibold">
-                            Select needed date or interval
-                        </div>
-                        <Calendar></Calendar>
-                    </div>
+                    <Calendar></Calendar>
                     <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden bg-[rgba(25,_118,_210,_0.08)] flex flex-row justify-center gap-3 w-3/5 h-12 shrink-0 items-center rounded-[50px] hover:bg-[#3877b53b] cursor-pointer">
                         <img
                             src="https://file.rendit.io/n/tCph0baGyDvCMUzNZVzt.svg"

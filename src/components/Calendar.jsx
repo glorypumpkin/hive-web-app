@@ -5,18 +5,44 @@ import React, { useState } from 'react';
 export function Calendar() {
     const [range, setRange] = useState();
 
+    const css = `
+    .date-picker-cont * {
+        --rdp-accent-color: #95b1c8;
+        --rdp-background-color: #95b1c8;
+    }
+    `
 
     return (
-        <div className="shadow-[11px_11px_26px_-2px_rgba(46,_55,_84,_0.08)] bg-[rgba(25,_118,_210,_0.08)] pb-4 px-6 rounded-[50px]">
-            <DayPicker
-                mode="range"
-                selected={range}
-                onSelect={setRange}
-                toMonth={new Date()}
-                captionLayout="dropdown-buttons"
-                fromMonth={new Date(2021, 0)} //TODO: change later
-                showOutsideDays
-            />
+        <div className="self-stretch flex flex-col gap-4 items-center">
+            <div className="text-center text-xl font-sans font-semibold">
+                Select needed date or interval
+            </div>
+
+            <div className="shadow-[11px_11px_26px_-2px_rgba(46,_55,_84,_0.08)] bg-[#1976d214] pb-4 px-6 rounded-[50px] date-picker-cont">
+                <style>{css}</style>
+                <DayPicker
+                    mode="range"
+                    selected={range}
+                    onSelect={setRange}
+                    toMonth={new Date()}
+                    captionLayout="dropdown-buttons"
+                    fromMonth={new Date(2021, 0)} //TODO: change later
+                    showOutsideDays
+
+                />
+            </div>
+            <div className="flex gap-2">
+                <button>
+                    <img
+                        src="/graph.png"
+                        className=" w-8 h-8"
+                    />
+                </button>
+                <button>
+                    <img src="/note.png"
+                    />
+                </button>
+            </div>
         </div>
     )
 }
@@ -134,7 +160,7 @@ export default function TestCalendar() {
                     </div>
                     <div
                         id="Cell17"
-                        className="border-solid border-[#d5d4df] w-12 h-12 bg-[#45539d] absolute top-12 left-[141.75px] flex flex-col justify-center pl-4 items-start border rounded-[50.000003814697266px]"
+                        className="border-solid border-[#d5d4df] w-12 h-12 bg-[#7488e9fd] absolute top-12 left-[141.75px] flex flex-col justify-center pl-4 items-start border rounded-[50.000003814697266px]"
                     >
                         <div
                             id="Element11"

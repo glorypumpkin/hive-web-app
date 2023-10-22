@@ -45,10 +45,12 @@
     }
 
     .type-button {
-        @apply rounded-[5px] bg-gray-300 w-4 h-4 hover:bg-gray-400 cursor-pointer
+        @apply appearance-none w-4 h-4 cursor-pointer bg-gray-300 checked:bg-red-950 rounded-[5px]
     }
 
     .graph-checkbox {
         @apply flex flex-row items-center gap-1
     }
+
+
 }
