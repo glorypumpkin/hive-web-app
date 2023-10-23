@@ -82,7 +82,6 @@ export default function DetailedGraph() {
                         yAxisId={units[type]} />
                 ))
             }
-            {/*TODO: add more smooth line animation when changing types*/}
             <XAxis dataKey={dataKeyXA} angle={-35} textAnchor="end" tick={{ fontSize: 14 }} />
             <YAxis yAxisId="kg" />
             <YAxis yAxisId="celsius" orientation="right" />
@@ -139,15 +138,16 @@ export default function DetailedGraph() {
         const typeLowerCase = type.toLowerCase();
         return (
             <div className="graph-checkbox">
-                <input type="checkbox" className="type-button"  //change to checkbox
+                <input
+                    type="checkbox" className="type-button"  //change to checkbox
                     checked={activeType.includes(typeLowerCase)}
-                    onClick={() => { onTypeClicked(typeLowerCase) }
+                    onChange={() => { onTypeClicked(typeLowerCase) }
                     }
                 ></input>
                 <div className="font-sans font-light">{type}</div>
             </div>
         )
-    }
+    } //TODO: make component from this
 
     function onTypeClicked(type) {
         if (activeType.includes(type)) {
