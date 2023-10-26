@@ -44,7 +44,7 @@ export function DataPrediction() {
         return null;
     }
     return (
-        <div className="dashboard-shadow bg-[#e7ecff] w-2/5 h-[340px] rounded-[50px] flex flex-row justify-evenly items-center">
+        <div className="shadow-[10px_10px_20px_5px_#4541332e] bg-[#e7ecff] w-2/5 h-[340px] rounded-[50px] flex flex-row justify-evenly items-center">
             <div className=" ml-5">
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti quo, pariatur optio culpa eligendi dignissimos perspiciatis, recusandae dolores earum sequi dolorum, sapiente error animi! Eius voluptatum quas nobis consectetur. Dolorem!</p>
             </div>
@@ -73,7 +73,7 @@ export function SmallWeightGraph() {
         return null;
     }
     return (
-        <div className="dashboard-shadow bg-[#e7ecff] w-1/2 h-[380px] rounded-[50px] items-center justify-center" >
+        <div className="dashboard-element w-1/2 h-[380px]" >
             <h2>Weight</h2>
             <div>
                 {hydrated && (
@@ -101,7 +101,7 @@ export function SmallTemperatureGraph() {
         return null;
     }
     return (
-        <div className="dashboard-shadow bg-[#e7ecff] w-1/2 h-[380px] rounded-[50px] items-center justify-center" >
+        <div className="dashboard-element w-1/2 h-[380px]" >
             <h2>Temperature</h2>
             <div>
                 {hydrated && (

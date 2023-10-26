@@ -32,8 +32,8 @@
         @apply bg-white flex justify-center items-center rounded-[50px] w-1/2 h-20
     }
 
-    .dashboard-shadow {
-        @apply shadow-[0px_0px_50px_5px_#4541332e]
+    .dashboard-element {
+        @apply bg-[#e7ecff] rounded-[50px] items-center justify-center shadow-[10px_10px_20px_5px_#4541332e]
     }
 
     .history-container {
@@ -52,5 +52,7 @@
         @apply flex flex-row items-center gap-1
     }
 
-
+    .color-note-button {
+        @apply rounded-3xl w-4 h-4
+    }
 }

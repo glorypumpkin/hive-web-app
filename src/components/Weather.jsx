@@ -36,7 +36,7 @@ export function Weather() {
     return (
         <div
             id="WeatherApiRoot"
-            className="dashboard-shadow bg-[#e7ecff] grid grid-rows-2 w-3/5 px-3 rounded-[50px] h-[340px]">
+            className="shadow-[10px_10px_20px_5px_#4541332e] bg-[#e7ecff] grid grid-rows-2 w-3/5 px-3 rounded-[50px] h-[340px]">
             <div className="grid grid-flow-col-dense">
                 <div className="flex items-center justify-center">
                     <img
