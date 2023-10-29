@@ -4,18 +4,23 @@ import { useState } from 'react';
 
 
 const colors = {
-    red: 'red',
-    green: 'green',
-    blue: 'blue',
+    red: 'bg-red-300',
+    green: 'bg-green-300',
+    blue: 'bg-blue-300',
 };
 
-export function Calendar() {
+function dateToYMD(date) {
+    const d = date.getDate();
+    const m = date.getMonth() + 1;
+    const y = date.getFullYear();
+    return `${y}-${m < 10 ? '0' + m : m}-${d < 10 ? '0' + d : d}`;
+}
+
+export function Calendar({ allNotes, setAllNotes }) {
     const [range, setRange] = useState();
-    const [disabled, setDisabled] = useState(true);
     const [showNote, setShowNote] = useState(false);
-    const [noteColor, setNoteColor] = useState('');
-    const [hasNote, setHasNote] = useState(false);
-    const [noteDays, setNoteDays] = useState([]); //days with notes
+    const [noteColor, setNoteColor] = useState('red');
+    const [noteText, setNoteText] = useState('');
 
     const css = `
     .date-picker-cont * {
@@ -23,40 +28,91 @@ export function Calendar() {
         --rdp-background-color: #95b1c8;
     }`
 
-    const noteDaysStyle = {
-        color: noteColor
-    };
+    const disabled = !range;
 
-
-    const handleDayClick = (day, { selected }) => {
-        if (selected) {
-            setDisabled(true);
-            setShowNote(false);
-            console.log(range);
-        } else {
-            setDisabled(false);
+    const allNotesStyle = {
+        red: {
+            color: 'red'
+        },
+        green: {
+            color: 'green'
+        },
+        blue: {
+            color: 'blue'
         }
     };
 
-    const handleColorClick = (color,) => {
-        setNoteColor(color);
-        setNoteDays(range); //TODO: only one color at a time, change it later
-        setHasNote(true);
+    const allNoteMatcher = {
+        red: [],
+        green: [],
+        blue: []
     };
+
+    for (let i = 0; i < allNotes.length; i++) {
+        const note = allNotes[i];
+        const noteFrom = new Date(note.dateFrom);
+        const noteTo = new Date(note.dateTo);
+
+        const noteColor = note.color;
+
+        const noteMatcher = {
+            from: noteFrom,
+            to: noteTo
+        };
+
+        allNoteMatcher[noteColor].push(noteMatcher); //TODO: change style for overlapping notes
+    }
+
+    console.log(range)
+
+    const handleDayClick = (day, { selected }) => {
+        if (selected) {
+            setShowNote(false);
+        }
+    };
+
+    const handleColorClick = (color) => {
+        setNoteColor(color);
+    };
+
+    function onSaveClick() {
+
+        let noteTo;
+
+        if (range.to !== undefined) {
+            noteTo = new Date(range.to);
+        } else {
+            noteTo = range.from;
+        }
+
+        const note = {
+            dateFrom: dateToYMD(range.from),
+            dateTo: dateToYMD(noteTo),
+            color: noteColor,
+            noteText: noteText
+        };
+
+        setAllNotes([...allNotes, note]);
+    }
 
     const noteArea = (
         <div>
-            <textarea className="flex rounded-[15px] pl-1 resize-both" placeholder="Add a note..."></textarea>
+            <textarea className="flex rounded-[15px] pl-1 resize-both" placeholder="Add a note..."
+                onChange={(e) => setNoteText(e.target.value)} value={noteText}
+            ></textarea>
             <div className="flex flex-row items-center justify-between">
                 <div className="flex justify-between gap-2 pl-1">
-                    {Object.values(colors).map((color) => (
+                    {Object.entries(colors).map(([color, colorClass]) => (
                         <button
                             key={color}
-                            className={`bg-${color}-300 color-note-button`}
+                            className={`${colorClass} color-note-button`}
                             onClick={() => handleColorClick(color)}
                         ></button>))}
+                    {/* TODO: change to radio buttons */}
                 </div>
-                <button className="bg-[#1976d214] rounded-[15px] px-2 mt-1 font-semibold">Save</button>
+                <button className="bg-[#1976d214] rounded-[15px] px-2 mt-1 font-semibold"
+                    onClick={onSaveClick}
+                >Save</button>
             </div>
         </div>
     )
@@ -77,8 +133,8 @@ export function Calendar() {
                     fromMonth={new Date(2021, 0)} //TODO: change later
                     showOutsideDays
                     onDayClick={handleDayClick}
-                    modifiers={{ hasNote: noteDays }}
-                    modifiersStyles={{ hasNote: noteDaysStyle }}
+                    modifiers={allNoteMatcher}
+                    modifiersStyles={allNotesStyle}
                 />
             </div>
             <div className="items-center gap-2">

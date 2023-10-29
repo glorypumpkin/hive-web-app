@@ -3,6 +3,8 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Responsi
 import { useState, useEffect } from 'react';
 import { Calendar } from './Calendar';
 import { CustomDot } from './CustomDot';
+import { SelectGraphType } from './SelectGraphType';
+import { HistoryLine } from './HistoryLine';
 
 const dataYear = [
     { month: 'January', weight: 2, temperature: 10 },
@@ -36,9 +38,11 @@ const dataDay = [
     { hour: '18:00', weight: 15 }
 ];
 
-const periods = ['This day', '7 days', '21 days', 'Month', '1 cvartal', '2 cvartal', '3 cvartal', '4 cvartal', 'Year'];
-
-const types = ['Weight', 'Temperature', 'Weather'];
+const allNotesDefault = [
+    { dateFrom: '2023-10-01', dateTo: '2023-10-04', color: 'red', noteText: 'note1' },
+    { dateFrom: '2023-10-05', dateTo: '2023-10-07', color: 'green', noteText: 'note2' },
+    { dateFrom: '2023-10-11', dateTo: '2023-10-13', color: 'blue', noteText: 'note4' }
+]
 
 const units = {
     weight: 'kg',
@@ -49,16 +53,24 @@ export default function DetailedGraph() {
 
     const [showDots, setShowDots] = useState(true);
     const [dataKeyXA, setDataKeyXA] = useState('month');
-    const [dataKeyYA, setDataKeyYA] = useState('weight');
     const [hydrated, setHydrated] = useState(false);
-    const [data, setData] = useState(dataYear);
     const [activeType, setActiveType] = useState(['weight']);
+    const [allNotes, setAllNotes] = useState(allNotesDefault);
 
     useEffect(() => {
         setHydrated(true);
     }, []);
     if (!hydrated) {
         return null;
+    }
+
+    let data;
+    if (dataKeyXA === "month") {
+        data = dataYear;
+    } else if (dataKeyXA === "day") {
+        data = dataWeek;
+    } else if (dataKeyXA === "hour") {
+        data = dataDay;
     }
 
     const renderLineChart = (
@@ -89,105 +101,16 @@ export default function DetailedGraph() {
         </LineChart>
     );
 
-
-    function OnPeriodClicked(period) {
-
-        if (period === 'This day') {
-            setData(dataDay);
-            setDataKeyXA('hour');
-        }
-        else if (period === '7 days') {
-            setData(dataWeek);
-            setDataKeyXA('day');
-            console.log('clicked');
-        }
-        else if (period === 'Year') {
-            setData(dataYear);
-            setDataKeyXA('month');
-        }
-        // else if (period === '21 days') {
-        //     setData(dataWeek);
-        //     setDataKeyXA('day');
-        // }
-        // else if (period === 'Month') {
-        //     setData(dataWeek);
-        //     setDataKeyXA('day');
-        // }
-        // else if (period === '1 cvartal') {
-        //     setData(dataWeek);
-        //     setDataKeyXA('day');
-        //     setDataKeyYA('weight');
-        // }
-
-    }
-
-    const historyLine = (
-        <div className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden flex flex-row mx-2 rounded-[50px] h-16">
-            {periods.map((period, index) => (
-
-                <button key={index} className="history-container font-sans font-light"
-                    onClick={() => OnPeriodClicked(period)}
-                >{period}</button>
-
-            ))}
-        </div>
-    )
-
-    function TypeButton({ type, onTypeClicked }) {
-        console.log(type);
-        const typeLowerCase = type.toLowerCase();
-        return (
-            <div className="graph-checkbox">
-                <input
-                    type="checkbox" className="type-button"  //change to checkbox
-                    checked={activeType.includes(typeLowerCase)}
-                    onChange={() => { onTypeClicked(typeLowerCase) }
-                    }
-                ></input>
-                <div className="font-sans font-light">{type}</div>
-            </div>
-        )
-    } //TODO: make component from this
-
-    function onTypeClicked(type) {
-        if (activeType.includes(type)) {
-            // If the clicked button is already active, deactivate it
-            setActiveType(activeType.filter((active) => active !== type));
-        } else {
-            // Otherwise, activate the button
-            setActiveType([...activeType, type]);
-        }
-        // Handle other logic based on the selected type here
-        if (type === 'weight') {
-            setDataKeyYA('weight');
-        } else if (type === 'temperature') {
-            setDataKeyYA('temperature');
-        } else if (type === 'weather') {
-            console.log('clicked Weather');
-        }
-        console.log(activeType);
-
-    }
-
     return (
         <div className=" bg-[rgba(25,118,210,0.08)] flex pt-10">
             <div className="flex flex-col gap-5 mt-3">
                 {hydrated && renderLineChart}
-                {historyLine}
+                <HistoryLine setDataKeyXA={setDataKeyXA}></HistoryLine>
             </div>
             <div className="flex flex-col gap-16 w-full items-center">
-                <div className="flex flex-col gap-6 w-[250px]">
-                    <div className="text-center text-xl font-sans font-semibold">
-                        Select graph type
-                    </div>
-                    <div className="graph-type-container shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)]">
-                        {['Weight', 'Temperature', 'Weather'].map((type, index) => (
-                            <TypeButton key={index} type={type} onTypeClicked={onTypeClicked} />
-                        ))}
-                    </div>
-                </div>
+                <SelectGraphType activeType={activeType} setActiveType={setActiveType}></SelectGraphType>
                 <div className=" flex flex-col gap-12 w-[377px] items-center">
-                    <Calendar></Calendar>
+                    <Calendar allNotes={allNotes} setAllNotes={setAllNotes}></Calendar>
                     <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden bg-[rgba(25,_118,_210,_0.08)] flex flex-row justify-center gap-3 w-3/5 h-12 shrink-0 items-center rounded-[50px] hover:bg-[#3877b53b] cursor-pointer">
                         <img
                             src="https://file.rendit.io/n/tCph0baGyDvCMUzNZVzt.svg"
@@ -200,10 +123,6 @@ export default function DetailedGraph() {
                 </div>
             </div>
         </div>
-
-
-
-
     )
 }
 
