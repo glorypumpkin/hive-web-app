@@ -2,7 +2,6 @@
 // Parametros: fileContents: string
 // Retorno: Array<{}>
 export function convertor(fileContents) {
-    console.log(fileContents)
     const lines = fileContents.split('\n');
     const data = [];
     for (let i = 1; i < (lines.length - 1); i++) {
@@ -28,9 +27,7 @@ export function parseLine(line) {
     now.setSeconds(0);
     now.setMilliseconds(0);
 
-
     const timestamp = now.getTime();
-    console.log(timestamp)
 
     const rozdilFloat = parseFloat(rozdil);
     const kgFloat = parseFloat(kg);

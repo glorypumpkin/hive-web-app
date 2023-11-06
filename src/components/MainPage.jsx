@@ -1,5 +1,4 @@
-'use client'
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Rectangle } from 'recharts';
+
 
 export default function MainPage() {
   return (

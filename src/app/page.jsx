@@ -4,12 +4,15 @@ import RegistrationForm from '../components/RegistrationForm.jsx'
 import GraphExample from '@/components/GraphExample'
 import Link from 'next/link'
 import PeriodGraph from '@/components/PeriodGraph.jsx'
+import { getBeeData } from '@/lib/dataFetching.js'
 
-export default function Home() {
+export default async function Home() {
+  const data = await getBeeData();
+
   return (
     <div>
       <Menu></Menu>
-      <PeriodGraph></PeriodGraph>
+      <PeriodGraph data={data}></PeriodGraph>
       <MainPage></MainPage>
       <Link href="/dashboard">Dashboard</Link>
       <Link href="/registration">Registration</Link>
