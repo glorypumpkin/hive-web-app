@@ -8,7 +8,7 @@ const units = {
 export function CustomDot(props) {
 
     const { cx, cy, payload, width: graphWidth, height: graphHeight, showDots, setShowDots, type } = props;
-    const { month, weight } = payload;
+    const { month, weight, temperature } = payload;
     const tooltipWidth = 160;
     const tooltipHeight = 100;
 
@@ -26,9 +26,9 @@ export function CustomDot(props) {
         setShowDots(false);
         setInsideRect(true);
         console.log(payload);
-        for (let i = 0; i < payload.weight; i++) {
-            console.log('a');
-        } // TODO: add arrows to show weight change
+        // for (let i = 0; i < payload.weight; i++) {
+        //     console.log('a');
+        // } // TODO: add arrows to show weight change
     }
 
     const handleDotLeave = () => {
@@ -77,6 +77,14 @@ export function CustomDot(props) {
         setInsideTooltip(false);
     }
 
+    const labelText = () => {
+        if (type === 'weight') {
+            return `${month}: ${weight} kg`
+        } else if (type === 'temperature') {
+            return `${month}: ${temperature} °C`
+        }
+    }
+
     return (
         <g>
 
@@ -87,7 +95,7 @@ export function CustomDot(props) {
                         onMouseLeave={handleTooltipLeave}
                     >
                         <p className="label">
-                            {units[type]} {/*fix how label shows data */}
+                            {labelText()}
                         </p>
 
                         <textarea

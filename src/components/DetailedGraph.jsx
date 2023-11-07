@@ -5,6 +5,7 @@ import { Calendar } from './Calendar';
 import { CustomDot } from './CustomDot';
 import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
+import { set } from 'date-fns';
 
 const dataYear = [
     { month: 'January', weight: 2, temperature: 10 },
@@ -56,6 +57,8 @@ export default function DetailedGraph() {
     const [hydrated, setHydrated] = useState(false);
     const [activeType, setActiveType] = useState(['weight']);
     const [allNotes, setAllNotes] = useState(allNotesDefault);
+    const [showTooltip, setShowTooltip] = useState(true);
+    const [showDot, setShowDot] = useState(false);
 
     useEffect(() => {
         setHydrated(true);
@@ -71,6 +74,24 @@ export default function DetailedGraph() {
         data = dataWeek;
     } else if (dataKeyXA === "hour") {
         data = dataDay;
+    }
+    const customTooltip = ({ active, payload, label }) => {
+        if (active) {
+            // if showDots is false, hide tooltip
+            if (!showDots) {
+                return null;
+            }
+            else {
+                return (
+                    <div className="custom-tooltip">
+                        <p>{`${label}`}</p>
+                        {activeType.map((type, index) => (
+                            <p key={index}>{`${type}: ${payload[0].payload[type]} ${units[type]}`}</p>
+                        ))}
+                    </div>
+                );
+            }
+        }
     }
 
     const renderLineChart = (
@@ -90,22 +111,40 @@ export default function DetailedGraph() {
                 activeType.map((type, index) => (
                     <Line key={index} type="monotone" dataKey={type}
                         stroke={type === 'weight' ? '#8884d8' : '#82ca9d'}
-                        dot={<CustomDot showDots={showDots} setShowDots={setShowDots} type={type} />}
+                        dot={showDot ? <CustomDot showDots={showDots} setShowDots={setShowDots} type={type} /> : true} //TODO: change dot to the same style
                         yAxisId={units[type]} />
                 ))
             }
             <XAxis dataKey={dataKeyXA} angle={-35} textAnchor="end" tick={{ fontSize: 14 }} />
             <YAxis yAxisId="kg" />
             <YAxis yAxisId="celsius" orientation="right" />
+            {showTooltip && <Tooltip content={customTooltip} />}
             <Legend />
         </LineChart>
     );
+
+    const onTooltipButtonClick = () => {
+        setShowTooltip(true);
+        setShowDot(false);
+    }
+
+    const onDotButtonClick = () => {
+        setShowTooltip(false);
+        setShowDot(true);
+    }
 
     return (
         <div className=" bg-[rgba(25,118,210,0.08)] flex pt-10">
             <div className="flex flex-col gap-5 mt-3">
                 {hydrated && renderLineChart}
+
                 <HistoryLine setDataKeyXA={setDataKeyXA}></HistoryLine>
+            </div>
+            <div className='flex-col'>
+                {/* <input type="checkbox" />
+                <input type="checkbox" /> */}
+                <button className=' bg-orange-200' onClick={onTooltipButtonClick}>Tooltip</button>
+                <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button>
             </div>
             <div className="flex flex-col gap-16 w-full items-center">
                 <SelectGraphType activeType={activeType} setActiveType={setActiveType}></SelectGraphType>

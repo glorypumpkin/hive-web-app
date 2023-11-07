@@ -1,6 +1,5 @@
 export function SelectGraphType({ activeType, setActiveType }) {
     function TypeButton({ type, onTypeClicked }) {
-        console.log(type);
         const typeLowerCase = type.toLowerCase();
         return (
             <div className="graph-checkbox">
