@@ -1,9 +1,12 @@
 import DetailedGraph from "@/components/DetailedGraph"
+import { getBeeData } from '@/lib/dataFetching.js'
 
-export default function DetailedGraphPage() {
+
+export default async function DetailedGraphPage() {
+    const data = await getBeeData();
     return (
         <div>
-            <DetailedGraph></DetailedGraph>
+            <DetailedGraph data={data}></DetailedGraph>
         </div>
     )
 }

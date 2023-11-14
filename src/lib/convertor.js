@@ -36,8 +36,8 @@ export function parseLine(line) {
     return {
         stan,
         timestamp,
-        kg: kgFloat,
+        weight: kgFloat,
         rozdil: rozdilFloat,
-        tepl: teplFloat
+        temperature: teplFloat
     };
 }

@@ -49,7 +49,7 @@
     }
 
     .graph-checkbox {
-        @apply flex flex-row items-center gap-1
+        @apply flex flex-row items-center gap-1 text-sm
     }
 
     .color-note-button {

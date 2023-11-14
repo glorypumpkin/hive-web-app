@@ -32,7 +32,7 @@ export function CustomDot(props) {
     }
 
     const handleDotLeave = () => {
-        setShowDots(true);
+        // setShowDots(true);
         setInsideRect(false);
     }
 
@@ -73,7 +73,7 @@ export function CustomDot(props) {
     }
 
     const handleTooltipLeave = () => {
-        setShowDots(true);
+        // setShowDots(true);
         setInsideTooltip(false);
     }
 

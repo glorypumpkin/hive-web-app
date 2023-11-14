@@ -1,43 +1,12 @@
 'use client'
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Rectangle } from 'recharts';
+import { Brush, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Area, ComposedChart } from 'recharts';
 import { useState, useEffect } from 'react';
 import { Calendar } from './Calendar';
 import { CustomDot } from './CustomDot';
 import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
 import { set } from 'date-fns';
-
-const dataYear = [
-    { month: 'January', weight: 2, temperature: 10 },
-    { month: 'Februrary', weight: 16, temperature: 15 },
-    { month: 'March', weight: 10, temperature: 20 },
-    { month: 'April', weight: 15, temperature: 25 },
-    { month: 'May', weight: 3, temperature: 30 },
-    { month: 'June', weight: 5, temperature: 35 },
-    { month: 'July', weight: 20, temperature: 40 },
-    { month: 'August', weight: 16, temperature: 15 },
-    { month: 'September', weight: 12, temperature: 20 },
-    { month: 'October', weight: 15, temperature: 25 },
-    { month: 'November', weight: 18, temperature: 30 },
-    { month: 'December', weight: 20, temperature: 35 }];
-// fix data!!!!
-
-const dataWeek = [
-    { day: 'Monday', weight: 2, temperature: 10 },
-    { day: 'Tuesday', weight: 16, temperature: 15 },
-    { day: 'Wednesday', weight: 10, temperature: 20 },
-    { day: 'Thursday', weight: 15, temperature: 25 },
-    { day: 'Friday', weight: 3, temperature: 30 },
-    { day: 'Saturday', weight: 5, temperature: 35 },
-    { day: 'Sunday', weight: 20, temperature: 40 }
-];
-
-const dataDay = [
-    { hour: '00:00', weight: 2 },
-    { hour: '06:00', weight: 16 },
-    { hour: '12:00', weight: 10 },
-    { hour: '18:00', weight: 15 }
-];
+import { dateFiltering, getDateInterval } from '@/lib/dateFiltering';
 
 const allNotesDefault = [
     { dateFrom: '2023-10-01', dateTo: '2023-10-04', color: 'red', noteText: 'note1' },
@@ -45,20 +14,26 @@ const allNotesDefault = [
     { dateFrom: '2023-10-11', dateTo: '2023-10-13', color: 'blue', noteText: 'note4' }
 ]
 
+const notesTest = [
+    { y: 10, month: 'January', color: 'red', noteText: 'note1' },
+    { y: 10, month: 'March', color: 'green', noteText: 'note2' },
+    { y: 10, month: 'July', color: 'blue', noteText: 'note4' }
+]
+
 const units = {
     weight: 'kg',
     temperature: 'celsius'
 };
 
-export default function DetailedGraph() {
+export default function DetailedGraph({ data }) {
 
-    const [showDots, setShowDots] = useState(true);
-    const [dataKeyXA, setDataKeyXA] = useState('month');
+    const [showDots, setShowDots] = useState(false);
     const [hydrated, setHydrated] = useState(false);
     const [activeType, setActiveType] = useState(['weight']);
     const [allNotes, setAllNotes] = useState(allNotesDefault);
     const [showTooltip, setShowTooltip] = useState(true);
     const [showDot, setShowDot] = useState(false);
+    const [activePeriodButton, setActivePeriodButton] = useState("Year");
 
     useEffect(() => {
         setHydrated(true);
@@ -67,24 +42,29 @@ export default function DetailedGraph() {
         return null;
     }
 
-    let data;
-    if (dataKeyXA === "month") {
-        data = dataYear;
-    } else if (dataKeyXA === "day") {
-        data = dataWeek;
-    } else if (dataKeyXA === "hour") {
-        data = dataDay;
-    }
+    const dateInterval = getDateInterval(activePeriodButton);
+    const dateFrom = dateInterval.startDate;
+    const dateTo = dateInterval.endDate;
+    console.log(dateFrom, dateTo, activePeriodButton);
+    const filterData = dateFiltering(data, dateFrom, dateTo);
+    const dataWithDayAndHour = filterData.map((item) => {
+        const date = new Date(item.timestamp);
+        const day = date.getDate() + '.' + (date.getMonth() + 1);
+        const hour = date.getHours() + ':00';
+        const year = date.getFullYear();
+        return { ...item, day, hour, year };
+    })
+
     const customTooltip = ({ active, payload, label }) => {
         if (active) {
             // if showDots is false, hide tooltip
-            if (!showDots) {
+            if (!showDots && !showTooltip) {
                 return null;
             }
             else {
                 return (
                     <div className="custom-tooltip">
-                        <p>{`${label}`}</p>
+                        <p>{`${payload[0].payload.day}, ${payload[0].payload.hour}, ${payload[0].payload.year}`}</p>
                         {activeType.map((type, index) => (
                             <p key={index}>{`${type}: ${payload[0].payload[type]} ${units[type]}`}</p>
                         ))}
@@ -94,33 +74,48 @@ export default function DetailedGraph() {
         }
     }
 
+
+    const graphType = activeType.map((type, index) => (
+        type === 'weight' || type === 'temperature' || type === 'weather' ? (
+            <Line
+                key={index}
+                type="monotone"
+                dataKey={type}
+                stroke={type === 'weight' ? '#8884d8' : '#82ca9d'}
+                dot={showDot ? <CustomDot showDots={showDots} setShowDots={setShowDots} type={type} /> : false}
+                yAxisId={units[type]}
+            />
+        ) : <Area
+            dataKey='smt'
+            fill={data[index].color}
+            yAxisId='kg'
+        />
+
+    ));
+
+
     const renderLineChart = (
-        <LineChart
+        <ComposedChart
             id='detailed-graph'
-            data={data}
+            data={dataWithDayAndHour}
             margin={{
                 top: 5,
                 right: 30,
                 left: 0,
                 bottom: 5
             }}
-            width={1200} height={800}
+            width={1300} height={800}
         >
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-            {
-                activeType.map((type, index) => (
-                    <Line key={index} type="monotone" dataKey={type}
-                        stroke={type === 'weight' ? '#8884d8' : '#82ca9d'}
-                        dot={showDot ? <CustomDot showDots={showDots} setShowDots={setShowDots} type={type} /> : true} //TODO: change dot to the same style
-                        yAxisId={units[type]} />
-                ))
-            }
-            <XAxis dataKey={dataKeyXA} angle={-35} textAnchor="end" tick={{ fontSize: 14 }} />
-            <YAxis yAxisId="kg" />
-            <YAxis yAxisId="celsius" orientation="right" />
+            {graphType}
+            <XAxis dataKey='day' angle={-35} textAnchor="end" tick={{ fontSize: 14 }} reversed />
+            <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
+            <YAxis yAxisId="celsius" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
             {showTooltip && <Tooltip content={customTooltip} />}
             <Legend />
-        </LineChart>
+            <Brush dataKey='day' reversed></Brush>
+        </ComposedChart>
+
     );
 
     const onTooltipButtonClick = () => {
@@ -134,19 +129,21 @@ export default function DetailedGraph() {
     }
 
     return (
-        <div className=" bg-[rgba(25,118,210,0.08)] flex pt-10">
-            <div className="flex flex-col gap-5 mt-3">
+        <div className=" bg-[rgba(25,118,210,0.08)] flex pt-2">
+            <div className="flex flex-col gap-5">
+                <div className='flex flex-row gap-2 pl-3 items-center pt-1'>
+                    {/* <input type="checkbox" />
+                <input type="checkbox" /> */}
+                    <button className=' bg-orange-200' onClick={onTooltipButtonClick}>Tooltip</button>
+                    <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button>
+                    <button className='bg-orange-200'>Statistic</button>
+                    <button className='bg-orange-200'>Normal</button>
+                </div>
                 {hydrated && renderLineChart}
 
-                <HistoryLine setDataKeyXA={setDataKeyXA}></HistoryLine>
+                <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton}></HistoryLine>
             </div>
-            <div className='flex-col'>
-                {/* <input type="checkbox" />
-                <input type="checkbox" /> */}
-                <button className=' bg-orange-200' onClick={onTooltipButtonClick}>Tooltip</button>
-                <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button>
-            </div>
-            <div className="flex flex-col gap-16 w-full items-center">
+            <div className="flex flex-col gap-16 w-full items-center pt-10">
                 <SelectGraphType activeType={activeType} setActiveType={setActiveType}></SelectGraphType>
                 <div className=" flex flex-col gap-12 w-[377px] items-center">
                     <Calendar allNotes={allNotes} setAllNotes={setAllNotes}></Calendar>
