@@ -27,12 +27,12 @@ export function NoteAreaCalendar({ showNote, setShowNote, dateToYMD, range, allN
         }
 
         const note = {
-            dateFrom: dateToYMD(range.from),
-            dateTo: dateToYMD(noteTo),
+            dateFrom: range.from,
+            dateTo: noteTo,
             color: noteColor,
             noteText: noteText
         };
-
+        console.log('note', note);
         setAllNotes([...allNotes, note]);
 
     }

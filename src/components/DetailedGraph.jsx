@@ -1,17 +1,14 @@
 'use client'
 import { Brush, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Area, ComposedChart } from 'recharts';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Calendar } from './Calendar';
 import { CustomDot } from './CustomDot';
 import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
 import { dateFiltering, getDateInterval } from '@/lib/dateFiltering';
-
-const allNotesDefault = [
-    { dateFrom: '2023-10-01', dateTo: '2023-10-04', color: 'red', noteText: 'note1' },
-    { dateFrom: '2023-10-05', dateTo: '2023-10-07', color: 'green', noteText: 'note2' },
-    { dateFrom: '2023-10-11', dateTo: '2023-10-13', color: 'blue', noteText: 'note4' }
-]
+import { NoteAreaGraph } from './NoteAreaGraph';
+import { scaleLog } from 'd3-scale';
 
 const units = {
     weight: 'kg',
@@ -19,12 +16,12 @@ const units = {
 };
 
 export default function DetailedGraph({ data }) {
-
-    // const data = useContext(DetailedGraphContext);
+    const [line, setLine] = useState(null);
+    const [noteCoordinates, setNoteCoordinates] = useState({});
     const [showDots, setShowDots] = useState(false);
     const [hydrated, setHydrated] = useState(false);
     const [activeType, setActiveType] = useState(['weight']);
-    const [allNotes, setAllNotes] = useState(allNotesDefault);
+    const [allNotes, setAllNotes] = useState([]);
     const [showTooltip, setShowTooltip] = useState(true);
     const [showDot, setShowDot] = useState(false);
     const [activePeriodButton, setActivePeriodButton] = useState("Year");
@@ -33,21 +30,62 @@ export default function DetailedGraph({ data }) {
     useEffect(() => {
         setHydrated(true);
     }, []);
+
+    useEffect(() => {
+        const selectedLine = document.querySelector('.recharts-cartesian-grid-horizontal line:first-child')
+        if (selectedLine != line) {
+            setLine(selectedLine);
+        }
+    });
+
+
     if (!hydrated) {
         return null;
     }
 
-    // const areaCharts = allNotes.map((note, index) => (
-    //     <Area
-    //         dataKey='weight'
-    //         fill={data[index].color}
-    //         yAxisId='kg'
-    //     />));
+    console.log('line');
+    console.dir(line);
+    let notesParent = null;
+    if (line) {
+        const x1 = line.getAttribute('x1');
+        const y1 = line.getAttribute('y1');
+        const x2 = line.getAttribute('x2');
+        const y2 = line.getAttribute('y2');
+        const coordinates = { x1, y1, x2, y2 };
+        console.log('coordinates', coordinates);
+        if (coordinates.x1 !== noteCoordinates.x1 || coordinates.y1 !== noteCoordinates.y1 || coordinates.x2 !== noteCoordinates.x2 || coordinates.y2 !== noteCoordinates.y2) {
+            setNoteCoordinates(coordinates);
+        }
+        notesParent = line.parentElement;
+    }
+
+    console.log('parent', notesParent);
+    console.dir(notesParent);
+    // [{area: }]
+    const areaCharts = allNotes.map((note, index) => (
+        <Area
+            dataKey='weight'
+            fill={data[index].color}
+            yAxisId='kg'
+        />));
 
     const dateInterval = getDateInterval(activePeriodButton); //TODO: getDateIntervalPeriod(activePeriodButton) getDateIntervalCalendar(range)
+
+    // Clamp dateInterval to data
+    const mostRecentDataDate = new Date(data[0].timestamp);
+    const oldestDataDate = new Date(data[data.length - 1].timestamp);
+    if (dateInterval.startDate < oldestDataDate) {
+        dateInterval.startDate = oldestDataDate;
+    }
+    if (dateInterval.endDate > mostRecentDataDate) {
+        dateInterval.endDate = mostRecentDataDate;
+    }
+
     const dateFrom = dateInterval.startDate;
     const dateTo = dateInterval.endDate;
     const filterData = dateFiltering(data, dateFrom, dateTo);
+    console.log('dateFrom', dateFrom);
+    console.log('dateTo', dateTo);
     const dataWithDayAndHour = filterData.map((item) => {
         const date = new Date(item.timestamp);
         const day = date.getDate() + '.' + (date.getMonth() + 1);
@@ -55,7 +93,6 @@ export default function DetailedGraph({ data }) {
         const year = date.getFullYear();
         return { ...item, day, hour, year };
     })
-
 
     const customTooltip = ({ active, payload, label }) => {
         if (active) {
@@ -106,7 +143,8 @@ export default function DetailedGraph({ data }) {
         >
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
             {graphType}
-            <XAxis dataKey='day' angle={-35} textAnchor="end" tick={{ fontSize: 14 }} reversed />
+            <XAxis dataKey='timestamp' angle={-35} textAnchor="end" reversed scale={'linear'} tick={<CustomTick />} />
+
             <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
             <YAxis yAxisId="celsius" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
             {showTooltip && <Tooltip content={customTooltip} />}
@@ -136,7 +174,7 @@ export default function DetailedGraph({ data }) {
                     <button className='bg-orange-200'>Normal</button>
                 </div>
                 {hydrated && renderLineChart}
-
+                {notesParent && createPortal(<NoteAreaGraph noteCoordinates={noteCoordinates} dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} />, notesParent)}
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton}></HistoryLine>
             </div>
             <div className="flex flex-col gap-16 w-full items-center pt-10">
@@ -160,5 +198,17 @@ export default function DetailedGraph({ data }) {
     )
 }
 
-
+const CustomTick = (props) => {
+    const { x, y, payload } = props;
+    console.log('payload', payload);
+    const date = new Date(payload.value);
+    const d = `${date.getDate()}.${date.getMonth() + 1}`
+    return (
+        <g transform={`translate(${x},${y})`}>
+            <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
+                {d}
+            </text>
+        </g>
+    );
+}
 

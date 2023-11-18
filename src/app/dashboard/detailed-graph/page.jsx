@@ -7,9 +7,6 @@ import { getBeeData } from '@/lib/dataFetching.js'
 export default async function DetailedGraphPage() {
     const data = await getBeeData();
     return (
-        // <DetailedGraphContext.Provider value={data}>
-        //     <DetailedGraph />
-        // </DetailedGraphContext.Provider>
         <DetailedGraph data={data} />
     )
 }

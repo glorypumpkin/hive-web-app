@@ -44,14 +44,6 @@ export function Calendar({ data, allNotes, setAllNotes, filteredNoteData, setFil
         const note = allNotes[i];
         const noteFrom = new Date(note.dateFrom);
         const noteTo = new Date(note.dateTo);
-
-        // const newFilterNoteData = dateFiltering(data, noteFrom, noteTo)
-        // //add new value color fitered data
-        // for (let i = 0; i < newFilterNoteData.length; i++) {
-        //     newFilterNoteData[i].color = note.color;
-        // }
-        // setFilteredNoteData(newFilterNoteData);
-        // console.log(filteredNoteData);
         const noteColor = note.color;
 
         const noteMatcher = {
