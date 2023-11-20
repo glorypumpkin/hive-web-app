@@ -2,17 +2,8 @@ import { DayPicker } from "react-day-picker"
 import "react-day-picker/dist/style.css"
 import { useState, useEffect } from 'react';
 import { NoteAreaCalendar } from "./NoteAreaCalendar";
-import { dateFiltering } from '@/lib/dateFiltering';
 
-function dateToYMD(date) {
-    const d = date.getDate();
-    const m = date.getMonth() + 1;
-    const y = date.getFullYear();
-
-    return `${y}-${m < 10 ? '0' + m : m}-${d < 10 ? '0' + d : d}`;
-}
-
-export function Calendar({ data, allNotes, setAllNotes, filteredNoteData, setFilteredNoteData }) {
+export function Calendar({ allNotes, setAllNotes }) {
     const [range, setRange] = useState();
     const [showNote, setShowNote] = useState(false);
 
@@ -80,7 +71,7 @@ export function Calendar({ data, allNotes, setAllNotes, filteredNoteData, setFil
                     modifiersStyles={allNotesStyle}
                 />
             </div>
-            <NoteAreaCalendar setShowNote={setShowNote} showNote={showNote} dateToYMD={dateToYMD} range={range} allNotes={allNotes} setAllNotes={setAllNotes}></NoteAreaCalendar>
+            <NoteAreaCalendar setShowNote={setShowNote} showNote={showNote} range={range} allNotes={allNotes} setAllNotes={setAllNotes}></NoteAreaCalendar>
         </div>
     )
 }

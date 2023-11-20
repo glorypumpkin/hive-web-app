@@ -1,5 +1,5 @@
 'use client'
-import { Brush, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Area, ComposedChart } from 'recharts';
+import { Brush, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, ComposedChart } from 'recharts';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Calendar } from './Calendar';
@@ -8,7 +8,6 @@ import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
 import { dateFiltering, getDateInterval } from '@/lib/dateFiltering';
 import { NoteAreaGraph } from './NoteAreaGraph';
-import { scaleLog } from 'd3-scale';
 
 const units = {
     weight: 'kg',
@@ -25,7 +24,7 @@ export default function DetailedGraph({ data }) {
     const [showTooltip, setShowTooltip] = useState(true);
     const [showDot, setShowDot] = useState(false);
     const [activePeriodButton, setActivePeriodButton] = useState("Year");
-    // const [filteredNoteData, setFilteredNoteData] = useState([]);
+
 
     useEffect(() => {
         setHydrated(true);
@@ -59,17 +58,7 @@ export default function DetailedGraph({ data }) {
         notesParent = line.parentElement;
     }
 
-    console.log('parent', notesParent);
-    console.dir(notesParent);
-    // [{area: }]
-    const areaCharts = allNotes.map((note, index) => (
-        <Area
-            dataKey='weight'
-            fill={data[index].color}
-            yAxisId='kg'
-        />));
-
-    const dateInterval = getDateInterval(activePeriodButton); //TODO: getDateIntervalPeriod(activePeriodButton) getDateIntervalCalendar(range)
+    const dateInterval = getDateInterval(activePeriodButton);
 
     // Clamp dateInterval to data
     const mostRecentDataDate = new Date(data[0].timestamp);
@@ -119,12 +108,13 @@ export default function DetailedGraph({ data }) {
             <Line
                 key={index}
                 type="monotone"
-                dataKey={type}
+                dataKey={type} //dataKey is used to set the data to the right type (weight, temperature or weather)
                 stroke={type === 'weight' ? '#8884d8' : '#82ca9d'}
                 dot={showDot ? <CustomDot showDots={showDots} setShowDots={setShowDots} type={type} /> : false}
+                // if showDot is true, show dot
                 yAxisId={units[type]}
             />
-        ) : areaCharts
+        ) : console.log('type', type)
 
     ));
 
@@ -132,7 +122,7 @@ export default function DetailedGraph({ data }) {
     const renderLineChart = (
         <ComposedChart
             id='detailed-graph'
-            data={dataWithDayAndHour}
+            data={dataWithDayAndHour} //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
             margin={{
                 top: 5,
                 right: 30,
@@ -143,13 +133,15 @@ export default function DetailedGraph({ data }) {
         >
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
             {graphType}
+            {/* the right graph type is rendered based on the activeType state, which is set by the user */}
             <XAxis dataKey='timestamp' angle={-35} textAnchor="end" reversed scale={'linear'} tick={<CustomTick />} />
-
             <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
+            {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
+            {/* domain is used to set the range of the y-axis */}
             <YAxis yAxisId="celsius" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
             {showTooltip && <Tooltip content={customTooltip} />}
+            {/* if showTooltip is true, show tooltip */}
             <Legend />
-            {/* <Brush dataKey='day' reversed></Brush> */}
         </ComposedChart>
 
     );
@@ -180,8 +172,7 @@ export default function DetailedGraph({ data }) {
             <div className="flex flex-col gap-16 w-full items-center pt-10">
                 <SelectGraphType activeType={activeType} setActiveType={setActiveType} ></SelectGraphType>
                 <div className=" flex flex-col gap-12 w-[377px] items-center">
-                    <Calendar allNotes={allNotes} setAllNotes={setAllNotes} data={data}
-                    // filteredNoteData={filteredNoteData} setFilteredNoteData={setFilteredNoteData}
+                    <Calendar allNotes={allNotes} setAllNotes={setAllNotes}
                     ></Calendar>
                     <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden bg-[rgba(25,_118,_210,_0.08)] flex flex-row justify-center gap-3 w-3/5 h-12 shrink-0 items-center rounded-[50px] hover:bg-[#3877b53b] cursor-pointer">
                         <img
@@ -200,7 +191,6 @@ export default function DetailedGraph({ data }) {
 
 const CustomTick = (props) => {
     const { x, y, payload } = props;
-    console.log('payload', payload);
     const date = new Date(payload.value);
     const d = `${date.getDate()}.${date.getMonth() + 1}`
     return (

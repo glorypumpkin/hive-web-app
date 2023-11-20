@@ -1,4 +1,3 @@
-import { useState } from 'react';
 const periods = ['This day', '7 days', '21 days', 'Month', '1 cvartal', '2 cvartal', '3 cvartal', '4 cvartal', 'Year'];
 
 export function HistoryLine({ activePeriodButton, setActivePeriodButton }) {

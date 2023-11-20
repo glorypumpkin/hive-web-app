@@ -6,7 +6,7 @@ const colors = {
     blue: 'bg-blue-300',
 };
 
-export function NoteAreaCalendar({ showNote, setShowNote, dateToYMD, range, allNotes, setAllNotes }) {
+export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAllNotes }) {
     const [noteColor, setNoteColor] = useState('red');
     const [noteText, setNoteText] = useState('');
 
@@ -32,7 +32,6 @@ export function NoteAreaCalendar({ showNote, setShowNote, dateToYMD, range, allN
             color: noteColor,
             noteText: noteText
         };
-        console.log('note', note);
         setAllNotes([...allNotes, note]);
 
     }
