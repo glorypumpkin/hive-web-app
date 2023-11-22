@@ -1,6 +1,6 @@
 import { DayPicker } from "react-day-picker"
 import "react-day-picker/dist/style.css"
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { NoteAreaCalendar } from "./NoteAreaCalendar";
 
 export function Calendar({ allNotes, setAllNotes }) {
@@ -43,6 +43,7 @@ export function Calendar({ allNotes, setAllNotes }) {
         };
 
         allNoteMatcher[noteColor].push(noteMatcher); //TODO: change style for overlapping notes
+        console.log('allNoteMatcher', allNoteMatcher);
     }
 
     const handleDayClick = (day, { selected }) => {

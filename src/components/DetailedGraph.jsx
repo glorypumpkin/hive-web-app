@@ -157,7 +157,7 @@ export default function DetailedGraph({ data }) {
     }
 
     return (
-        <div className=" bg-[rgba(25,118,210,0.08)] flex pt-2">
+        <div className=" -bg--primary-color flex pt-2 w-[100vw] h-[100vh]">
             <div className="flex flex-col gap-5">
                 <div className='flex flex-row gap-2 pl-3 items-center pt-1'>
                     <button className=' bg-orange-200' onClick={onTooltipButtonClick}>Tooltip</button>
@@ -174,7 +174,7 @@ export default function DetailedGraph({ data }) {
                 <div className=" flex flex-col gap-12 w-[377px] items-center">
                     <Calendar allNotes={allNotes} setAllNotes={setAllNotes}
                     ></Calendar>
-                    <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden bg-[rgba(25,_118,_210,_0.08)] flex flex-row justify-center gap-3 w-3/5 h-12 shrink-0 items-center rounded-[50px] hover:bg-[#3877b53b] cursor-pointer">
+                    <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] -bg--primary-color flex flex-row justify-center gap-3 w-3/5 h-12 items-center rounded-[50px] hover:-bg--hover-color cursor-pointer">
                         <img
                             src="https://file.rendit.io/n/tCph0baGyDvCMUzNZVzt.svg"
                             className="w-6 shrink-0"
@@ -195,7 +195,7 @@ const CustomTick = (props) => {
     const d = `${date.getDate()}.${date.getMonth() + 1}`
     return (
         <g transform={`translate(${x},${y})`}>
-            <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
+            <text x={0} y={0} dy={10} textAnchor="end" fill="#666" transform="rotate(-25)">
                 {d}
             </text>
         </g>

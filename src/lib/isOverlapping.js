@@ -11,7 +11,9 @@ export function assignFloors(notes) {
     notes.forEach((note, index) => {
         let floor = 0;
         for (let i = 0; i < index; i++) {
-            if (isOverlapping(notes[i], note)) {
+            // if note is overlapping with any previous note, increase floor
+            // if note is overlapiing, with multiple notes with the same floor, it will increase floor only once
+            if (isOverlapping(note, notes[i]) && notes[i].floor === floor) {
                 floor++;
             }
         }

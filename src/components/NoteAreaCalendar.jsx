@@ -16,7 +16,7 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAl
 
     const disabled = !range
 
-    function onSaveClick() {
+    function onSaveClick() {  //TODO: if there is no text - don't save
 
         let noteTo;
 
