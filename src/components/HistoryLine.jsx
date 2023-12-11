@@ -1,4 +1,4 @@
-const periods = ['This day', '7 days', '21 days', 'Month', '1 cvartal', '2 cvartal', '3 cvartal', '4 cvartal', 'Year'];
+const periods = ['This day', '7 days', '21 days', 'Month', '1 kvartal', '2 kvartal', '3 kvartal', '4 kvartal', 'Year'];
 
 export function HistoryLine({ activePeriodButton, setActivePeriodButton }) {
 

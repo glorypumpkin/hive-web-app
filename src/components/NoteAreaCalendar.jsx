@@ -20,7 +20,7 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAl
 
         let noteTo;
 
-        if (range.to !== undefined) {
+        if (range.to !== undefined) { //if there is only one date selected, there is no range.to
             noteTo = new Date(range.to);
         } else {
             noteTo = range.from;

@@ -1,5 +1,5 @@
 'use client'
-import { Brush, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, ComposedChart } from 'recharts';
+import { Brush, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LineChart } from 'recharts';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Calendar } from './Calendar';
@@ -104,23 +104,20 @@ export default function DetailedGraph({ data }) {
 
 
     const graphType = activeType.map((type, index) => (
-        type === 'weight' || type === 'temperature' || type === 'weather' ? (
-            <Line
-                key={index}
-                type="monotone"
-                dataKey={type} //dataKey is used to set the data to the right type (weight, temperature or weather)
-                stroke={type === 'weight' ? '#8884d8' : '#82ca9d'}
-                dot={showDot ? <CustomDot showDots={showDots} setShowDots={setShowDots} type={type} /> : false}
-                // if showDot is true, show dot
-                yAxisId={units[type]}
-            />
-        ) : console.log('type', type)
-
+        <Line
+            key={index}
+            type="monotone"
+            dataKey={type} //dataKey is used to set the data to the right type (weight, temperature or weather)
+            stroke={type === 'weight' ? '#8884d8' : '#82ca9d'}
+            dot={showDot ? <CustomDot showDots={showDots} setShowDots={setShowDots} type={type} /> : false}
+            // if showDot is true, show dot
+            yAxisId={units[type]}
+        />
     ));
 
 
     const renderLineChart = (
-        <ComposedChart
+        <LineChart
             id='detailed-graph'
             data={dataWithDayAndHour} //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
             margin={{
@@ -142,7 +139,7 @@ export default function DetailedGraph({ data }) {
             {showTooltip && <Tooltip content={customTooltip} />}
             {/* if showTooltip is true, show tooltip */}
             <Legend />
-        </ComposedChart>
+        </LineChart>
 
     );
 
@@ -164,6 +161,7 @@ export default function DetailedGraph({ data }) {
                     <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button>
                     <button className='bg-orange-200'>Statistic</button>
                     <button className='bg-orange-200'>Normal</button>
+                    <button className='bg-orange-200'>Notes ON/OFF</button>
                 </div>
                 {hydrated && renderLineChart}
                 {notesParent && createPortal(<NoteAreaGraph noteCoordinates={noteCoordinates} dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} />, notesParent)}
