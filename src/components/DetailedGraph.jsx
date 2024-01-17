@@ -8,6 +8,7 @@ import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
 import { dateFiltering, getDateInterval } from '@/lib/dateFiltering';
 import { NoteAreaGraph } from './NoteAreaGraph';
+import Link from 'next/link'
 
 const units = {
     weight: 'kg',
@@ -83,6 +84,8 @@ export default function DetailedGraph({ data }) {
         return { ...item, day, hour, year };
     })
 
+    console.log('dataWithDayAndHour', dataWithDayAndHour);
+
     const customTooltip = ({ active, payload, label }) => {
         if (active) {
             // if showDots is false, hide tooltip
@@ -115,7 +118,7 @@ export default function DetailedGraph({ data }) {
         />
     ));
 
-
+    //TODO: find a problem with graph going out of bounds
     const renderLineChart = (
         <LineChart
             id='detailed-graph'
@@ -154,7 +157,7 @@ export default function DetailedGraph({ data }) {
     }
 
     return (
-        <div className=" -bg--primary-color flex pt-2 w-[100vw] h-[100vh]">
+        <div className="-bg--primary-color flex pt-2 w-[100vw] h-[100vh]">
             <div className="flex flex-col gap-5">
                 <div className='flex flex-row gap-2 pl-3 items-center pt-1'>
                     <button className=' bg-orange-200' onClick={onTooltipButtonClick}>Tooltip</button>
@@ -167,12 +170,25 @@ export default function DetailedGraph({ data }) {
                 {notesParent && createPortal(<NoteAreaGraph noteCoordinates={noteCoordinates} dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} />, notesParent)}
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton}></HistoryLine>
             </div>
-            <div className="flex flex-col gap-16 w-full items-center pt-10">
+            <div className="flex flex-col gap-16 w-full items-center">
+                <div className='flex flex-row w-full justify-end'>
+                    <Link href="/dashboard" className='shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] flex flex-row gap-3 h-12 rounded-[50px] common-button pr-4 bg-orange-200 hover:bg-orange-400'>
+                        <img src="/minimize.png"
+                            className=' pl-2 w-6 shrink-0'
+                        />
+                        <div className='text-center text-xl font-sans font-semibold'>
+                            Dashbord </div>
+                    </Link>
+                    <Link href='/' className='shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] h-12 rounded-[50px] common-button bg-orange-200 hover:bg-orange-400 flex px-3'>
+                        <div>
+                            Main page
+                        </div></Link>
+                </div>
                 <SelectGraphType activeType={activeType} setActiveType={setActiveType} ></SelectGraphType>
-                <div className=" flex flex-col gap-12 w-[377px] items-center">
+                <div className=" flex flex-col gap-12 items-center">
                     <Calendar allNotes={allNotes} setAllNotes={setAllNotes}
                     ></Calendar>
-                    <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] -bg--primary-color flex flex-row justify-center gap-3 w-3/5 h-12 items-center rounded-[50px] hover:-bg--hover-color cursor-pointer">
+                    <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] flex flex-row gap-3 w-3/5 h-12 rounded-[50px] common-button">
                         <img
                             src="https://file.rendit.io/n/tCph0baGyDvCMUzNZVzt.svg"
                             className="w-6 shrink-0"

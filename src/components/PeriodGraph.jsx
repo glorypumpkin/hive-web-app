@@ -30,7 +30,6 @@ export default function PeriodGraph({ data }) {
                 </div>
             );
         }
-
         return null;
     };
     // params: data, date from 21 days ago, date to today
@@ -45,14 +44,14 @@ export default function PeriodGraph({ data }) {
         const hour = date.getHours() + ':00';
         return { ...item, day, hour };
     })
-
+    console.log('dataWithDayAndHour', dataWithDayAndHour);
     const renderLineChart = (
         <ResponsiveContainer width="70%" height="70%">
             <LineChart id="period-graph" width={400} height={300} data={dataWithDayAndHour}>
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                <Line dataKey="kg" stroke="#8884d8" xAxisId={data.hour} />
+                <Line stroke="#8884d8" xAxisId={data.hour} type="monotone" dataKey="weight" />
+                {/* <Line stroke="#82ca9d" xAxisId={data.hour} type="monotone" dataKey="temperature" /> */}
                 <XAxis dataKey="day" angle={-30} textAnchor="end" tick={{ fontSize: 15 }} reversed />
-                {/* <XAxis dataKey="hour" orientation="top" tick={{ fontSize: 10 }} xAxisId="hourAxis" angle={45} textAnchor="end" hide /> */}
                 <YAxis tick={{ fontSize: 10 }} domain={['dataMin-0.5', 'dataMax +0.5']} />
                 <Tooltip content={CustomTooltip} />
             </LineChart>
@@ -61,7 +60,7 @@ export default function PeriodGraph({ data }) {
 
     return (
         <div className='main-page bg-[#fffae7]'>
-            {renderLineChart}
+            {hydrated && renderLineChart}
         </div>
     )
 }

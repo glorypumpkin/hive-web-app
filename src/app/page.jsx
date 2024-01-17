@@ -17,6 +17,7 @@ export default async function Home() {
       <Link href="/dashboard">Dashboard</Link>
       <Link href="/registration">Registration</Link>
       <GraphExample></GraphExample>
+      {/* <a href="https://www.flaticon.com/free-icons/compression" title="compression icons">Compression icons created by MansyGraphics - Flaticon</a> */}
     </div>
   )
 }

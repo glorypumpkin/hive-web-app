@@ -10,6 +10,7 @@ export default function MainPage() {
         src="main-page-pic.png"
         id="Image1"
         className="mb-12"
+        alt="main-page-pic"
       />
       <div>
         <div className="shadow-[0px_0px_15px_3px_rgba(0,_0,_0,_0.12)] overflow-hidden bg-[rgba(240,_189,_7,_0.21)] self-start flex flex-col gap-3 items-start pt-10 pb-16 px-4 rounded-[25px] min-w-[400px] w-[500px] ">

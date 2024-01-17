@@ -38,17 +38,22 @@
     }
 
     .dashboard-element {
-        @apply bg-[#e7ecff] rounded-[50px] items-center justify-center shadow-[10px_10px_20px_5px_#4541332e]
+        @apply bg-[#e7ecff] rounded-[50px] items-center justify-center shadow-[10px_10px_20px_5px_#4541332e] flex flex-col
     }
 
-    .history-container {
-        @apply -bg--primary-color flex flex-col justify-center w-full items-center hover:-bg--hover-color cursor-pointer
-    }
+    /* .dashboard-button {
+        @apply w-6
+    } */
 
     .graph-type-container {
         @apply -bg--primary-color self-stretch flex flex-col justify-center gap-3 h-32 rounded-[50px] pl-16 items-start
     }
 
+    .common-button {
+        @apply overflow-hidden cursor-pointer justify-center hover:-bg--hover-color -bg--primary-color items-center
+    }
+
+    /* shadow-[15px_15px_35px_-3px_#4541332e] */
     .type-button {
         @apply appearance-none w-4 h-4 cursor-pointer bg-gray-300 checked:bg-red-950 rounded-[5px]
     }
@@ -60,4 +65,5 @@
     .color-note-button {
         @apply rounded-3xl w-4 h-4
     }
+
 }

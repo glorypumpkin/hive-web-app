@@ -10,7 +10,7 @@ export function HistoryLine({ activePeriodButton, setActivePeriodButton }) {
         <div className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] overflow-hidden flex flex-row mx-2 rounded-[50px] h-16">
             {periods.map((period, index) => (
 
-                <button key={index} className={`history-container font-sans font-light ${activePeriodButton === period ? 'bg-[#3877b53b]' : ''}`}
+                <button key={index} className={`common-button font-sans flex w-full flex-col font-light ${activePeriodButton === period ? '-bg--hover-color' : ''}`}
                     onClick={() => OnPeriodClicked(period)}
                 >{period}</button>
 
