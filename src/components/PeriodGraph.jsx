@@ -18,6 +18,7 @@ export default function PeriodGraph({ data }) {
     useEffect(() => {
         setHydrated(true);
     }, []);
+
     if (!hydrated) {
         return null;
     }
@@ -46,7 +47,7 @@ export default function PeriodGraph({ data }) {
     })
     console.log('dataWithDayAndHour', dataWithDayAndHour);
     const renderLineChart = (
-        <ResponsiveContainer width="70%" height="70%">
+        <ResponsiveContainer width="100%" height="100%">
             <LineChart id="period-graph" width={400} height={300} data={dataWithDayAndHour}>
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <Line stroke="#8884d8" xAxisId={data.hour} type="monotone" dataKey="weight" />
@@ -59,7 +60,7 @@ export default function PeriodGraph({ data }) {
     )
 
     return (
-        <div className='main-page bg-[#fffae7]'>
+        <div className='w-[55vw] h-[70vh] bg-[#fffae7] '>
             {hydrated && renderLineChart}
         </div>
     )

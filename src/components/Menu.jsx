@@ -4,7 +4,7 @@ export default function Menu() {
 
     <div
       id="MenuRoot"
-      className="overflow-hidden bg-[rgba(224,_187,_55,_0.24)] flex flex-row justify-end gap-2 w-full h-12 items-center px-6"
+      className="overflow-hidden bg-[rgba(224,_187,_55,_0.24)] flex flex-row justify-end gap-2 w-full h-[5vh] items-center px-6"
     >
       <button className="bg-[#fce07c] w-16 p-1 rounded-[50px] font-['Inter']">Login</button>
       <button

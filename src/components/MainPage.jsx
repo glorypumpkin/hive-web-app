@@ -1,20 +1,25 @@
+import PeriodGraph from '@/components/PeriodGraph.jsx'
+import Bee from '@/components/Bee.jsx'
 
+export default function MainPage({ data }) {
 
-export default function MainPage() {
   return (
     <div
       id="FrontPageRoot"
-      className="main-page bg-gradient-to-b from-[#fffae7] via-[#fffae7] via-60% to-[rgba(255, 224, 205, 0)]"
+      className=" bg-gradient-to-b from-[#fffae7] via-[#fffae7] via-100% to-[rgba(255, 224, 205, 0)]"
     >
-      <img
+      {/* <img
         src="main-page-pic.png"
         id="Image1"
         className="mb-12"
         alt="main-page-pic"
-      />
-      <div>
-        <div className="shadow-[0px_0px_15px_3px_rgba(0,_0,_0,_0.12)] overflow-hidden bg-[rgba(240,_189,_7,_0.21)] self-start flex flex-col gap-3 items-start pt-10 pb-16 px-4 rounded-[25px] min-w-[400px] w-[500px] ">
-          <div className="m-3">
+      /> */}
+      <div className='main-page items-center justify-between'>
+        <PeriodGraph data={data}>
+        </PeriodGraph>
+        <div className=" flex flex-col gap-3 ">
+          <Bee></Bee>
+          <div className="m-3 shadow-[0px_0px_15px_3px_rgba(0,_0,_0,_0.12)] overflow-hidden bg-[rgba(240,_189,_7,_0.21)] pt-10 pb-16 px-4 rounded-[25px] w-[30vw]">
             <h2 className="text-6xl font-bold mb-3">Bees</h2>
             <p className="text-lg font-extralight self-end w-full">
               Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Pellentesque
@@ -25,16 +30,16 @@ export default function MainPage() {
               velit mauris vel metus. In rutrum. Maecenas libero.
             </p>
           </div>
+          <button
+            // onClick={(e) => SignUpButtonRootFunction(e, "SignUpButtonRoot")}
+            id="SignUpButtonRoot"
+            className="shadow-[0px_0px_15px_3px_rgba(0,_0,_0,_0.12)] overflow-hidden bg-[#fce07c] justify-center h-16 items-center rounded-[50px] mt-7"
+          >
+            <div className="text-center text-3xl font-semibold tracking-[1.26]">
+              Start beeing
+            </div>
+          </button>
         </div>
-        <button
-          // onClick={(e) => SignUpButtonRootFunction(e, "SignUpButtonRoot")}
-          id="SignUpButtonRoot"
-          className="shadow-[0px_0px_15px_3px_rgba(0,_0,_0,_0.12)] overflow-hidden bg-[#fce07c] flex flex-col justify-center w-full h-16 items-center rounded-[50px] mt-7"
-        >
-          <div className="text-center text-3xl font-semibold tracking-[1.26]">
-            Start beeing
-          </div>
-        </button>
       </div>
     </div>
   )
