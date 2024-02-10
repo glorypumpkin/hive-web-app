@@ -5,6 +5,7 @@ export function getDateInterval(period) {
     const endDate = new Date();
     const firstOfJanuary = new Date(now.getFullYear(), 0, 1);
     // const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const lastYear = new Date(now.getFullYear() - 1, 0, 1);
     const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7, 0, 0, 0);
     switch (period) {
         case 'This day':
@@ -41,8 +42,8 @@ export function getDateInterval(period) {
             // TODO: if there is no data for the second 3 months of the year, return first 3 months of the year
             if (now.getMonth() < 3) {
                 return {
-                    startDate: new Date(firstOfJanuary.setMonth(0)),
-                    endDate: new Date(firstOfJanuary.setMonth(3))
+                    startDate: new Date(lastYear.setMonth(3)),
+                    endDate: new Date(lastYear.setMonth(6))
                 }
             } else {
                 return {
@@ -53,15 +54,10 @@ export function getDateInterval(period) {
 
         case '3 kvartal':
             // return third 3 months of the year
-            if (now.getMonth() < 6 && now.getMonth() >= 3) {
+            if (now.getMonth() < 6) {
                 return {
-                    startDate: new Date(firstOfJanuary.setMonth(3)),
-                    endDate: new Date(firstOfJanuary.setMonth(6))
-                }
-            } else if (now.getMonth() < 3) {
-                return {
-                    startDate: new Date(firstOfJanuary.setMonth(0)),
-                    endDate: new Date(firstOfJanuary.setMonth(3))
+                    startDate: new Date(lastYear.setMonth(6)),
+                    endDate: new Date(lastYear.setMonth(9))
                 }
             } else {
                 return {
@@ -71,20 +67,10 @@ export function getDateInterval(period) {
             }
         case '4 kvartal':
             // return fourth 3 months of the year
-            if (now.getMonth() < 9 && now.getMonth() >= 6) {
+            if (now.getMonth() < 9) {
                 return {
-                    startDate: new Date(firstOfJanuary.setMonth(6)),
-                    endDate: new Date(firstOfJanuary.setMonth(9))
-                }
-            } else if (now.getMonth() < 6 && now.getMonth() >= 3) {
-                return {
-                    startDate: new Date(firstOfJanuary.setMonth(3)),
-                    endDate: new Date(firstOfJanuary.setMonth(6))
-                }
-            } else if (now.getMonth() < 3) {
-                return {
-                    startDate: new Date(firstOfJanuary.setMonth(0)),
-                    endDate: new Date(firstOfJanuary.setMonth(3))
+                    startDate: new Date(lastYear.setMonth(9)),
+                    endDate: new Date(lastYear.setMonth(12))
                 }
             } else {
                 return {

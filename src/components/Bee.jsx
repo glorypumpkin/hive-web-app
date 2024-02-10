@@ -1,12 +1,12 @@
 
 export default function Bee() {
-    const css = `
+  const css = `
     .bug {
         transform: rotate(-360deg);
         width: 50px;
         height: 50px;
         position: absolute;
-        // animation: bee 5s linear infinite both;
+        animation: bee 5s linear infinite both;
       }
       .bee1 {
         width: 40px;
@@ -176,19 +176,19 @@ export default function Bee() {
         height: 5px;}
       }
   `
-    return (
-        <div className='wrap'>
-            <style>{css}</style>
-            <div className="bug">
-                <div className="bee1">
-                    <div className="eye"></div>
-                </div>
-                <div className="bee2">
-                    <div className="wing"></div>
-                    <div className="wing2"></div>
-                </div>
-                <div className="black"></div>
-            </div>
+  return (
+    <div className='wrap'>
+      <style>{css}</style>
+      <div className="bug">
+        <div className="bee1">
+          <div className="eye"></div>
         </div>
-    )
+        <div className="bee2">
+          <div className="wing"></div>
+          <div className="wing2"></div>
+        </div>
+        <div className="black"></div>
+      </div>
+    </div>
+  )
 }

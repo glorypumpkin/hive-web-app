@@ -1,5 +1,7 @@
 import DetailedGraph from "@/components/DetailedGraph"
+import Menu from "@/components/Menu";
 import { getBeeData } from '@/lib/dataFetching.js'
+import AccessHandler from '@/components/AccessHandler';
 // import { createContext } from "react";
 
 // const DetailedGraphContext = createContext();
@@ -7,6 +9,10 @@ import { getBeeData } from '@/lib/dataFetching.js'
 export default async function DetailedGraphPage() {
     const data = await getBeeData();
     return (
-        <DetailedGraph data={data} />
+        <>
+            {/* <Menu /> */}
+            <AccessHandler />
+            <DetailedGraph data={data} />
+        </>
     )
 }
