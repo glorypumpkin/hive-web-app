@@ -31,7 +31,7 @@ async function dataFetching() {
 
     const service = google.drive('v3');
     const res = await service.files.list({ pageSize: 8, q: `'${FOLDER_ID}' in parents` });
-    console.dir(res);
+    // console.dir(res);
     let dataId = null;
     const dataFile = res.data.files.forEach(file => {
         if (file.mimeType === 'text/plain') {

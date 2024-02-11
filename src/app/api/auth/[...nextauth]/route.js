@@ -6,11 +6,22 @@ export const authOptions = {
         GoogleProvider({
             clientId: process.env.GG_ID,
             clientSecret: process.env.GG_SECRET,
+            authorization: {
+                params: {
+                    scope: "https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+                }
+            }
         })
     ],
     callbacks: {
         async redirect() {
             return "/dashboard"
+        },
+        async jwt(token, user, account, profile, isNewUser) {
+            if (account?.accessToken) {
+                token.accessToken = account.accessToken;
+            }
+            return token;
         }
     }
 };
