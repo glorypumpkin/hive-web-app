@@ -7,7 +7,7 @@ import { dateFiltering } from '@/lib/dateFiltering';
 
 export default function Dashboard({ data }) {
     return (
-        <div className="bg-[##1976d214] flex flex-col gap-16 w-full px-6 pt-16 pb-10">
+        <div className="bg-[##1976d214] flex flex-col gap-16 w-full px-6 pt-16 pb-10 h-[95vh]">
             <div className="flex flex-row mr-1 gap-12 items-start">
                 <Weather> </Weather>
                 <DataPrediction> </DataPrediction>

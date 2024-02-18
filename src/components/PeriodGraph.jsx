@@ -60,7 +60,7 @@ export default function PeriodGraph({ data }) {
     )
 
     return (
-        <div className='w-[55vw] h-[70vh] bg-[#fffae7] '>
+        <div className='h-full'>
             {hydrated && renderLineChart}
         </div>
     )
