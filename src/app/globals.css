@@ -77,6 +77,7 @@
         align-items: center;
         justify-content: center;
         margin-right: calc((var(--hex-size)/2) + var(--gap)*2);
+        /* box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000; */
     }
 
     .hex-container {
@@ -85,6 +86,8 @@
         /* display: flex; */
         position: relative;
         width: 100%;
+        background: #fff transparent;
+        filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.5));
     }
 
     .hex-row {
@@ -97,7 +100,6 @@
 
     .hex-row:nth-child(even) {
         margin-left: calc(var(--hex-size)*0.75 + var(--gap));
-
     }
 
 }

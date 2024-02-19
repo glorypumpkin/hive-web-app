@@ -55,7 +55,7 @@ export default function MainPage({ data }) {
                 </div>
               </div>
             </div>
-            <div className=' justify-self-start flex'>
+            <div className=' items-center justify-around  flex pl-20'>
               <img src="/beehive.png"
                 className=' w-64 h-64 '
               />
@@ -63,7 +63,7 @@ export default function MainPage({ data }) {
               <button
                 // onClick={(e) => SignUpButtonRootFunction(e, "SignUpButtonRoot")}
                 id="SignUpButtonRoot"
-                className="shadow-[0px_0px_15px_3px_rgba(0,_0,_0,_0.12)] overflow-hidden bg-[#fce07c] h-16 rounded-[50px] w-full"
+                className="shadow-[0px_0px_15px_3px_rgba(0,_0,_0,_0.12)] bg-[#fce07c] h-16 rounded-[50px] w-[600px]"
               >
                 <div className="text-center text-3xl font-semibold tracking-[1.26]">
                   Start beeing

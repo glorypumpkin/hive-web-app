@@ -1,13 +1,13 @@
 'use client'
 import { Weather } from "./Weather"
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { dateFiltering } from '@/lib/dateFiltering';
 
 export default function Dashboard({ data }) {
     return (
-        <div className="bg-[##1976d214] flex flex-col gap-16 w-full px-6 pt-16 pb-10 h-[95vh]">
+        <div className="bg-[#1976d214] flex flex-col gap-16 w-full px-6 pt-16 pb-10 h-[94vh]">
             <div className="flex flex-row mr-1 gap-12 items-start">
                 <Weather> </Weather>
                 <DataPrediction> </DataPrediction>
@@ -45,19 +45,20 @@ export function DataPrediction() {
         return null;
     }
     return (
-        <div className="shadow-[10px_10px_20px_5px_#4541332e] bg-[#e7ecff] w-2/5 h-[340px] rounded-[50px] flex flex-row justify-evenly items-center">
-            <div className=" ml-5">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti quo, pariatur optio culpa eligendi dignissimos perspiciatis, recusandae dolores earum sequi dolorum, sapiente error animi! Eius voluptatum quas nobis consectetur. Dolorem!</p>
+        <div className="shadow-[10px_10px_20px_5px_#4541332e] bg-[#e7ecff] w-full max-w-2xl md:w-2/5 h-[340px] rounded-[50px] flex flex-col md:flex-row justify-between items-center mx-auto md:mx-0">
+            <div className="w-full md:w-[30%] mb-4 md:mb-0 md:ml-5">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
             </div>
-            <div className="">
+            <div className=" h-[200px] md:h-full md:w-[80%]">
                 {hydrated && (
-
-                    <LineChart id="data-prediction-graph" width={400} height={300} data={exampleData}>
-                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                        <Line type="monotone" dataKey="weight" stroke="#8884d8" />
-                        <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
-                        <YAxis tick={{ fontSize: 10 }} />
-                    </LineChart>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart id="data-prediction-graph" data={exampleData}>
+                            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                            <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+                            <XAxis dataKey="month" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
+                            <YAxis tick={{ fontSize: 10 }} />
+                        </LineChart>
+                    </ResponsiveContainer>
                 )}
             </div>
         </div>
@@ -88,15 +89,17 @@ export function SmallWeightGraph({ data }) {
     return (
         <div className="dashboard-element w-1/2 h-[380px] " >
             <h2>Weight</h2>
-            <div className="flex flex-row">
+            <div className="flex flex-row w-full h-full">
                 {hydrated && (
-                    <LineChart id="small-weight-graph" width={800} height={300} data={dataWithDayAndHour}>
-                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                        <Line type="monotone" dataKey="weight" stroke="#8884d8" />
-                        <XAxis dataKey="day" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} reversed />
-                        <YAxis tick={{ fontSize: 10 }} domain={['dataMin-0.5', 'dataMax +0.5']} />
-                        <Tooltip></Tooltip>
-                    </LineChart>
+                    <ResponsiveContainer width="100%" height="100%" >
+                        <LineChart id="small-weight-graph" width={800} height={300} data={dataWithDayAndHour}>
+                            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                            <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+                            <XAxis dataKey="day" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} reversed />
+                            <YAxis tick={{ fontSize: 10 }} domain={['dataMin-0.5', 'dataMax +0.5']} />
+                            <Tooltip></Tooltip>
+                        </LineChart>
+                    </ResponsiveContainer>
                 )}
                 <div className="flex items-end pb-4">
                     <Link href="/dashboard/detailed-graph" className="h-6 w-6">
@@ -132,16 +135,17 @@ export function SmallTemperatureGraph({ data }) {
     return (
         <div className="dashboard-element w-1/2 h-[380px]" >
             <h2>Temperature</h2>
-            <div className="flex flex-row">
+            <div className="flex flex-row w-full h-full">
                 {hydrated && (
-
-                    <LineChart id="small-temperature-graph" width={800} height={300} data={dataWithDayAndHour}>
-                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                        <Line type="monotone" dataKey="temperature" stroke="#82ca9d" />
-                        <XAxis dataKey="day" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} reversed />
-                        <YAxis tick={{ fontSize: 10 }} domain={['dataMin-0.5', 'dataMax +0.5']} />
-                        <Tooltip></Tooltip>
-                    </LineChart>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart id="small-temperature-graph" width={800} height={300} data={dataWithDayAndHour}>
+                            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                            <Line type="monotone" dataKey="temperature" stroke="#82ca9d" />
+                            <XAxis dataKey="day" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} reversed />
+                            <YAxis tick={{ fontSize: 10 }} domain={['dataMin-0.5', 'dataMax +0.5']} />
+                            <Tooltip></Tooltip>
+                        </LineChart>
+                    </ResponsiveContainer>
                 )}
                 <div className="flex items-end pb-4">
                     <Link href="/dashboard/detailed-graph" className="h-6 w-6">
