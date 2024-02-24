@@ -3,8 +3,8 @@ import "react-day-picker/dist/style.css"
 import { useState } from 'react';
 import { NoteAreaCalendar } from "./NoteAreaCalendar";
 
-export function Calendar({ allNotes, setAllNotes }) {
-    const [range, setRange] = useState();
+export function Calendar({ allNotes, setAllNotes, activeShowButton, setActiveShowButton, range, setRange }) {
+    // const [range, setRange] = useState();
     const [showNote, setShowNote] = useState(false);
 
     const css = `
@@ -72,7 +72,9 @@ export function Calendar({ allNotes, setAllNotes }) {
                     modifiersStyles={allNotesStyle}
                 />
             </div>
-            <NoteAreaCalendar setShowNote={setShowNote} showNote={showNote} range={range} allNotes={allNotes} setAllNotes={setAllNotes}></NoteAreaCalendar>
+            <NoteAreaCalendar setShowNote={setShowNote} showNote={showNote} range={range} setRange={setRange} allNotes={allNotes} setAllNotes={setAllNotes}
+                activeShowButton={activeShowButton} setActiveShowButton={setActiveShowButton}
+            ></NoteAreaCalendar>
         </div>
     )
 }

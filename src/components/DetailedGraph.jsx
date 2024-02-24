@@ -6,7 +6,7 @@ import { Calendar } from './Calendar';
 import { CustomDot } from './CustomDot';
 import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
-import { dateFiltering, getDateInterval } from '@/lib/dateFiltering';
+import { dateFiltering, getDateInterval, getDataWithDayAndHour } from '@/lib/dateFiltering';
 import { NoteAreaGraph } from './NoteAreaGraph';
 import Link from 'next/link'
 
@@ -25,7 +25,8 @@ export default function DetailedGraph({ data }) {
     const [showTooltip, setShowTooltip] = useState(true);
     const [showDot, setShowDot] = useState(false);
     const [activePeriodButton, setActivePeriodButton] = useState("Year");
-
+    const [activeShowButton, setActiveShowButton] = useState(false);
+    const [range, setRange] = useState();
 
     useEffect(() => {
         setHydrated(true);
@@ -43,8 +44,8 @@ export default function DetailedGraph({ data }) {
         return null;
     }
 
-    console.log('line');
-    console.dir(line);
+    // console.log('line');
+    // console.dir(line);
     let notesParent = null;
     if (line) {
         const x1 = line.getAttribute('x1');
@@ -52,7 +53,7 @@ export default function DetailedGraph({ data }) {
         const x2 = line.getAttribute('x2');
         const y2 = line.getAttribute('y2');
         const coordinates = { x1, y1, x2, y2 };
-        console.log('coordinates', coordinates);
+        // console.log('coordinates', coordinates);
         if (coordinates.x1 !== noteCoordinates.x1 || coordinates.y1 !== noteCoordinates.y1 || coordinates.x2 !== noteCoordinates.x2 || coordinates.y2 !== noteCoordinates.y2) {
             setNoteCoordinates(coordinates);
         }
@@ -60,6 +61,7 @@ export default function DetailedGraph({ data }) {
     }
 
     const dateInterval = getDateInterval(activePeriodButton);
+    // console.log('dateInterval', dateInterval);
 
     // Clamp dateInterval to data
     const mostRecentDataDate = new Date(data[0].timestamp);
@@ -71,19 +73,28 @@ export default function DetailedGraph({ data }) {
         dateInterval.endDate = mostRecentDataDate;
     }
 
-    const dateFrom = dateInterval.startDate;
-    const dateTo = dateInterval.endDate;
-    const filterData = dateFiltering(data, dateFrom, dateTo);
-    console.log('dateFrom', dateFrom);
-    console.log('dateTo', dateTo);
-    const dataWithDayAndHour = filterData.map((item) => {
-        const date = new Date(item.timestamp);
-        const day = date.getDate() + '.' + (date.getMonth() + 1);
-        const hour = date.getHours() + ':00';
-        const year = date.getFullYear();
-        return { ...item, day, hour, year };
-    })
-
+    // const filterData = dateFiltering(data, dateFrom, dateTo);
+    // console.log('dateFrom', dateFrom);
+    // console.log('dateTo', dateTo);
+    // const dateFrom = dateInterval.startDate;
+    // const dateTo = dateInterval.endDate;
+    let dateFrom;
+    let dateTo;
+    if (activeShowButton) {
+        console.log('active show button');
+        // if (range.to !== undefined) {
+        //     dateTo = new Date(range.to);
+        // } else {
+        //     dateTo = range.from;
+        // }
+        dateTo = range.to !== undefined ? new Date(range.to) : range.from;
+        dateFrom = range.from;
+    } else {
+        console.log('not active show button');
+        dateFrom = dateInterval.startDate;
+        dateTo = dateInterval.endDate;
+    }
+    const dataWithDayAndHour = getDataWithDayAndHour(data, dateFrom, dateTo);
     console.log('dataWithDayAndHour', dataWithDayAndHour);
 
     const customTooltip = ({ active, payload, label }) => {
@@ -186,7 +197,7 @@ export default function DetailedGraph({ data }) {
                 </div>
                 <SelectGraphType activeType={activeType} setActiveType={setActiveType} ></SelectGraphType>
                 <div className=" flex flex-col gap-12 items-center">
-                    <Calendar allNotes={allNotes} setAllNotes={setAllNotes}
+                    <Calendar allNotes={allNotes} setAllNotes={setAllNotes} activeShowButton={activeShowButton} setActiveShowButton={setActiveShowButton} range={range} setRange={setRange}
                     ></Calendar>
                     <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] flex flex-row gap-3 w-3/5 h-12 rounded-[50px] common-button">
                         <img

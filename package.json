@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@vercel/kv": "^1.0.1",
     "autoprefixer": "10.4.16",
     "date-fns": "^2.30.0",
     "eslint": "8.50.0",

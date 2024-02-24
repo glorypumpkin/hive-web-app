@@ -107,11 +107,28 @@ export function dateFiltering(data, startDate, endDate) {
         if (data[i].timestamp >= startDateInMs && data[i].timestamp <= endDateInMs) {
             filteredData.push(data[i]);
         } // if there is no data for today yet, add last 4 entries to the filteredData array
-        else if (data[i].timestamp >= new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 0, 0, 0).getTime()) {
+        else if (data[i].timestamp >= new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime()) {
             filteredData.push(data[i]);
         }
     }
 
     return filteredData;
 
+}
+
+
+export function getDataWithDayAndHour(data, dateFrom, dateTo) {
+    const filterData = dateFiltering(data, dateFrom, dateTo);
+    // console.log('dateFrom', dateFrom);
+    // console.log('dateTo', dateTo);
+    // console.log('filterData', filterData);
+    const dataWithDayAndHour = filterData.map((item) => {
+        const date = new Date(item.timestamp);
+        const day = date.getDate() + '.' + (date.getMonth() + 1);
+        const hour = date.getHours() + ':00';
+        const year = date.getFullYear();
+        return { ...item, day, hour, year };
+    })
+
+    return dataWithDayAndHour;
 }

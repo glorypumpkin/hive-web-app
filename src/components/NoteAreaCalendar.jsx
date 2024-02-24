@@ -6,7 +6,7 @@ const colors = {
     blue: 'bg-blue-300',
 };
 
-export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAllNotes }) {
+export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAllNotes, setActiveShowButton, activeShowButton }) {
     const [noteColor, setNoteColor] = useState('red');
     const [noteText, setNoteText] = useState('');
 
@@ -34,6 +34,10 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAl
         };
         setAllNotes([...allNotes, note]);
 
+    }
+    function onShowOnGraphClick() {
+        console.log(range.from, range.to);
+        setActiveShowButton(!activeShowButton);
     }
 
     const noteArea = (
@@ -65,6 +69,7 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAl
                 <button disabled={disabled}
                     className={disabled ? 'opacity-50' : 'opacity-100'}
                     title="Show on graph"
+                    onClick={onShowOnGraphClick}
                 >
                     <img
                         src="/graph.png"
