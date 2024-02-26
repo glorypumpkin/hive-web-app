@@ -2,15 +2,14 @@ import { createClient, kv } from "@vercel/kv";
 import { differenceInDays, addDays, subDays, format } from "date-fns";
 
 
-const APIForecast = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia/next7days?unitGroup=metric&key=EH8QCN7D4JL5QY29BLLSEEGVA&contentType=json'
-const APIHistory = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia/2022-01-1/today?unitGroup=metric&include=days&key=EH8QCN7D4JL5QY29BLLSEEGVA&contentType=json';
+const APIForecast = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json'
 
 const weater_set = 'weather';
 
 
 // yyyy-mm-dd
 function getRequestURL(date) {
-    return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia/${date}?unitGroup=metric&include=days&key=EH8QCN7D4JL5QY29BLLSEEGVA&contentType=json`
+    return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia/${date}?unitGroup=metric&include=days&key=${process.env.WEATHER_API_KEY}&contentType=json`
 }
 
 export async function getAllData() {

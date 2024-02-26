@@ -8,6 +8,7 @@ import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
 import { dateFiltering, getDateInterval, getDataWithDayAndHour } from '@/lib/dateFiltering';
 import { NoteAreaGraph } from './NoteAreaGraph';
+import { getSortedData } from '@/lib/dataComparison';
 import Link from 'next/link'
 
 const units = {
@@ -61,6 +62,8 @@ export default function DetailedGraph({ data }) {
     }
 
     const dateInterval = getDateInterval(activePeriodButton);
+
+
     // console.log('dateInterval', dateInterval);
 
     // Clamp dateInterval to data
@@ -73,11 +76,6 @@ export default function DetailedGraph({ data }) {
         dateInterval.endDate = mostRecentDataDate;
     }
 
-    // const filterData = dateFiltering(data, dateFrom, dateTo);
-    // console.log('dateFrom', dateFrom);
-    // console.log('dateTo', dateTo);
-    // const dateFrom = dateInterval.startDate;
-    // const dateTo = dateInterval.endDate;
     let dateFrom;
     let dateTo;
     if (activeShowButton) {
@@ -94,6 +92,18 @@ export default function DetailedGraph({ data }) {
         dateFrom = dateInterval.startDate;
         dateTo = dateInterval.endDate;
     }
+
+    let dataFromWeather;
+
+    getSortedData(dateFrom, dateTo)
+        .then((result) => {
+            dataFromWeather = result;
+            console.log('dataFromWeather', dataFromWeather);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
     const dataWithDayAndHour = getDataWithDayAndHour(data, dateFrom, dateTo);
     console.log('dataWithDayAndHour', dataWithDayAndHour);
 
