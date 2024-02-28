@@ -15,7 +15,7 @@ function getRequestURL(date) {
 export async function getAllData() {
     // get from KV
     const dateFrom = await kv.zrange(weater_set, 0, -1);
-    console.log('dateFrom', dateFrom);
+    // console.log('dateFrom', dateFrom);
     // if not in KV, fetch from API
 }
 export async function getWeatherFromDB(fromTimestamp, toTimestamp) {
@@ -49,14 +49,12 @@ export async function getWeatherData(from, to) {
     // convert to timestamp
     const fromTimestamp = from.getTime();
     const toTimestamp = to.getTime();
-    console.log('fromTimestamp', fromTimestamp);
-    console.log('toTimestamp  ', toTimestamp);
 
     // load from KV
     const data = await getWeatherFromDB(fromTimestamp, toTimestamp);
     // data: Array<{datetime: string, datetimeepoch: number, ...}>
     // datetime: "2022-01-01"
-    console.log('data from DB', data);
+    // console.log('data from DB', data);
 
     // find missing dates
     const knownDates = [];
@@ -69,7 +67,7 @@ export async function getWeatherData(from, to) {
     // add new object at the beginning of the array
     knownDates.unshift(subDays(from, 1));
     knownDates.push(addDays(to, 1));
-    console.log('knownDates', knownDates);
+    // console.log('knownDates', knownDates);
 
     // invariant: db returns sorted data
     const missingDates = [];
@@ -85,7 +83,7 @@ export async function getWeatherData(from, to) {
             }
         }
     }
-    console.log('missingDates', missingDates);
+    // console.log('missingDates', missingDates);
     // fetch missing dates from API 
     if (missingDates.length !== 0) {
 
@@ -93,12 +91,16 @@ export async function getWeatherData(from, to) {
         for (let i = 0; i < missingDates.length; i++) {
             const date = missingDates[i];
             const fetched = await getWeatherOn(date);
-            fetchedData.push(fetched);
+            if (fetched !== null) {
+                fetchedData.push(fetched);
+            }
         }
         console.log('fetchedData', fetchedData);
 
         // save to KV 
-        await saveWeatherData(fetchedData);
+        if (fetchedData.length !== 0) {
+            await saveWeatherData(fetchedData);
+        }
     }
 
     // return all data
@@ -108,17 +110,18 @@ export async function getWeatherData(from, to) {
 // format yyyy-mm-dd
 export async function getWeatherOn(date) {
 
-    const response = await fetch(getRequestURL(date), {
-        method: "GET",
-        headers: {}
-    });
-    const responseBody = await response.text();
+    console.info('external API call for ', date);
     try {
+        const response = await fetch(getRequestURL(date), {
+            method: "GET",
+            headers: {}
+        });
+        const responseBody = await response.text();
         const data = JSON.parse(responseBody);
         const days = data.days;
         return days[0];
     } catch (jsonError) {
         console.error("JSON parsing error", jsonError);
-        return new Response("Invalid JSON in the response", { status: 500 });
+        return null;
     }
 }

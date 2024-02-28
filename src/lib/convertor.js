@@ -1,10 +1,14 @@
 
 // Parametros: fileContents: string
+
+import { parse } from "date-fns";
+
 // Retorno: Array<{}>
 export function convertor(fileContents) {
     const lines = fileContents.split('\n');
     const data = [];
-    for (let i = 1; i < (lines.length - 1); i++) {
+    // skip header
+    for (let i = (lines.length - 2); i > 0; i--) {
         const line = lines[i];
         const parsed = parseLine(line);
         data.push(parsed);
@@ -27,6 +31,13 @@ export function parseLine(line) {
     now.setSeconds(0);
     now.setMilliseconds(0);
 
+    // const now = parse(datum, 'dd/MM/yy', new Date());
+    // console.log('now', now);
+    // console.log('timezone', now.getTimezoneOffset() / 60);
+
+    // // convert to utc
+    // now.setHours(parseInt(cas) - 1);
+
     const timestamp = now.getTime();
 
     const rozdilFloat = parseFloat(rozdil);
@@ -34,6 +45,7 @@ export function parseLine(line) {
     const teplFloat = parseFloat(tepl);
 
     return {
+        datum,
         stan,
         timestamp,
         weight: kgFloat,

@@ -10,11 +10,18 @@ import { dateFiltering, getDateInterval, getDataWithDayAndHour } from '@/lib/dat
 import { NoteAreaGraph } from './NoteAreaGraph';
 import { getSortedData } from '@/lib/dataComparison';
 import Link from 'next/link'
+import useSWR from 'swr';
+import { format } from 'date-fns';
+import { dataComparison } from '@/lib/dataComparison';
+import { da, is } from 'date-fns/locale';
 
 const units = {
     weight: 'kg',
-    temperature: 'celsius'
+    temperature: 'celsius',
+    weather: 'celsius'
 };
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function DetailedGraph({ data }) {
     const [line, setLine] = useState(null);
@@ -29,6 +36,7 @@ export default function DetailedGraph({ data }) {
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState();
 
+
     useEffect(() => {
         setHydrated(true);
     }, []);
@@ -41,9 +49,6 @@ export default function DetailedGraph({ data }) {
     });
 
 
-    if (!hydrated) {
-        return null;
-    }
 
     // console.log('line');
     // console.dir(line);
@@ -67,8 +72,8 @@ export default function DetailedGraph({ data }) {
     // console.log('dateInterval', dateInterval);
 
     // Clamp dateInterval to data
-    const mostRecentDataDate = new Date(data[0].timestamp);
-    const oldestDataDate = new Date(data[data.length - 1].timestamp);
+    const oldestDataDate = new Date(data[0].timestamp);
+    const mostRecentDataDate = new Date(data[data.length - 1].timestamp);
     if (dateInterval.startDate < oldestDataDate) {
         dateInterval.startDate = oldestDataDate;
     }
@@ -93,19 +98,33 @@ export default function DetailedGraph({ data }) {
         dateTo = dateInterval.endDate;
     }
 
-    let dataFromWeather;
+    const dateFromFormatted = format(dateFrom, 'yyyy-LL-dd');
+    const dateToFormatted = format(dateTo, 'yyyy-LL-dd');
 
-    getSortedData(dateFrom, dateTo)
-        .then((result) => {
-            dataFromWeather = result;
-            console.log('dataFromWeather', dataFromWeather);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+    const weatherDataNeeded = activeType.includes('weather');
 
+    const { data: dataFromWeather, error, isLoading } = useSWR(weatherDataNeeded ? `/api/weather-history?&from=${dateFromFormatted}&to=${dateToFormatted}` : null, fetcher, {
+        revalidateIfStale: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false
+    });
+
+    const weatherDataLoaded = dataFromWeather !== undefined
+    // console.log(`/api/weather-history?&from=${dateFromFormatted}&to=${dateToFormatted}`)
+    // console.log('dataFromWeather', dataFromWeather);
+    // console.log('error', error);
+    // console.log('isLoading', isLoading);
+
+    //TODO: isLoadind and error handling
+
+    if (!hydrated) {
+        return null;
+    }
     const dataWithDayAndHour = getDataWithDayAndHour(data, dateFrom, dateTo);
-    console.log('dataWithDayAndHour', dataWithDayAndHour);
+    const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
+    console.log('mergedData', mergedData);
+
+    // console.log('dataWithDayAndHour', dataWithDayAndHour);
 
     const customTooltip = ({ active, payload, label }) => {
         if (active) {
@@ -126,7 +145,6 @@ export default function DetailedGraph({ data }) {
         }
     }
 
-
     const graphType = activeType.map((type, index) => (
         <Line
             key={index}
@@ -143,7 +161,7 @@ export default function DetailedGraph({ data }) {
     const renderLineChart = (
         <LineChart
             id='detailed-graph'
-            data={dataWithDayAndHour} //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
+            data={mergedData} //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
             margin={{
                 top: 5,
                 right: 30,
@@ -155,7 +173,7 @@ export default function DetailedGraph({ data }) {
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
             {graphType}
             {/* the right graph type is rendered based on the activeType state, which is set by the user */}
-            <XAxis dataKey='timestamp' angle={-35} textAnchor="end" reversed scale={'linear'} tick={<CustomTick />} />
+            <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} />
             <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
             {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
             {/* domain is used to set the range of the y-axis */}
