@@ -21,6 +21,12 @@ const units = {
     weather: 'celsius'
 };
 
+const strokeColors = {
+    weight: '#8884d8',
+    temperature: '#82ca9d',
+    weather: '#ff7300'
+};
+
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function DetailedGraph({ data }) {
@@ -150,10 +156,11 @@ export default function DetailedGraph({ data }) {
             key={index}
             type="monotone"
             dataKey={type} //dataKey is used to set the data to the right type (weight, temperature or weather)
-            stroke={type === 'weight' ? '#8884d8' : '#82ca9d'}
+            stroke={strokeColors[type]}
             dot={showDot ? <CustomDot showDots={showDots} setShowDots={setShowDots} type={type} /> : false}
             // if showDot is true, show dot
             yAxisId={units[type]}
+            connectNulls
         />
     ));
 
@@ -204,6 +211,7 @@ export default function DetailedGraph({ data }) {
                     <button className='bg-orange-200'>Statistic</button>
                     <button className='bg-orange-200'>Normal</button>
                     <button className='bg-orange-200'>Notes ON/OFF</button>
+                    <button className='bg-orange-200'>Comparison</button>
                 </div>
                 {hydrated && renderLineChart}
                 {notesParent && createPortal(<NoteAreaGraph noteCoordinates={noteCoordinates} dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} />, notesParent)}
@@ -211,17 +219,15 @@ export default function DetailedGraph({ data }) {
             </div>
             <div className="flex flex-col gap-16 w-full items-center">
                 <div className='flex flex-row w-full justify-end'>
-                    <Link href="/dashboard" className='shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] flex flex-row gap-3 h-12 rounded-[50px] common-button pr-4 bg-orange-200 hover:bg-orange-400'>
-                        <img src="/minimize.png"
-                            className=' pl-2 w-6 shrink-0'
+                    <Link href="/dashboard" className=' bg-transparent h-12 rounded-[50px] common-button flex px-3'>
+                        <img src="/dashboard-icon.png"
+                            className='w-8 shrink-0'
                         />
-                        <div className='text-center text-xl font-sans font-semibold'>
-                            Dashbord </div>
+
                     </Link>
-                    <Link href='/' className='shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] h-12 rounded-[50px] common-button bg-orange-200 hover:bg-orange-400 flex px-3'>
-                        <div>
-                            Main page
-                        </div></Link>
+                    <Link href='/' className=' bg-transparent h-12 rounded-[50px] common-button  flex px-3'>
+                        <img src="/home-icon.svg" className=' w-9 shrink-0' />
+                    </Link>
                 </div>
                 <SelectGraphType activeType={activeType} setActiveType={setActiveType} ></SelectGraphType>
                 <div className=" flex flex-col gap-12 items-center">
