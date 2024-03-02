@@ -2,44 +2,112 @@ import { getToken } from 'next-auth/jwt';
 import { google } from 'googleapis';
 
 const fileMetadata = {
-    'name': 'notes.txt',
+    'name': 'notes.json',
     'parents': ['appDataFolder']
 };
 
-function readNotesFile(token) {
-    const { accessToken, scope, id_token } = token;
-    const auth = new google.auth.JWT(null, null, accessToken, scope, null, id_token);
-    const drive = google.drive({ version: 'v3', auth })
-    drive.files.create({
+async function getNotesFileId(drive) {
+    //look up file notes.txt in appDataFolder
+
+    const listResult = await drive.files.list({
+        spaces: 'appDataFolder',
+        fields: 'files(id, name)',
+        pageSize: 10,
+        // q: `name='${fileMetadata.name}'`
+    });
+
+    console.log('list result:', listResult)
+    const length = listResult.data.files.length;
+    if (length > 0) {
+        return listResult.data.files[0].id;
+    }
+
+    //if not found, create a new file
+    const result = await drive.files.create({
         resource: fileMetadata,
         media: {
             mimeType: 'text/plain',
-            body: 'Hello World'
+            body: '[]'
         },
         fields: 'id'
-    }, (err, file) => {
-        if (err) {
-            console.error(err);
-        } else {
-            console.log('File Id: ', file.id);
-        }
     });
+    console.log('created file')
+    return result.data.id;
+}
+
+async function writeNoteContent(drive, fileId, content) {
+    const media = {
+        mimeType: 'text/plain',
+        body: content
+    };
+    const result = await drive.files.update({
+        fileId: fileId,
+        media: media
+    });
+    console.log('updated file')
+    return result.data.id;
+}
+
+async function readNoteContent(drive, fileId) {
+    const result = await drive.files.get({
+        fileId: fileId,
+        alt: 'media'
+    });
+    console.log('read file')
+    return result.data;
+}
+
+async function getDrive(token) {
+    const { accessToken } = token;
+    const auth = new google.auth.OAuth2({});
+    auth.setCredentials({ access_token: accessToken });
+    const drive = google.drive({ version: 'v3', auth })
+
+    return drive;
 }
 
 
 export async function GET(request) {
     // console.log(request)
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-    // console.log("iii", token)
-    const accessToken = token.token.account.access_token;
-    const scope = token.token.account.scope;
-    const id_token = token.token.account.id_token;
-    console.log(token.token)
-    console.log(accessToken)
-    readNotesFile({
-        accessToken: accessToken,
-        scope: scope,
-        id_token: id_token
-    });
-    return Response.json("hoho");
+    try {
+        const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+        const drive = await getDrive({
+            accessToken: token.access_token
+        });
+        const fileId = await getNotesFileId(drive);
+        console.log('fileId:', fileId)
+        const content = await readNoteContent(drive, fileId);
+        console.log('content:', content)
+        return new Response(content);
+        // return new Response('test');
+    }
+    catch (e) {
+        console.error(e)
+        return new Response(e)
+    }
+}
+// TODO: test functionality later in client
+export async function POST(request) {
+    // console.log(request)
+    const content = await request.text();
+    const contentJSON = JSON.parse(content);
+    console.log('contentJSON:', contentJSON)
+    if (contentJSON === undefined || contentJSON === null || contentJSON === '') {
+        return new Response('Invalid content');
+    }
+    try {
+        const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+        const drive = await getDrive({
+            accessToken: token.access_token
+        });
+        const fileId = await getNotesFileId(drive);
+        console.log('fileId:', fileId)
+        await writeNoteContent(drive, fileId, content);
+        return new Response("OK");
+        // return new Response('test');
+    }
+    catch (e) {
+        console.error(e)
+        return new Response(e)
+    }
 }

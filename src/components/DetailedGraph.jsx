@@ -223,7 +223,7 @@ export default function DetailedGraph({ data }) {
                         <img src="/dashboard-icon.png"
                             className='w-8 shrink-0'
                         />
-
+                        {/* <a target="_blank" href="https://icons8.com/icon/sUJRwjfnGwbJ/dashboard-layout">Dashboard</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a> */}
                     </Link>
                     <Link href='/' className=' bg-transparent h-12 rounded-[50px] common-button  flex px-3'>
                         <img src="/home-icon.svg" className=' w-9 shrink-0' />
