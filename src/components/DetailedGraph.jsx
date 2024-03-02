@@ -29,19 +29,57 @@ const strokeColors = {
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
+function useUserNotes() {
+    const [allNotes, setAllNotes] = useState([]);
+    // Fetch notes from the server
+    useEffect(() => {
+        // This function is used for async/await syntax
+        async function fetchNotes() {
+            const response = await fetch('/api/notes');
+            const data = await response.json();
+            console.log('data', data);
+            setAllNotes(data);
+        }
+        fetchNotes();
+    }, []);
+
+    const setNotesAndPersist = (notes) => {
+        setAllNotes(notes);
+        fetch('/api/notes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(notes)
+        });
+    }
+
+    const deleteAllNotes = () => {
+        setAllNotes([]);
+        fetch('/api/notes', {
+            method: 'DELETE'
+        });
+    }
+
+    return { allNotes, setAllNotes: setNotesAndPersist, deleteAllNotes };
+}
+
 export default function DetailedGraph({ data }) {
     const [line, setLine] = useState(null);
     const [noteCoordinates, setNoteCoordinates] = useState({});
     const [showDots, setShowDots] = useState(false);
     const [hydrated, setHydrated] = useState(false);
     const [activeType, setActiveType] = useState(['weight']);
-    const [allNotes, setAllNotes] = useState([]);
+    const { allNotes, setAllNotes, deleteAllNotes } = useUserNotes();
     const [showTooltip, setShowTooltip] = useState(true);
     const [showDot, setShowDot] = useState(false);
     const [activePeriodButton, setActivePeriodButton] = useState("Year");
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState();
 
+    console.log('allNotes', allNotes);
+
+    // deleteAllNotes();
 
     useEffect(() => {
         setHydrated(true);
@@ -54,10 +92,6 @@ export default function DetailedGraph({ data }) {
         }
     });
 
-
-
-    // console.log('line');
-    // console.dir(line);
     let notesParent = null;
     if (line) {
         const x1 = line.getAttribute('x1');
@@ -74,9 +108,6 @@ export default function DetailedGraph({ data }) {
 
     const dateInterval = getDateInterval(activePeriodButton);
 
-
-    // console.log('dateInterval', dateInterval);
-
     // Clamp dateInterval to data
     const oldestDataDate = new Date(data[0].timestamp);
     const mostRecentDataDate = new Date(data[data.length - 1].timestamp);
@@ -91,11 +122,6 @@ export default function DetailedGraph({ data }) {
     let dateTo;
     if (activeShowButton) {
         console.log('active show button');
-        // if (range.to !== undefined) {
-        //     dateTo = new Date(range.to);
-        // } else {
-        //     dateTo = range.from;
-        // }
         dateTo = range.to !== undefined ? new Date(range.to) : range.from;
         dateFrom = range.from;
     } else {
@@ -116,10 +142,6 @@ export default function DetailedGraph({ data }) {
     });
 
     const weatherDataLoaded = dataFromWeather !== undefined
-    // console.log(`/api/weather-history?&from=${dateFromFormatted}&to=${dateToFormatted}`)
-    // console.log('dataFromWeather', dataFromWeather);
-    // console.log('error', error);
-    // console.log('isLoading', isLoading);
 
     //TODO: isLoadind and error handling
 

@@ -57,6 +57,14 @@ async function readNoteContent(drive, fileId) {
     return result.data;
 }
 
+async function deleteNoteContent(drive, fileId) {
+    const result = await drive.files.delete({
+        fileId: fileId
+    });
+    console.log('deleted file')
+    return result.data;
+}
+
 async function getDrive(token) {
     const { accessToken } = token;
     const auth = new google.auth.OAuth2({});
@@ -75,9 +83,7 @@ export async function GET(request) {
             accessToken: token.access_token
         });
         const fileId = await getNotesFileId(drive);
-        console.log('fileId:', fileId)
         const content = await readNoteContent(drive, fileId);
-        console.log('content:', content)
         return new Response(content);
         // return new Response('test');
     }
@@ -103,6 +109,24 @@ export async function POST(request) {
         const fileId = await getNotesFileId(drive);
         console.log('fileId:', fileId)
         await writeNoteContent(drive, fileId, content);
+        return new Response("OK");
+        // return new Response('test');
+    }
+    catch (e) {
+        console.error(e)
+        return new Response(e)
+    }
+}
+
+export async function DELETE(request) {
+    // console.log(request)
+    try {
+        const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+        const drive = await getDrive({
+            accessToken: token.access_token
+        });
+        const fileId = await getNotesFileId(drive);
+        await deleteNoteContent(drive, fileId);
         return new Response("OK");
         // return new Response('test');
     }

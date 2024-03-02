@@ -27,8 +27,8 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAl
         }
 
         const note = {
-            dateFrom: range.from,
-            dateTo: noteTo,
+            dateFrom: range.from.getTime(),
+            dateTo: noteTo.getTime(),
             color: noteColor,
             noteText: noteText
         };

@@ -1,6 +1,6 @@
 import { assignFloors } from "@/lib/isOverlapping";
 import { set } from "date-fns";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 export function NoteAreaGraph({ noteCoordinates, dateFrom, dateTo, allNotes }) {
     const [showNoteText, setShowNoteText] = useState(false);
@@ -23,10 +23,7 @@ export function NoteAreaGraph({ noteCoordinates, dateFrom, dateTo, allNotes }) {
         const noteFrom = note.dateFrom;
         const noteTo = note.dateTo;
 
-        const noteFromMilliseconds = noteFrom.getTime();
-        const noteToMilliseconds = noteTo.getTime();
-
-        if (noteFromMilliseconds >= dateFromMilliseconds && noteToMilliseconds <= dateToMilliseconds) {
+        if (noteFrom >= dateFromMilliseconds && noteTo <= dateToMilliseconds) {
             relevantNotes.push({ ...note });
         }
     }
@@ -63,18 +60,15 @@ export function NoteAreaGraph({ noteCoordinates, dateFrom, dateTo, allNotes }) {
             backgroundColor = '#bed8f1';
         }
 
-        const noteFromMilliseconds = noteFrom.getTime();
-        const noteToMilliseconds = noteTo.getTime();
-
-        const noteStartOffset = (noteFromMilliseconds - dateFromMilliseconds) / (dateToMilliseconds - dateFromMilliseconds) * 100;
-        const noteWidth = (noteToMilliseconds - noteFromMilliseconds) / (dateToMilliseconds - dateFromMilliseconds) * 100;
+        const noteStartOffset = (noteFrom - dateFromMilliseconds) / (dateToMilliseconds - dateFromMilliseconds) * 100;
+        const noteWidth = (noteTo - noteFrom) / (dateToMilliseconds - dateFromMilliseconds) * 100;
 
         const renderedHeight = (noteFloor + 1) * floorHeight;
         const zIndex = 100 - noteFloor;
 
         const noteTextStartOffset = noteStartOffset + 1;
         return (
-            <>
+            <Fragment key={index}>
                 <div style={
                     {
                         backgroundColor: backgroundColor,
@@ -91,34 +85,38 @@ export function NoteAreaGraph({ noteCoordinates, dateFrom, dateTo, allNotes }) {
                     onMouseLeave={handleMouseLeave}
                 >
                 </div>
-                {showNoteText && hoveredNote === noteText && <div style={
-                    {
-                        display: 'flex',
-                        alignItems: 'center',
-                        backgroundColor: '#e5e191', // Set background color for the message box
-                        border: '1px solid #ceca82', // Add a border for the message box
-                        padding: '8px', // Add padding for content inside the message box
-                        borderRadius: '5px', // Add border radius for rounded corners
-                        // text in box is in the center
-                        height: renderedHeight,
-                        position: 'absolute',
-                        left: `${noteTextStartOffset}%`,
-                        bottom: 50,
-                        zIndex: 100,
-                    }
-                }>{noteText}
+                {showNoteText && hoveredNote === noteText &&
                     <div style={
                         {
+                            display: 'flex',
+                            alignItems: 'center',
+                            backgroundColor: '#e5e191', // Set background color for the message box
+                            border: '1px solid #ceca82', // Add a border for the message box
+                            padding: '8px', // Add padding for content inside the message box
+                            borderRadius: '5px', // Add border radius for rounded corners
+                            // text in box is in the center
+                            height: renderedHeight,
                             position: 'absolute',
-                            bottom: '-10px',
-                            left: '0',
-                            borderTop: '15px solid transparent',
-                            borderLeft: '10px solid #ceca82',
-                            borderBottom: '10px solid transparent',
-                            stroke: '#ccc',
+                            left: `${noteTextStartOffset}%`,
+                            bottom: 50,
+                            zIndex: 100,
                         }
-                    }></div></div>}
-            </>
+                    }>
+                        {noteText}
+                        <div style={
+                            {
+                                position: 'absolute',
+                                bottom: '-10px',
+                                left: '0',
+                                borderTop: '15px solid transparent',
+                                borderLeft: '10px solid #ceca82',
+                                borderBottom: '10px solid transparent',
+                                stroke: '#ccc',
+                            }
+                        }></div>
+                    </div>
+                }
+            </Fragment>
         )
     })
 
