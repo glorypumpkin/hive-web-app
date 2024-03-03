@@ -1,18 +1,17 @@
 'use client'
 import { Brush, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LineChart } from 'recharts';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar } from './Calendar';
 import { CustomDot } from './CustomDot';
 import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
-import { dateFiltering, getDateInterval, getDataWithDayAndHour } from '@/lib/dateFiltering';
+import { getRangeToDisplay, getDataWithDayAndHour } from '@/lib/dateFiltering';
 import { NoteAreaGraph } from './NoteAreaGraph';
-import { getSortedData } from '@/lib/dataComparison';
 import Link from 'next/link'
 import useSWR from 'swr';
 import { format } from 'date-fns';
 import { dataComparison } from '@/lib/dataComparison';
-import { da, is } from 'date-fns/locale';
+import { useUserNotes } from '@/lib/useUserNotes';
 
 const units = {
     weight: 'kg',
@@ -28,43 +27,7 @@ const strokeColors = {
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-function useUserNotes() {
-    const [allNotes, setAllNotes] = useState([]);
-    // Fetch notes from the server
-    useEffect(() => {
-        // This function is used for async/await syntax
-        async function fetchNotes() {
-            const response = await fetch('/api/notes');
-            const data = await response.json();
-            setAllNotes(data);
-        }
-        fetchNotes();
-    }, []);
-
-    const setNotesAndPersist = (notes) => {
-        setAllNotes(notes);
-        fetch('/api/notes', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(notes)
-        });
-    }
-
-    const deleteAllNotes = () => {
-        setAllNotes([]);
-        fetch('/api/notes', {
-            method: 'DELETE'
-        });
-    }
-
-    return { allNotes, setAllNotes: setNotesAndPersist, deleteAllNotes };
-}
-
 export default function DetailedGraph({ data }) {
-
-
     const [showDots, setShowDots] = useState(false);
     const [hydrated, setHydrated] = useState(false);
     const [activeType, setActiveType] = useState(['weight']);
@@ -73,36 +36,14 @@ export default function DetailedGraph({ data }) {
     const [showDot, setShowDot] = useState(false);
     const [activePeriodButton, setActivePeriodButton] = useState("Year");
     const [activeShowButton, setActiveShowButton] = useState(false);
-    const [range, setRange] = useState();
+    const [range, setRange] = useState(undefined);
     // deleteAllNotes();
 
     useEffect(() => {
         setHydrated(true);
     }, []);
 
-
-
-    const dateInterval = getDateInterval(activePeriodButton);
-
-    // Clamp dateInterval to data
-    const oldestDataDate = new Date(data[0].timestamp);
-    const mostRecentDataDate = new Date(data[data.length - 1].timestamp);
-    if (dateInterval.startDate < oldestDataDate) {
-        dateInterval.startDate = oldestDataDate;
-    }
-    if (dateInterval.endDate > mostRecentDataDate) {
-        dateInterval.endDate = mostRecentDataDate;
-    }
-
-    let dateFrom;
-    let dateTo;
-    if (activeShowButton) {
-        dateTo = range.to !== undefined ? new Date(range.to) : range.from;
-        dateFrom = range.from;
-    } else {
-        dateFrom = dateInterval.startDate;
-        dateTo = dateInterval.endDate;
-    }
+    const { dateFrom, dateTo } = getRangeToDisplay(activePeriodButton, new Date(data[0].timestamp), new Date(data[data.length - 1].timestamp), activeShowButton ? range : undefined);
 
     const dateFromFormatted = format(dateFrom, 'yyyy-LL-dd');
     const dateToFormatted = format(dateTo, 'yyyy-LL-dd');

@@ -106,9 +106,9 @@ export function dateFiltering(data, startDate, endDate) {
         if (data[i].timestamp >= startDateInMs && data[i].timestamp <= endDateInMs) {
             filteredData.push(data[i]);
         } // if there is no data for today yet, add last 4 entries to the filteredData array
-        else if (data[i].timestamp >= new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime()) {
-            filteredData.push(data[i]);
-        }
+        // else if (data[i].timestamp >= new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime()) {
+        //     filteredData.push(data[i]);
+        // }
     }
 
     return filteredData;
@@ -130,4 +130,31 @@ export function getDataWithDayAndHour(data, dateFrom, dateTo) {
     })
 
     return dataWithDayAndHour;
+}
+
+// oldestTimestamp: Date
+// newestTimestamp: Date
+// range: {from, to} or undefined
+export function getRangeToDisplay(period, oldestTimestamp, newestTimestamp, range) {
+    const dateInterval = getDateInterval(period);
+    // Clamp dateInterval to data
+    // Compare the first and last timestamp of the data to the dateInterval
+    if (dateInterval.startDate < oldestTimestamp) {
+        dateInterval.startDate = oldestTimestamp;
+    }
+    if (dateInterval.endDate > newestTimestamp) {
+        dateInterval.endDate = newestTimestamp;
+    }
+
+    let dateFrom;
+    let dateTo;
+    if (range) {
+        dateTo = range.to !== undefined ? new Date(range.to) : range.from;
+        dateFrom = range.from;
+    } else {
+        dateFrom = dateInterval.startDate;
+        dateTo = dateInterval.endDate;
+    }
+
+    return { dateFrom, dateTo };
 }
