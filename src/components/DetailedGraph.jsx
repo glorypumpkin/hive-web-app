@@ -12,6 +12,7 @@ import useSWR from 'swr';
 import { format } from 'date-fns';
 import { dataComparison } from '@/lib/dataComparison';
 import { useUserNotes } from '@/lib/useUserNotes';
+import { CustomTooltip } from './CustomTooltip';
 
 const units = {
     weight: 'kg',
@@ -66,25 +67,6 @@ export default function DetailedGraph({ data }) {
     const dataWithDayAndHour = getDataWithDayAndHour(data, dateFrom, dateTo);
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
 
-    const customTooltip = ({ active, payload, label }) => {
-        if (active) {
-            // if showDots is false, hide tooltip
-            if (!showDots && !showTooltip) {
-                return null;
-            }
-            else {
-                return (
-                    <div className="custom-tooltip">
-                        <p>{`${payload[0].payload.day}, ${payload[0].payload.hour}, ${payload[0].payload.year}`}</p>
-                        {activeType.map((type, index) => (
-                            <p key={index}>{`${type}: ${payload[0].payload[type]} ${units[type]}`}</p>
-                        ))}
-                    </div>
-                );
-            }
-        }
-    }
-
     const graphType = activeType.map((type, index) => (
         <Line
             key={index}
@@ -119,7 +101,7 @@ export default function DetailedGraph({ data }) {
             {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
             {/* domain is used to set the range of the y-axis */}
             <YAxis yAxisId="celsius" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
-            {showTooltip && <Tooltip content={customTooltip} />}
+            {showTooltip && !showDots && <Tooltip content={(props) => CustomTooltip({ ...props, activeType, units })} />}
             {/* if showTooltip is true, show tooltip */}
             <Legend />
         </LineChart>

@@ -118,18 +118,15 @@ export function dateFiltering(data, startDate, endDate) {
 
 export function getDataWithDayAndHour(data, dateFrom, dateTo) {
     const filterData = dateFiltering(data, dateFrom, dateTo);
-    // console.log('dateFrom', dateFrom);
-    // console.log('dateTo', dateTo);
-    // console.log('filterData', filterData);
-    const dataWithDayAndHour = filterData.map((item) => {
-        const date = new Date(item.timestamp);
-        const day = date.getDate() + '.' + (date.getMonth() + 1);
-        const hour = date.getHours() + ':00';
-        const year = date.getFullYear();
-        return { ...item, day, hour, year };
-    })
 
-    return dataWithDayAndHour;
+    for (let dataPoint of filterData) {
+        const date = new Date(dataPoint.timestamp);
+        dataPoint.day = date.getDate() + '.' + (date.getMonth() + 1);
+        dataPoint.hour = date.getHours() + ':00';
+        dataPoint.year = date.getFullYear();
+    }
+
+    return filterData;
 }
 
 // oldestTimestamp: Date
