@@ -1,8 +1,7 @@
 'use client'
-import { Brush, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LineChart } from 'recharts';
-import { useState, useEffect } from 'react';
+
+import { useState } from 'react';
 import { Calendar } from './Calendar';
-import { CustomDot } from './CustomDot';
 import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
 import { getRangeToDisplay, getDataWithDayAndHour } from '@/lib/dateFiltering';
@@ -12,25 +11,12 @@ import useSWR from 'swr';
 import { format } from 'date-fns';
 import { dataComparison } from '@/lib/dataComparison';
 import { useUserNotes } from '@/lib/useUserNotes';
-import { CustomTooltip } from './CustomTooltip';
-
-const units = {
-    weight: 'kg',
-    temperature: 'celsius',
-    weather: 'celsius'
-};
-
-const strokeColors = {
-    weight: '#8884d8',
-    temperature: '#82ca9d',
-    weather: '#ff7300'
-};
+import { MainGraph } from './MainGraph';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function DetailedGraph({ data }) {
     const [showDots, setShowDots] = useState(false);
-    const [hydrated, setHydrated] = useState(false);
     const [activeType, setActiveType] = useState(['weight']);
     const { allNotes, setAllNotes, deleteAllNotes } = useUserNotes();
     const [showTooltip, setShowTooltip] = useState(true);
@@ -39,10 +25,6 @@ export default function DetailedGraph({ data }) {
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState(undefined);
     // deleteAllNotes();
-
-    useEffect(() => {
-        setHydrated(true);
-    }, []);
 
     const { dateFrom, dateTo } = getRangeToDisplay(activePeriodButton, new Date(data[0].timestamp), new Date(data[data.length - 1].timestamp), activeShowButton ? range : undefined);
 
@@ -60,53 +42,8 @@ export default function DetailedGraph({ data }) {
     const weatherDataLoaded = dataFromWeather !== undefined
 
     //TODO: isLoadind and error handling
-
-    if (!hydrated) {
-        return null;
-    }
     const dataWithDayAndHour = getDataWithDayAndHour(data, dateFrom, dateTo);
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
-
-    const graphType = activeType.map((type, index) => (
-        <Line
-            key={index}
-            type="monotone"
-            dataKey={type} //dataKey is used to set the data to the right type (weight, temperature or weather)
-            stroke={strokeColors[type]}
-            dot={showDot ? <CustomDot showDots={showDots} setShowDots={setShowDots} type={type} /> : false}
-            // if showDot is true, show dot
-            yAxisId={units[type]}
-            connectNulls
-        />
-    ));
-
-    //TODO: find a problem with graph going out of bounds
-    const renderLineChart = (
-        <LineChart
-            id='detailed-graph'
-            data={mergedData} //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
-            margin={{
-                top: 5,
-                right: 30,
-                left: 0,
-                bottom: 5
-            }}
-            width={1300} height={800}
-        >
-            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-            {graphType}
-            {/* the right graph type is rendered based on the activeType state, which is set by the user */}
-            <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} />
-            <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
-            {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
-            {/* domain is used to set the range of the y-axis */}
-            <YAxis yAxisId="celsius" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
-            {showTooltip && !showDots && <Tooltip content={(props) => CustomTooltip({ ...props, activeType, units })} />}
-            {/* if showTooltip is true, show tooltip */}
-            <Legend />
-        </LineChart>
-
-    );
 
     const onTooltipButtonClick = () => {
         setShowTooltip(true);
@@ -130,8 +67,13 @@ export default function DetailedGraph({ data }) {
                     <button className='bg-orange-200'>Notes ON/OFF</button>
                     <button className='bg-orange-200'>Comparison</button>
                 </div>
-                {hydrated && renderLineChart}
-                <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton}></HistoryLine>
+                <div style={{
+                    width: '1300px',
+                    height: '800px',
+                }}>
+                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} showDot={showDot} showDots={showDots} setShowDots={setShowDots} />
+                </div>
+                <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip}></HistoryLine>
             </div>
             <div className="flex flex-col gap-16 w-full items-center">
                 <div className='flex flex-row w-full justify-end'>
@@ -163,17 +105,3 @@ export default function DetailedGraph({ data }) {
         </div>
     )
 }
-
-const CustomTick = (props) => {
-    const { x, y, payload } = props;
-    const date = new Date(payload.value);
-    const d = `${date.getDate()}.${date.getMonth() + 1}`
-    return (
-        <g transform={`translate(${x},${y})`}>
-            <text x={0} y={0} dy={10} textAnchor="end" fill="#666" transform="rotate(-25)">
-                {d}
-            </text>
-        </g>
-    );
-}
-
