@@ -29,7 +29,6 @@ export function parseLine(line) {
     // const midnight = startOfDay(current);
     // change timezone of the date to local time
     const localDateObject = addHours(current, -current.getTimezoneOffset() / 60);
-    // console.log('localDateObject: ', localDateObject);
     const timestamp = localDateObject.getTime();
 
     const rozdilFloat = parseFloat(rozdil);

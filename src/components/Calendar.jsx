@@ -43,7 +43,6 @@ export function Calendar({ allNotes, setAllNotes, activeShowButton, setActiveSho
         };
 
         allNoteMatcher[noteColor].push(noteMatcher); //TODO: change style for overlapping notes
-        console.log('allNoteMatcher', allNoteMatcher);
     }
 
     const handleDayClick = (day, { selected }) => {

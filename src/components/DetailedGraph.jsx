@@ -1,7 +1,6 @@
 'use client'
 import { Brush, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LineChart } from 'recharts';
 import { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { Calendar } from './Calendar';
 import { CustomDot } from './CustomDot';
 import { SelectGraphType } from './SelectGraphType';
@@ -37,7 +36,6 @@ function useUserNotes() {
         async function fetchNotes() {
             const response = await fetch('/api/notes');
             const data = await response.json();
-            console.log('data', data);
             setAllNotes(data);
         }
         fetchNotes();
@@ -65,8 +63,8 @@ function useUserNotes() {
 }
 
 export default function DetailedGraph({ data }) {
-    const [line, setLine] = useState(null);
-    const [noteCoordinates, setNoteCoordinates] = useState({});
+
+
     const [showDots, setShowDots] = useState(false);
     const [hydrated, setHydrated] = useState(false);
     const [activeType, setActiveType] = useState(['weight']);
@@ -76,35 +74,13 @@ export default function DetailedGraph({ data }) {
     const [activePeriodButton, setActivePeriodButton] = useState("Year");
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState();
-
-    console.log('allNotes', allNotes);
-
     // deleteAllNotes();
 
     useEffect(() => {
         setHydrated(true);
     }, []);
 
-    useEffect(() => {
-        const selectedLine = document.querySelector('.recharts-cartesian-grid-horizontal line:first-child')
-        if (selectedLine != line) {
-            setLine(selectedLine);
-        }
-    });
 
-    let notesParent = null;
-    if (line) {
-        const x1 = line.getAttribute('x1');
-        const y1 = line.getAttribute('y1');
-        const x2 = line.getAttribute('x2');
-        const y2 = line.getAttribute('y2');
-        const coordinates = { x1, y1, x2, y2 };
-        // console.log('coordinates', coordinates);
-        if (coordinates.x1 !== noteCoordinates.x1 || coordinates.y1 !== noteCoordinates.y1 || coordinates.x2 !== noteCoordinates.x2 || coordinates.y2 !== noteCoordinates.y2) {
-            setNoteCoordinates(coordinates);
-        }
-        notesParent = line.parentElement;
-    }
 
     const dateInterval = getDateInterval(activePeriodButton);
 
@@ -121,11 +97,9 @@ export default function DetailedGraph({ data }) {
     let dateFrom;
     let dateTo;
     if (activeShowButton) {
-        console.log('active show button');
         dateTo = range.to !== undefined ? new Date(range.to) : range.from;
         dateFrom = range.from;
     } else {
-        console.log('not active show button');
         dateFrom = dateInterval.startDate;
         dateTo = dateInterval.endDate;
     }
@@ -150,9 +124,6 @@ export default function DetailedGraph({ data }) {
     }
     const dataWithDayAndHour = getDataWithDayAndHour(data, dateFrom, dateTo);
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
-    console.log('mergedData', mergedData);
-
-    // console.log('dataWithDayAndHour', dataWithDayAndHour);
 
     const customTooltip = ({ active, payload, label }) => {
         if (active) {
@@ -226,6 +197,7 @@ export default function DetailedGraph({ data }) {
 
     return (
         <div className="-bg--primary-color flex pt-2 w-[100vw] h-[100vh]">
+            <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} />
             <div className="flex flex-col gap-5">
                 <div className='flex flex-row gap-2 pl-3 items-center pt-1'>
                     <button className=' bg-orange-200' onClick={onTooltipButtonClick}>Tooltip</button>
@@ -236,7 +208,6 @@ export default function DetailedGraph({ data }) {
                     <button className='bg-orange-200'>Comparison</button>
                 </div>
                 {hydrated && renderLineChart}
-                {notesParent && createPortal(<NoteAreaGraph noteCoordinates={noteCoordinates} dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} />, notesParent)}
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton}></HistoryLine>
             </div>
             <div className="flex flex-col gap-16 w-full items-center">

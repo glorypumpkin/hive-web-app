@@ -45,14 +45,13 @@ export default function PeriodGraph({ data }) {
         const hour = date.getHours() + ':00';
         return { ...item, day, hour };
     })
-    console.log('dataWithDayAndHour', dataWithDayAndHour);
     const renderLineChart = (
         <ResponsiveContainer width="100%" height="100%">
             <LineChart id="period-graph" width={400} height={300} data={dataWithDayAndHour}>
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <Line stroke="#8884d8" xAxisId={data.hour} type="monotone" dataKey="weight" />
                 {/* <Line stroke="#82ca9d" xAxisId={data.hour} type="monotone" dataKey="temperature" /> */}
-                <XAxis dataKey="day" angle={-30} textAnchor="end" tick={{ fontSize: 15 }} reversed />
+                <XAxis dataKey="day" angle={-30} textAnchor="end" tick={{ fontSize: 15 }} />
                 <YAxis tick={{ fontSize: 10 }} domain={['dataMin-0.5', 'dataMax +0.5']} />
                 <Tooltip content={CustomTooltip} />
             </LineChart>

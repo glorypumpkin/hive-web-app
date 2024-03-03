@@ -32,7 +32,7 @@ export async function GET(request) {
         const midnight = startOfDay(date);
         const localDateObject = addHours(midnight, -midnight.getTimezoneOffset() / 60);
         const timestamp = localDateObject.getTime();
-        // console.log('timestamp: ', timestamp);
+
         const filtered = {
             datatime: current.datetime,
             timestamp: timestamp,

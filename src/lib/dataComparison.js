@@ -1,19 +1,12 @@
 
 // dataFromWeight: Array<{timestamp: number, ..}>
 // dataFromWeather: Array<{timestamp: number, ...}>
-export function dataComparison(dataFromWeight, dataFromWeather) {
+
+// Source: https://stackoverflow.com/questions/18691627/how-to-merge-sorted-arrays-in-javascript
+export function dataComparison(weights, weather) {
     // two objects are already sorted by date
     // find the same dates
     // if the date is the same, merge the objects
-    const merged = mergeSorted(dataFromWeight, dataFromWeather);
-    console.log('dataFromWeight', dataFromWeight);
-    console.log('dataFromWeather', dataFromWeather);
-    // console.log('merged', merged);
-    return merged;
-}
-
-// Source: https://stackoverflow.com/questions/18691627/how-to-merge-sorted-arrays-in-javascript
-function mergeSorted(weights, weather) {
     var answer = [], i = 0, j = 0;
     while (i < weights.length && j < weather.length) {
         if (weights[i].timestamp === weather[j].timestamp) {

@@ -25,7 +25,6 @@ export function CustomDot(props) {
     const handleDotEnter = () => {
         setShowDots(false);
         setInsideRect(true);
-        console.log(payload);
     }
 
     const handleDotLeave = () => {

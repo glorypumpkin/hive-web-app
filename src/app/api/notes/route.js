@@ -16,7 +16,7 @@ async function getNotesFileId(drive) {
         // q: `name='${fileMetadata.name}'`
     });
 
-    console.log('list result:', listResult)
+    // console.log('list result:', listResult)
     const length = listResult.data.files.length;
     if (length > 0) {
         return listResult.data.files[0].id;
@@ -76,7 +76,6 @@ async function getDrive(token) {
 
 
 export async function GET(request) {
-    // console.log(request)
     try {
         const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
         const drive = await getDrive({
@@ -97,7 +96,6 @@ export async function POST(request) {
     // console.log(request)
     const content = await request.text();
     const contentJSON = JSON.parse(content);
-    console.log('contentJSON:', contentJSON)
     if (contentJSON === undefined || contentJSON === null || contentJSON === '') {
         return new Response('Invalid content');
     }
@@ -107,7 +105,6 @@ export async function POST(request) {
             accessToken: token.access_token
         });
         const fileId = await getNotesFileId(drive);
-        console.log('fileId:', fileId)
         await writeNoteContent(drive, fileId, content);
         return new Response("OK");
         // return new Response('test');

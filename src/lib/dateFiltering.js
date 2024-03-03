@@ -9,8 +9,7 @@ export function getDateInterval(period) {
     const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7, 0, 0, 0);
     switch (period) {
         case 'This day':
-            console.log("now", now);
-            console.log("last 24 hours", new Date(endDate.setDate(now.getDate() - 1, 0, 0, 0)));
+            // TODO: fix this
             return {
                 startDate: new Date(endDate.setDate(now.getDate() - 1, 0, 0, 0)),
                 endDate: now

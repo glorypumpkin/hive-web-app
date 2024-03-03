@@ -36,7 +36,6 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAl
 
     }
     function onShowOnGraphClick() {
-        console.log(range.from, range.to);
         setActiveShowButton(!activeShowButton);
     }
 

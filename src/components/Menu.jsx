@@ -30,16 +30,16 @@ export default function Menu() {
           }}
         >Login</button>
       )}
-      <button
+      <div
         id="Profile"
         className="bg-[#FCE07C] overflow-hidden rounded-[50px] flex flex-col w-10 h-10 justify-center items-center shadow-[0px_0px_5px_3px_rgba(0,_0,_0,_0.12)]"
       >
         <img
           src={loggedIn ? session.user.image : "https://file.rendit.io/n/ZjMaQphCBoK5MreYxpgu.svg"}
-          className='w-8 h-8'
+          className='w-10 h-10'
           id="Bee"
         />
-      </button>
+      </div>
     </div>
   )
 }
