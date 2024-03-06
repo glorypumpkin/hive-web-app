@@ -5,11 +5,11 @@ import AccessHandler from '@/components/AccessHandler';
 
 export default async function DashboardPage() {
     const data = await getBeeData();
-
+    const pageName = 'Dashboard';
     return (
-        <div>
+        <div className='bg-[#1976d214]'>
             <AccessHandler></AccessHandler>
-            <Menu></Menu>
+            <Menu pageName={pageName}></Menu>
             <Dashboard data={data}></Dashboard>
         </div>
     )

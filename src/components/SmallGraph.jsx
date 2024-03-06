@@ -29,18 +29,34 @@ export function SmallGraph({ data, graphType }) {
         const hour = date.getHours() + ':00';
         return { ...item, day, hour };
     })
+
+    const lineColors = {
+        weight: '#8884d8',
+        temperature: '#82ca9d'
+    }
+
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active) {
+            return (
+                <div className="custom-tooltip">
+                    <p>{`${payload[0].payload.day}, ${payload[0].payload.hour}`}</p>
+                    <p>{`${graphType}: ${payload[0].value}`}</p>
+                </div>
+            );
+        }
+        return null;
+    };
     return (
         <div className="dashboard-element w-1/2 h-[380px] " >
-            <h2>{graphTypeName}</h2>
+            <h2 className=' text-lg font-semibold'>{graphTypeName}</h2>
             <div className="flex flex-row w-full h-full">
                 {hydrated && (
-                    <ResponsiveContainer width="100%" height="100%" >
+                    <ResponsiveContainer width="95%" height="100%" >
                         <LineChart id="small-weight-graph" width={800} height={300} data={dataWithDayAndHour}>
-                            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                            <Line type="monotone" dataKey={graphType} stroke="#8884d8" />
+                            <Line type="monotone" dataKey={graphType} stroke={lineColors[graphType]} />
                             <XAxis dataKey="day" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
                             <YAxis tick={{ fontSize: 10 }} domain={['dataMin-0.5', 'dataMax +0.5']} />
-                            <Tooltip></Tooltip>
+                            <Tooltip content={CustomTooltip}></Tooltip>
                         </LineChart>
                     </ResponsiveContainer>
                 )}

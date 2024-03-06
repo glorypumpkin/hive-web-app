@@ -1,9 +1,6 @@
 import { createClient, kv } from "@vercel/kv";
 import { differenceInDays, addDays, subDays, format } from "date-fns";
 
-
-const APIForecast = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json'
-
 const weater_set = 'weather';
 
 

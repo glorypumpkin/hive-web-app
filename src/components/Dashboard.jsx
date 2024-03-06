@@ -6,7 +6,7 @@ import { SmallGraph } from './SmallGraph'
 
 export default function Dashboard({ data }) {
     return (
-        <div className="bg-[#1976d214] flex flex-col gap-16 w-full px-6 pt-16 pb-10 h-[94vh]">
+        <div className=" flex flex-col gap-16 w-full px-6 pt-16 pb-10 h-[94vh]">
             <div className="flex flex-row mr-1 gap-12 items-start">
                 <Weather> </Weather>
                 <DataPrediction> </DataPrediction>

@@ -1,4 +1,12 @@
+import useSWR from 'swr';
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
 export function Weather() {
+
+    const { data: forecast, error, isLoading } = useSWR('/api/weather-forecast', fetcher);
+
+    console.log('data', forecast);
 
     const weatherIcons = {
         sunny: "/sunny.png",

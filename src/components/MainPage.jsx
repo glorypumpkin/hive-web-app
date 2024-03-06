@@ -16,7 +16,7 @@ export default function MainPage({ data }) {
   return (
     <div
       id="FrontPageRoot"
-      className=" bg-gradient-to-b from-[#d2dce2] via-[#fffae7] via-100% to-[rgba(255, 224, 205, 0)]"
+      className=""
     >
       <div className='overflow-hidden flex flex-col gap-5 w-full  justify-center h-[95vh] items-center'>
         <div className=' w-[100vw] text-center'>
