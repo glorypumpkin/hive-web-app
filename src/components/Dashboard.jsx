@@ -44,7 +44,7 @@ export function DataPrediction() {
         return null;
     }
     return (
-        <div className="shadow-[10px_10px_20px_5px_#4541332e] bg-[#e7ecff] w-full max-w-2xl md:w-2/5 h-[340px] rounded-[50px] flex flex-col md:flex-row justify-between items-center mx-auto md:mx-0">
+        <div className="dashboard-element w-full max-w-2xl md:w-2/5 h-[340px] rounded-[50px] md:flex-row justify-between mx-auto md:mx-0">
             <div className="w-full md:w-[30%] mb-4 md:mb-0 md:ml-5">
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
             </div>

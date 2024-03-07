@@ -1,5 +1,5 @@
 
-const APIForecast = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json`;
+const APIForecast = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20Brno/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json&lang=id`;
 
 export async function GET(request) {
     let response = null;
@@ -13,6 +13,7 @@ export async function GET(request) {
     const responseBody = await response.text();
     const data = JSON.parse(responseBody);
     const forecast = data.days;
+    // console.log('forecast', forecast);
     // get lenght of forecast
     const totalObjects = Object.keys(forecast).length;
 
@@ -22,7 +23,7 @@ export async function GET(request) {
         const timestamp = new Date(datetime).getTime();
 
         const filtered = {
-            datatime: current.datetime,
+            datetime: current.datetime,
             timestamp: timestamp,
             tempmax: current.tempmax,
             tempmin: current.tempmin,
@@ -39,11 +40,14 @@ export async function GET(request) {
             uvindex: current.uvindex,
             sunrise: current.sunrise,
             sunset: current.sunset,
-            conditions: current.conditions
+            conditions: current.conditions,
+            // icon: current.icon
             // hours: current.hours
         }
         forecast[i] = filtered;
     }
+
+    // console.log('forecast', forecast);
 
     return new Response(JSON.stringify(forecast), { headers: { 'Content-Type': 'application/json' } });
 }

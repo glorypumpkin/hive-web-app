@@ -38,7 +38,7 @@
     }
 
     .dashboard-element {
-        @apply bg-[#e7ecff] rounded-[50px] items-center justify-center shadow-[10px_10px_20px_5px_#4541332e] flex flex-col
+        @apply -bg--primary-color rounded-[50px] items-center justify-center shadow-[10px_10px_20px_5px_#4541332e] flex flex-col
     }
 
     /* .dashboard-button {

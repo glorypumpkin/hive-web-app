@@ -1,77 +1,59 @@
 import useSWR from 'swr';
+import { WeatherElement } from './WeatherElement';
+import { WeatherActive } from './WeatherActive';
+import { addHours, startOfDay } from 'date-fns';
+import { useState } from 'react';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
+const today = startOfDay(new Date());
+const localTime = addHours(today, -today.getTimezoneOffset() / 60);
+
 export function Weather() {
+    const [activeDay, setActiveDay] = useState(localTime.getTime());
 
     const { data: forecast, error, isLoading } = useSWR('/api/weather-forecast', fetcher);
 
-    console.log('data', forecast);
+    if (isLoading) return <div>Loading...</div>
 
-    const weatherIcons = {
-        sunny: "/sunny.png",
-        partialcloud: "/partial-cloudy.png",
-        mostlycloudy: "/mostly-cloudly.png",
-        stormy: "/stormy.png",
-        rainyday: "/rainy.png",
-        snow: "/snowfell.png",
-        heavywind: "/heavy-wind.png",
-        hailstorm: "/hailstorm.png"
+    if (error) return <div>Error loading weather forecast</div>
+
+    console.log('forecast', forecast);
+    console.log('activeDay', activeDay); // activeDay is a timestamp
+
+    // filter forecast so that it only contains days, starting from today
+    let forecastNext7Days = [];
+    for (let i = 0; i < forecast.length; i++) {
+        const day = forecast[i];
+        const timestamp = day.timestamp;
+        if (timestamp >= localTime.getTime()) {
+            forecastNext7Days.push(day);
+        }
     }
 
-    const tempText = {
-        day: "Day: 20 C",
-        night: "Night: 20 C"
-    }
-
-    function WeatherElement({ weatherType, tempText }) {
-        const imageSrc = weatherIcons[weatherType];
-
-        return (
-            <div className="">
-                <img
-                    src={imageSrc}
-                    alt={weatherType}
-                    className=""
-                />
-                {tempText.day}
-                <br />
-                {tempText.night}
-            </div>
-        )
-    }
+    console.log('forecastNext7Days', forecastNext7Days);
 
     return (
         <div
-            id="WeatherApiRoot"
-            className="shadow-[10px_10px_20px_5px_#4541332e] bg-[#e7ecff] grid grid-rows-2 w-3/5 px-3 rounded-[50px] h-[340px]">
-            <div className="grid grid-flow-col-dense">
-                <div className="flex items-center justify-center">
-                    <img
-                        src={weatherIcons.sunny}
-                        id="Sunny"
-                        className="top-0 left-0"
-                    />
-                </div>
-                <div className="text-xs col-span-3 flex items-center">
-                    {/* temporary solution */}
-                    Temperature:
-                    <br />
-                    Humidity:
-                    <br />
-                    Wind:
-                </div>
-            </div>
+            className="shadow-[10px_10px_20px_5px_#4541332e] -bg--primary-color grid w-3/5 rounded-[50px] h-[340px]"
+            style={{
+                gridTemplateRows: 'auto max-content',
+            }}
+        >
+            <WeatherActive
+                activeDay={activeDay}
+                forecast={forecast}
+            />
             <div
                 id="WeatherPrediction"
-                className="grid grid-cols-7">
-                {WeatherElement({ weatherType: "partialcloud", tempText: tempText })}
-                {WeatherElement({ weatherType: "mostlycloudy", tempText: tempText })}
-                {WeatherElement({ weatherType: "stormy", tempText: tempText })}
-                {WeatherElement({ weatherType: "rainyday", tempText: tempText })}
-                {WeatherElement({ weatherType: "snow", tempText: tempText })}
-                {WeatherElement({ weatherType: "heavywind", tempText: tempText })}
-                {WeatherElement({ weatherType: "hailstorm", tempText: tempText })}
+                className="grid grid-cols-8 gap-2 mx-2 mb-2">
+                {forecastNext7Days && forecastNext7Days.map((day, index) => (
+                    <WeatherElement
+                        key={index}
+                        forecastForOneDay={day}
+                        setActiveDay={setActiveDay}
+                    />
+                ))}
             </div>
         </div>
     )
