@@ -17,7 +17,7 @@ export function WeatherElement({ forecastForOneDay, setActiveDay }) {
                 <img
                     src={icon}
                     alt={description}
-                    className=""
+                    className="w-16 h-16"
                 />
                 <div>
                     {day}

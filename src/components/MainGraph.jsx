@@ -1,4 +1,4 @@
-import { Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, LineChart } from 'recharts';
+import { Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, LineChart, Brush } from 'recharts';
 import { useState, useEffect } from 'react';
 import { CustomTooltip } from './CustomTooltip';
 import { CustomDot } from './CustomDot';
@@ -27,6 +27,8 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
         />
     ));
 
+    console.log('relevantData', relevantData)
+
     return (
         <LineChart
             id='detailed-graph'
@@ -42,7 +44,7 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
             {graphLines}
             {/* the right graph type is rendered based on the activeType state, which is set by the user */}
-            <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} />
+            <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} domain={['dataMin', 'dataMax']} type='number' />
             <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
             {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
             {/* domain is used to set the range of the y-axis */}
@@ -50,6 +52,8 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
             {showTooltip && !showDots && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
             {/* if showTooltip is true, show tooltip */}
             <Legend />
+            <Brush dataKey='day' height={30} stroke="#8884d8" />
+            {/* Brush is used to set the range of the x-axis */}
         </LineChart>
     )
 }

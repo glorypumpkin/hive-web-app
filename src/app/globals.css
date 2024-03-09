@@ -102,4 +102,13 @@
         margin-left: calc(var(--hex-size)*0.75 + var(--gap));
     }
 
+    #hovered-menu[data-hovered="true"] {
+        transform: translateX(0);
+    }
+
+    #hovered-menu[data-hovered="false"] {
+        /* display: none; */
+        transform: translateX(-100%);
+
+    }
 }

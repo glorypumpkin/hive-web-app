@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import { dataComparison } from '@/lib/dataComparison';
 import { useUserNotes } from '@/lib/useUserNotes';
 import { MainGraph } from './MainGraph';
+import { GraphExtra } from './GraphExtra';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -45,28 +46,11 @@ export default function DetailedGraph({ data }) {
     const dataWithDayAndHour = getDataWithDayAndHour(data, dateFrom, dateTo);
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
 
-    const onTooltipButtonClick = () => {
-        setShowTooltip(true);
-        setShowDot(false);
-    }
-
-    const onDotButtonClick = () => {
-        setShowTooltip(false);
-        setShowDot(true);
-    }
-
     return (
-        <div className="-bg--primary-color flex pt-2 w-[100vw] h-[100vh]">
+        <div className="-bg--primary-color flex w-[100vw] h-[100vh]">
             <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} />
-            <div className="flex flex-col gap-5">
-                <div className='flex flex-row gap-2 pl-3 items-center pt-1'>
-                    <button className=' bg-orange-200' onClick={onTooltipButtonClick}>Tooltip</button>
-                    <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button>
-                    <button className='bg-orange-200'>Statistic</button>
-                    <button className='bg-orange-200'>Normal</button>
-                    <button className='bg-orange-200'>Notes ON/OFF</button>
-                    <button className='bg-orange-200'>Comparison</button>
-                </div>
+            <div className="flex flex-col gap-1">
+                <GraphExtra showTooltip={showTooltip} setShowTooltip={setShowTooltip}></GraphExtra>
                 <div style={{
                     width: '1300px',
                     height: '800px',
@@ -76,15 +60,15 @@ export default function DetailedGraph({ data }) {
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip}></HistoryLine>
             </div>
             <div className="flex flex-col gap-16 w-full items-center">
-                <div className='flex flex-row w-full justify-end'>
+                <div className='flex flex-row w-full justify-end pt-1'>
                     <Link href="/dashboard" className=' bg-transparent h-12 rounded-[50px] common-button flex px-3'>
                         <img src="/dashboard-icon.png"
-                            className='w-8 shrink-0'
+                            className='w-8 h-8 shrink-0'
                         />
                         {/* <a target="_blank" href="https://icons8.com/icon/sUJRwjfnGwbJ/dashboard-layout">Dashboard</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a> */}
                     </Link>
                     <Link href='/' className=' bg-transparent h-12 rounded-[50px] common-button  flex px-3'>
-                        <img src="/home-icon.svg" className=' w-9 shrink-0' />
+                        <img src="/home-icon.svg" className=' w-9 h-9 shrink-0' />
                     </Link>
                 </div>
                 <SelectGraphType activeType={activeType} setActiveType={setActiveType} ></SelectGraphType>

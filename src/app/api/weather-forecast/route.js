@@ -4,7 +4,11 @@ const APIForecast = `https://weather.visualcrossing.com/VisualCrossingWebService
 export async function GET(request) {
     let response = null;
     try {
-        response = await fetch(APIForecast);
+        response = await fetch(APIForecast, {
+            next: {
+                revalidate: 43200 // 12 hours
+            }
+        });
     }
     catch (error) {
         console.error("Fetch error", error);
