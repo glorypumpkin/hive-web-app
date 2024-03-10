@@ -8,7 +8,7 @@ import { getRangeToDisplay, getDataWithDayAndHour } from '@/lib/dateFiltering';
 import { NoteAreaGraph } from './NoteAreaGraph';
 import Link from 'next/link'
 import useSWR from 'swr';
-import { format } from 'date-fns';
+import { format, sub } from 'date-fns';
 import { dataComparison } from '@/lib/dataComparison';
 import { useUserNotes } from '@/lib/useUserNotes';
 import { MainGraph } from './MainGraph';
@@ -25,6 +25,7 @@ export default function DetailedGraph({ data }) {
     const [activePeriodButton, setActivePeriodButton] = useState("Year");
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState(undefined);
+    const [compareActive, setCompareActive] = useState(false);
     // deleteAllNotes();
 
     const { dateFrom, dateTo } = getRangeToDisplay(activePeriodButton, new Date(data[0].timestamp), new Date(data[data.length - 1].timestamp), activeShowButton ? range : undefined);
@@ -39,23 +40,29 @@ export default function DetailedGraph({ data }) {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });
-
     const weatherDataLoaded = dataFromWeather !== undefined
 
     //TODO: isLoadind and error handling
     const dataWithDayAndHour = getDataWithDayAndHour(data, dateFrom, dateTo);
+
+    const dateFromYearAgo = sub(new Date(dateFrom), { years: 1 });
+    const dateToYearAgo = sub(new Date(dateTo), { years: 1 });
+
+    const dataToCompare = getDataWithDayAndHour(data, dateFromYearAgo, dateToYearAgo);
+    console.log('dataToCompare', dataToCompare)
+
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
 
     return (
         <div className="-bg--primary-color flex w-[100vw] h-[100vh]">
             <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} />
             <div className="flex flex-col gap-1">
-                <GraphExtra showTooltip={showTooltip} setShowTooltip={setShowTooltip}></GraphExtra>
+                <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive}></GraphExtra>
                 <div style={{
                     width: '1300px',
                     height: '800px',
                 }}>
-                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} showDot={showDot} showDots={showDots} setShowDots={setShowDots} />
+                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} showDot={showDot} showDots={showDots} setShowDots={setShowDots} dataToCompare={dataToCompare} compareActive={compareActive} />
                 </div>
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip}></HistoryLine>
             </div>

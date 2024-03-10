@@ -1,12 +1,17 @@
 import { useState } from 'react';
 
-export function GraphExtra({ showTooltip, setShowTooltip }) {
+export function GraphExtra({ setShowTooltip, setCompareActive }) {
     const [isHovered, setIsHovered] = useState(false);
 
     const onTooltipButtonClick = () => {
         setShowTooltip(showTooltip => !showTooltip);
         // setShowDot(false);
     }
+
+    const onCompareButtonClick = () => {
+        setCompareActive(compareActive => !compareActive);
+    }
+
     console.log('isHovered', isHovered)
     const hoveredMenu = () => (
         <div className=" absolute top-0 left-full overflow-hidden">
@@ -18,7 +23,7 @@ export function GraphExtra({ showTooltip, setShowTooltip }) {
                 <button className='' onClick={onTooltipButtonClick}>Tooltip</button>
                 {/* <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button> */}
                 <button className=''>Notes</button>
-                <button className=''>Comparison</button>
+                <button className='' onClick={onCompareButtonClick}>Comparison</button>
             </div>
         </div>
     );
