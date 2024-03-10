@@ -48,6 +48,7 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
     return (
         <LineChart
             id='detailed-graph'
+            data={relevantData}
             //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
             margin={{
                 top: 5,
@@ -70,7 +71,7 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
             {showTooltip && !showDots && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
             {/* if showTooltip is true, show tooltip */}
             <Legend />
-            <Brush dataKey='day' height={30} stroke="#8884d8" />
+            {/* <Brush dataKey='day' height={30} stroke="#8884d8"/> */}
             {/* Brush is used to set the range of the x-axis */}
         </LineChart>
     )

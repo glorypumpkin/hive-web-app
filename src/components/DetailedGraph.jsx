@@ -79,7 +79,7 @@ export default function DetailedGraph({ data }) {
                     </Link>
                 </div>
                 <SelectGraphType activeType={activeType} setActiveType={setActiveType} ></SelectGraphType>
-                <div className=" flex flex-col gap-12 items-center">
+                <div className=" flex flex-col items-center gap-6">
                     <Calendar allNotes={allNotes} setAllNotes={setAllNotes} activeShowButton={activeShowButton} setActiveShowButton={setActiveShowButton} range={range} setRange={setRange}
                     ></Calendar>
                     <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] flex flex-row gap-3 w-3/5 h-12 rounded-[50px] common-button">

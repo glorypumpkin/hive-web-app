@@ -111,4 +111,8 @@
         transform: translateX(-100%);
 
     }
+
+    .custom-tooltip {
+        @apply -bg--primary-color rounded-lg shadow-lg p-2
+    }
 }
