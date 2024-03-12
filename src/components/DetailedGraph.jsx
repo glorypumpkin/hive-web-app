@@ -64,7 +64,7 @@ export default function DetailedGraph({ data }) {
                 }}>
                     <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} showDot={showDot} showDots={showDots} setShowDots={setShowDots} dataToCompare={dataToCompare} compareActive={compareActive} />
                 </div>
-                <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip}></HistoryLine>
+                <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip} setActiveShowButton={setActiveShowButton} activeShowButton={activeShowButton}></HistoryLine>
             </div>
             <div className="flex flex-col gap-16 w-full items-center">
                 <div className='flex flex-row w-full justify-end pt-1'>

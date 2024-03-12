@@ -27,7 +27,7 @@ export function NoteAreaGraph({ dateFrom, dateTo, allNotes }) {
     }
 
     const width = x2 - x1;
-    const fullHeight = 90;
+    const fullHeight = 300;
     const floorHeight = 30
     const y = y1 - fullHeight;
 

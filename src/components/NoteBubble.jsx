@@ -1,8 +1,11 @@
+import { format } from "date-fns";
 import { Fragment, useState } from "react";
 
 export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, floorHeight, index }) {
     const [showNoteText, setShowNoteText] = useState(false);
     const [hoveredNote, setHoveredNote] = useState(null);
+    const [expandedNote, setExpandedNote] = useState(false);
+    const [noteTextChanged, setNoteTextChanged] = useState('');
 
     const noteFrom = note.dateFrom
     const noteTo = note.dateTo;
@@ -28,6 +31,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
 
     const noteTextStartOffset = noteStartOffset + 1;
 
+    // if the note is hovered, show the note text
     const handleMouseEnter = (noteText) => () => {
         setShowNoteText(true);
         setHoveredNote(noteText);
@@ -36,6 +40,15 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
     const handleMouseLeave = () => {
         setShowNoteText(false);
         setHoveredNote(null);
+    }
+
+    // if the note is clicked, expand the note
+    const handleNoteClick = () => {
+        setExpandedNote(!expandedNote);
+    }
+
+    const handleNoteTextChange = (e) => {
+        setNoteTextChanged(e.target.value);
     }
 
     return (
@@ -54,39 +67,50 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                 className=" rounded-t-[5px]"
                 onMouseEnter={handleMouseEnter(noteText)}
                 onMouseLeave={handleMouseLeave}
+                onClick={handleNoteClick}
             >
             </div>
             {showNoteText && hoveredNote === noteText &&
-                <div style={
-                    {
-                        display: 'flex',
-                        alignItems: 'center',
-                        backgroundColor: '#e5e191', // Set background color for the message box
-                        border: '1px solid #ceca82', // Add a border for the message box
-                        padding: '8px', // Add padding for content inside the message box
-                        borderRadius: '5px', // Add border radius for rounded corners
-                        // text in box is in the center
-                        height: renderedHeight,
-                        position: 'absolute',
-                        left: `${noteTextStartOffset}%`,
-                        bottom: 50,
-                        zIndex: 100,
-                    }
-                }>
-                    {noteText}
-                    <div style={
+                <div
+                    style={
                         {
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: renderedHeight,
+                            minWidth: `${noteWidth / 2}%`,
+                            backgroundColor: 'white',
                             position: 'absolute',
-                            bottom: '-10px',
-                            left: '0',
-                            borderTop: '15px solid transparent',
-                            borderLeft: '10px solid #ceca82',
-                            borderBottom: '10px solid transparent',
-                            stroke: '#ccc',
+                            left: `${noteTextStartOffset}%`,
+                            bottom: 50,
+                            zIndex: 100,
                         }
-                    }></div>
+                    }
+                    className='rounded-[5px] shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] px-2 py-1 overflow-hidden'
+                >
+                    {noteText}
                 </div>
             }
-        </Fragment>
+            {expandedNote &&
+                <div style={{ left: `${noteStartOffset}%` }}
+                    className="absolute flex rounded-lg bottom-20 -bg--primary-color border-[1px] border-black">
+                    <div className="flex flex-col">
+                        <div className="flex justify-between gap-3 border-black border-b-[1px] rounded-lg">
+                            <div className=" font-medium px-2">{format(noteFrom, 'dd.LL')} - {format(noteTo, 'dd.LL')}</div>
+                            <div className="flex gap-1 px-2">
+                                <button>
+                                    <img src="/check.svg" className="w-6 h-6" />
+                                </button>
+                                <button>
+                                    <img src="/delete.svg" className="w-6 h-6" />
+                                </button>
+                            </div>
+                        </div>
+                        <textarea defaultValue={noteText} value={noteTextChanged} className="rounded-b-lg px-2" onChange={handleNoteTextChange}></textarea>
+                    </div>
+                </div>
+            }
+
+        </Fragment >
     )
 }
