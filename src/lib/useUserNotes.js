@@ -31,5 +31,9 @@ export function useUserNotes() {
         });
     }
 
-    return { allNotes, setAllNotes: setNotesAndPersist, deleteAllNotes };
+    const deleteNote = (note) => {
+        // TODO: implement
+    }
+
+    return { allNotes, setAllNotes: setNotesAndPersist, deleteAllNotes, deleteNote };
 }

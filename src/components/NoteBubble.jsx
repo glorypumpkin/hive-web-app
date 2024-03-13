@@ -1,11 +1,13 @@
 import { format } from "date-fns";
 import { Fragment, useState } from "react";
+import { useUserNotes } from "@/lib/useUserNotes";
 
-export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, floorHeight, index }) {
+export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, floorHeight, index, setAllNotes, allNotes }) {
     const [showNoteText, setShowNoteText] = useState(false);
     const [hoveredNote, setHoveredNote] = useState(null);
     const [expandedNote, setExpandedNote] = useState(false);
     const [noteTextChanged, setNoteTextChanged] = useState('');
+    const { deleteNote } = useUserNotes();
 
     const noteFrom = note.dateFrom
     const noteTo = note.dateTo;
@@ -31,6 +33,14 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
 
     const noteTextStartOffset = noteStartOffset + 1;
 
+    const calculateNoteTextPosition = (noteTextStartOffset, noteWidth) => {
+        console.log(noteTextStartOffset, noteWidth)
+        if (noteTextStartOffset + noteWidth > 80) {
+            return noteTextStartOffset - 17;
+        }
+        return noteTextStartOffset;
+    }
+
     // if the note is hovered, show the note text
     const handleMouseEnter = (noteText) => () => {
         setShowNoteText(true);
@@ -49,6 +59,21 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
 
     const handleNoteTextChange = (e) => {
         setNoteTextChanged(e.target.value);
+    }
+
+    function onCheckClick() {
+        setExpandedNote(false);
+        console.log(allNotes)
+        // only update the note that was changed
+        // explanation: map through all notes, if the noteText is the same as the noteText of the note that was changed, return the note with the new noteText, else return the note
+        setAllNotes(allNotes.map(n => {
+            if (n.noteText === noteText) {
+                return { ...n, noteText: noteTextChanged }
+            } else {
+                return n;
+            }
+        }
+        ));
     }
 
     return (
@@ -92,21 +117,21 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                 </div>
             }
             {expandedNote &&
-                <div style={{ left: `${noteStartOffset}%` }}
+                <div style={{ left: `${calculateNoteTextPosition(noteTextStartOffset, noteWidth)}%` }}
                     className="absolute flex rounded-lg bottom-20 -bg--primary-color border-[1px] border-black">
                     <div className="flex flex-col">
-                        <div className="flex justify-between gap-3 border-black border-b-[1px] rounded-lg">
+                        <div className="flex justify-between gap-3 border-black border-b-[1px] ">
                             <div className=" font-medium px-2">{format(noteFrom, 'dd.LL')} - {format(noteTo, 'dd.LL')}</div>
                             <div className="flex gap-1 px-2">
-                                <button>
+                                <button onClick={onCheckClick}>
                                     <img src="/check.svg" className="w-6 h-6" />
                                 </button>
-                                <button>
+                                <button onClick={() => deleteNote(note)}>
                                     <img src="/delete.svg" className="w-6 h-6" />
                                 </button>
                             </div>
                         </div>
-                        <textarea defaultValue={noteText} value={noteTextChanged} className="rounded-b-lg px-2" onChange={handleNoteTextChange}></textarea>
+                        <textarea defaultValue={noteText} className="rounded-b-lg px-2 w-52" onChange={handleNoteTextChange} ></textarea>
                     </div>
                 </div>
             }

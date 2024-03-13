@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from 'react-dom';
 import { NoteBubble } from "./NoteBubble";
 
-export function NoteAreaGraph({ dateFrom, dateTo, allNotes }) {
+export function NoteAreaGraph({ dateFrom, dateTo, allNotes, setAllNotes }) {
     const [line, setLine] = useState(null);
 
     // Get the line element from the graph
@@ -51,7 +51,7 @@ export function NoteAreaGraph({ dateFrom, dateTo, allNotes }) {
 
     const noteArea = relevantNotes.map((note, index) => {
         return (
-            <NoteBubble note={note} dateFromMilliseconds={dateFromMilliseconds} dateToMilliseconds={dateToMilliseconds} floorHeight={floorHeight} key={index} />
+            <NoteBubble note={note} dateFromMilliseconds={dateFromMilliseconds} dateToMilliseconds={dateToMilliseconds} floorHeight={floorHeight} key={index} setAllNotes={setAllNotes} allNotes={allNotes} />
         )
     })
 

@@ -33,6 +33,8 @@ export default function DetailedGraph({ data }) {
     const dateFromFormatted = format(dateFrom, 'yyyy-LL-dd');
     const dateToFormatted = format(dateTo, 'yyyy-LL-dd');
 
+    console.log('allNotes', allNotes)
+
     const weatherDataNeeded = activeType.includes('weather');
 
     const { data: dataFromWeather, error, isLoading } = useSWR(weatherDataNeeded ? `/api/weather-history?&from=${dateFromFormatted}&to=${dateToFormatted}` : null, fetcher, {
@@ -55,7 +57,7 @@ export default function DetailedGraph({ data }) {
 
     return (
         <div className="-bg--primary-color flex w-[100vw] h-[100vh]">
-            <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} />
+            <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} setAllNotes={setAllNotes} />
             <div className="flex flex-col gap-1">
                 <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive}></GraphExtra>
                 <div style={{
