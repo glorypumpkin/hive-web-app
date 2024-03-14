@@ -118,6 +118,7 @@ export async function POST(request) {
 export async function DELETE(request) {
     // console.log(request)
     try {
+        // const { noteID } = request.params;
         const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
         const drive = await getDrive({
             accessToken: token.access_token

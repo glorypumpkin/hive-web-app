@@ -31,8 +31,24 @@ export function useUserNotes() {
         });
     }
 
-    const deleteNote = (note) => {
+    const deleteNote = (noteID) => {
         // TODO: implement
+        // delete only one chosen note
+        const updatedNotes = allNotes.filter(note => note.id !== noteID);
+        setAllNotes(updatedNotes);
+        console.log('updatedNotes', updatedNotes)
+        console.log('allNotes', allNotes)
+        fetch('/api/notes', {
+            method: 'DELETE',
+        }).then(response => {
+            if (response.ok) {
+                console.log(`Note with ID ${noteID} deleted successfully.`);
+            } else {
+                console.error(`Failed to delete note with ID ${noteID}.`);
+            }
+        }).catch(error => {
+            console.error(`Error deleting note with ID ${noteID}: ${error.message}`);
+        });
     }
 
     return { allNotes, setAllNotes: setNotesAndPersist, deleteAllNotes, deleteNote };

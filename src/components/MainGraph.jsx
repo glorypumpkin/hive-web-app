@@ -67,7 +67,7 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
             <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
             {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
             {/* domain is used to set the range of the y-axis */}
-            <YAxis yAxisId="celsius" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
+            <YAxis yAxisId="C" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
             {showTooltip && !showDots && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
             {/* if showTooltip is true, show tooltip */}
             <Legend />
@@ -103,6 +103,6 @@ const strokeColorsCompare = {
 
 const units = {
     weight: 'kg',
-    temperature: 'celsius',
-    weather: 'celsius'
+    temperature: 'C',
+    weather: 'C'
 };

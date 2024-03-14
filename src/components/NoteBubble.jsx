@@ -14,6 +14,10 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
     const noteColor = note.color;
     const noteText = note.noteText;
     const noteFloor = note.floor;
+    const noteID = note.id;
+
+    // const graphWidth = (dateToMilliseconds - dateFromMilliseconds);
+    // console.log(graphWidth)
 
     let backgroundColor;
 
@@ -28,18 +32,32 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
     const noteStartOffset = (noteFrom - dateFromMilliseconds) / (dateToMilliseconds - dateFromMilliseconds) * 100;
     const noteWidth = (noteTo - noteFrom) / (dateToMilliseconds - dateFromMilliseconds) * 100;
 
+    const remainingWidth = 100 - (noteStartOffset + noteWidth);
+
     const renderedHeight = (noteFloor + 1) * floorHeight;
     const zIndex = 100 - noteFloor;
 
-    const noteTextStartOffset = noteStartOffset + 1;
 
-    const calculateNoteTextPosition = (noteTextStartOffset, noteWidth) => {
-        console.log(noteTextStartOffset, noteWidth)
-        if (noteTextStartOffset + noteWidth > 80) {
-            return noteTextStartOffset - 17;
+    const calculateExpandedNotePosition = () => {
+        // if the remaining width is less than 17, move the note to the left
+        if (remainingWidth < 17) {
+            return noteTextStartOffset - 17
+        } else {
+            return noteTextStartOffset;
         }
-        return noteTextStartOffset;
     }
+
+    const noteTextStartOffset = noteStartOffset + 1;
+    const calculateHoveredNotePosition = () => {
+        // if the remaining width is less than 10, move the note to the left
+        if (remainingWidth < 10) {
+            return noteTextStartOffset - 10;
+        } else {
+            return noteTextStartOffset;
+        }
+
+    }
+
 
     // if the note is hovered, show the note text
     const handleMouseEnter = (noteText) => () => {
@@ -103,10 +121,10 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                             alignItems: 'center',
                             justifyContent: 'center',
                             height: renderedHeight,
-                            minWidth: `${noteWidth / 2}%`,
+                            // minWidth: `${noteWidth / 2}%`,
                             backgroundColor: 'white',
                             position: 'absolute',
-                            left: `${noteTextStartOffset}%`,
+                            left: `${calculateHoveredNotePosition()}%`,
                             bottom: 50,
                             zIndex: 100,
                         }
@@ -117,7 +135,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                 </div>
             }
             {expandedNote &&
-                <div style={{ left: `${calculateNoteTextPosition(noteTextStartOffset, noteWidth)}%` }}
+                <div style={{ left: `${calculateExpandedNotePosition()}%` }}
                     className="absolute flex rounded-lg bottom-20 -bg--primary-color border-[1px] border-black">
                     <div className="flex flex-col">
                         <div className="flex justify-between gap-3 border-black border-b-[1px] ">
@@ -126,7 +144,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                                 <button onClick={onCheckClick}>
                                     <img src="/check.svg" className="w-6 h-6" />
                                 </button>
-                                <button onClick={() => deleteNote(note)}>
+                                <button onClick={() => deleteNote(noteID)}>
                                     <img src="/delete.svg" className="w-6 h-6" />
                                 </button>
                             </div>
