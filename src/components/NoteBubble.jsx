@@ -2,12 +2,12 @@ import { format } from "date-fns";
 import { Fragment, useState } from "react";
 import { useUserNotes } from "@/lib/useUserNotes";
 
-export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, floorHeight, index, setAllNotes, allNotes }) {
+export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, floorHeight, index }) {
     const [showNoteText, setShowNoteText] = useState(false);
     const [hoveredNote, setHoveredNote] = useState(null);
     const [expandedNote, setExpandedNote] = useState(false);
     const [noteTextChanged, setNoteTextChanged] = useState('');
-    const { deleteNote } = useUserNotes();
+    const { allNotes, setAllNotes, deleteNote } = useUserNotes();
 
     const noteFrom = note.dateFrom
     const noteTo = note.dateTo;
@@ -58,6 +58,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
 
     }
 
+    console.log('allNotes', allNotes)
 
     // if the note is hovered, show the note text
     const handleMouseEnter = (noteText) => () => {

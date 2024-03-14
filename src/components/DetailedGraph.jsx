@@ -13,6 +13,7 @@ import { dataComparison } from '@/lib/dataComparison';
 import { useUserNotes } from '@/lib/useUserNotes';
 import { MainGraph } from './MainGraph';
 import { GraphExtra } from './GraphExtra';
+import { ExtraGraphs } from './ExtraGraphs';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -26,6 +27,7 @@ export default function DetailedGraph({ data }) {
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState(undefined);
     const [compareActive, setCompareActive] = useState(false);
+    const [extraGraphs, setExtraGraphs] = useState(false);
     // deleteAllNotes();
 
     const { dateFrom, dateTo } = getRangeToDisplay(activePeriodButton, new Date(data[0].timestamp), new Date(data[data.length - 1].timestamp), activeShowButton ? range : undefined);
@@ -33,7 +35,7 @@ export default function DetailedGraph({ data }) {
     const dateFromFormatted = format(dateFrom, 'yyyy-LL-dd');
     const dateToFormatted = format(dateTo, 'yyyy-LL-dd');
 
-    console.log('allNotes', allNotes)
+    // console.log('allNotes', allNotes)
 
     const weatherDataNeeded = activeType.includes('weather');
 
@@ -57,14 +59,14 @@ export default function DetailedGraph({ data }) {
 
     return (
         <div className="-bg--primary-color flex w-[100vw] h-[100vh]">
-            <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} allNotes={allNotes} setAllNotes={setAllNotes} />
+            <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} />
             <div className="flex flex-col gap-1">
-                <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive}></GraphExtra>
+                <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive}></GraphExtra>
                 <div style={{
                     width: '1300px',
                     height: '800px',
                 }}>
-                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} showDot={showDot} showDots={showDots} setShowDots={setShowDots} dataToCompare={dataToCompare} compareActive={compareActive} />
+                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} showDot={showDot} showDots={showDots} setShowDots={setShowDots} dataToCompare={dataToCompare} compareActive={compareActive} extraGraphs={extraGraphs} />
                 </div>
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip} setActiveShowButton={setActiveShowButton} activeShowButton={activeShowButton}></HistoryLine>
             </div>
@@ -84,15 +86,7 @@ export default function DetailedGraph({ data }) {
                 <div className=" flex flex-col items-center gap-6">
                     <Calendar allNotes={allNotes} setAllNotes={setAllNotes} activeShowButton={activeShowButton} setActiveShowButton={setActiveShowButton} range={range} setRange={setRange}
                     ></Calendar>
-                    <button className="shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] flex flex-row gap-3 w-3/5 h-12 rounded-[50px] common-button">
-                        <img
-                            src="https://file.rendit.io/n/tCph0baGyDvCMUzNZVzt.svg"
-                            className="w-6 shrink-0"
-                        />
-                        <div className="text-center text-xl font-sans font-semibold">
-                            Add extra graph
-                        </div>
-                    </button>
+                    <ExtraGraphs setExtraGraphs={setExtraGraphs} extraGraphs={extraGraphs}></ExtraGraphs>
                 </div>
             </div>
         </div>

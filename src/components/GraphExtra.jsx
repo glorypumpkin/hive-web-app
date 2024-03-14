@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export function GraphExtra({ setShowTooltip, setCompareActive }) {
+export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, compareActive }) {
     const [isHovered, setIsHovered] = useState(false);
 
     const onTooltipButtonClick = () => {
@@ -20,10 +20,10 @@ export function GraphExtra({ setShowTooltip, setCompareActive }) {
                 data-hovered={isHovered}
                 className='flex gap-2 transition-all duration-500 ease-in-out -bg--primary-color rounded-r-3xl h-8 px-2'
             >
-                <button className='' onClick={onTooltipButtonClick}>Tooltip</button>
+                <button className={`extra-buttons ${showTooltip ? '-bg--hover-color' : ''}`} onClick={onTooltipButtonClick}>Tooltip</button>
                 {/* <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button> */}
-                <button className=''>Notes</button>
-                <button className='' onClick={onCompareButtonClick}>Comparison</button>
+                <button className={`extra-buttons`}>Notes</button>
+                <button className={`extra-buttons ${compareActive ? '-bg--hover-color' : ''}`} onClick={onCompareButtonClick}>Comparison</button>
             </div>
         </div>
     );

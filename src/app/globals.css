@@ -115,4 +115,8 @@
     .custom-tooltip {
         @apply -bg--primary-color rounded-lg shadow-lg p-2
     }
+
+    .extra-buttons {
+        @apply hover:-bg--hover-color rounded-3xl px-1
+    }
 }

@@ -12,7 +12,7 @@ export function SelectGraphType({ activeType, setActiveType }) {
         }
     }
     return (
-        <div className="flex flex-col gap-6 w-[250px]">
+        <div className="flex flex-col gap-6 w-2/5">
             <div className="text-center text-xl font-sans font-semibold">
                 Select graph type
             </div>

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { CustomTooltip } from './CustomTooltip';
 import { CustomDot } from './CustomDot';
 
-export function MainGraph({ relevantData, activeMeasurements, showDot, showDots, setShowDots, showTooltip, dataToCompare, compareActive }) {
+export function MainGraph({ relevantData, activeMeasurements, showDot, showDots, setShowDots, showTooltip, dataToCompare, compareActive, extraGraphs }) {
 
     // Do not render on the server
     const [hydrated, setHydrated] = useState(false);
@@ -43,37 +43,46 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
         />
     ));
 
-    console.log('relevantData', relevantData)
+    const selectExtraGraphsType = extraGraphs ? (
+        <div>
+            {/* TODO */}
+        </div>
+    ) : null;
+
+    // console.log('relevantData', relevantData)
 
     return (
-        <LineChart
-            id='detailed-graph'
-            data={relevantData}
-            //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
-            margin={{
-                top: 5,
-                right: 30,
-                left: 0,
-                bottom: 5
-            }}
-            width={1300} height={800}
-        >
-            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-            {graphLines}
-            {comparisonLine}
-            {/* the right graph type is rendered based on the activeType state, which is set by the user */}
-            <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} domain={['dataMin', 'dataMax']} type='number' />
-            <XAxis dataKey='timestamp' orientation='top' domain={['dataMin', 'dataMax']} type='number' xAxisId='compare' hide></XAxis>
-            <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
-            {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
-            {/* domain is used to set the range of the y-axis */}
-            <YAxis yAxisId="C" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
-            {showTooltip && !showDots && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
-            {/* if showTooltip is true, show tooltip */}
-            <Legend />
-            {/* <Brush dataKey='day' height={30} stroke="#8884d8"/> */}
-            {/* Brush is used to set the range of the x-axis */}
-        </LineChart>
+        <>
+            <LineChart
+                id='detailed-graph'
+                data={relevantData}
+                //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 0,
+                    bottom: 5
+                }}
+                width={1300} height={800}
+            >
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                {graphLines}
+                {comparisonLine}
+                {/* the right graph type is rendered based on the activeType state, which is set by the user */}
+                <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} domain={['dataMin', 'dataMax']} type='number' />
+                <XAxis dataKey='timestamp' orientation='top' domain={['dataMin', 'dataMax']} type='number' xAxisId='compare' hide></XAxis>
+                <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
+                {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
+                {/* domain is used to set the range of the y-axis */}
+                <YAxis yAxisId="C" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
+                {showTooltip && !showDots && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
+                {/* if showTooltip is true, show tooltip */}
+                <Legend />
+                {/* <Brush dataKey='day' height={30} stroke="#8884d8"/> */}
+                {/* Brush is used to set the range of the x-axis */}
+            </LineChart>
+            {selectExtraGraphsType}
+        </>
     )
 }
 
