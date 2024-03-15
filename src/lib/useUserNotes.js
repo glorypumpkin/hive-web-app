@@ -1,10 +1,15 @@
-import { useState, useEffect } from 'react';
+'use client'
+import { useState, useEffect, createContext, useContext } from 'react';
 
-export function useUserNotes() {
+const notesContext = createContext({
+    allNotes: [],
+    setNotesAndPersist: () => { },
+    deleteNote: () => { },
+    deleteAllNotes: () => { }
+});
+
+export function NotesProvider({ children }) {
     const [allNotes, setAllNotes] = useState([]);
-
-    console.log('new notes state', allNotes)
-
     // Fetch notes from the server
     useEffect(() => {
         // This function is used for async/await syntax
@@ -42,6 +47,15 @@ export function useUserNotes() {
         setNotesAndPersist(updatedNotes);
         console.log('updatedNotes', updatedNotes)
     }
+    return (
+        <notesContext.Provider value={{ allNotes, setNotesAndPersist, deleteNote, deleteAllNotes }}>
+            {children}
+        </notesContext.Provider>
+    );
+}
 
-    return { allNotes, setAllNotes: setNotesAndPersist, deleteAllNotes, deleteNote };
+export function useUserNotes() {
+    const { allNotes, setNotesAndPersist, deleteNote, deleteAllNotes } = useContext(notesContext);
+    console.log('new notes state', allNotes)
+    return { allNotes, setNotesAndPersist, deleteNote, deleteAllNotes };
 }

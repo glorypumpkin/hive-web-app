@@ -84,7 +84,7 @@ export default function DetailedGraph({ data }) {
                 </div>
                 <SelectGraphType activeType={activeType} setActiveType={setActiveType} ></SelectGraphType>
                 <div className=" flex flex-col items-center gap-6">
-                    <Calendar allNotes={allNotes} setAllNotes={setAllNotes} activeShowButton={activeShowButton} setActiveShowButton={setActiveShowButton} range={range} setRange={setRange}
+                    <Calendar activeShowButton={activeShowButton} setActiveShowButton={setActiveShowButton} range={range} setRange={setRange}
                     ></Calendar>
                     <ExtraGraphs setExtraGraphs={setExtraGraphs} extraGraphs={extraGraphs}></ExtraGraphs>
                 </div>

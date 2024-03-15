@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useUserNotes } from '@/lib/useUserNotes';
 
 const colors = {
     red: 'bg-red-300',
@@ -6,9 +7,10 @@ const colors = {
     blue: 'bg-blue-300',
 };
 
-export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAllNotes, setActiveShowButton, activeShowButton }) {
+export function NoteAreaCalendar({ showNote, setShowNote, range, setActiveShowButton, activeShowButton }) {
     const [noteColor, setNoteColor] = useState('red');
     const [noteText, setNoteText] = useState('');
+    const { allNotes, setNotesAndPersist } = useUserNotes();
 
     const handleColorClick = (color) => {
         setNoteColor(color);
@@ -33,7 +35,7 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, allNotes, setAl
             color: noteColor,
             noteText: noteText
         };
-        setAllNotes([...allNotes, note]);
+        setNotesAndPersist([...allNotes, note]);
 
     }
     function onShowOnGraphClick() {

@@ -60,7 +60,7 @@ export function NoteAreaGraph({ dateFrom, dateTo }) {
     return (
         <>
             {notesParent && createPortal(
-                <foreignObject x={x1} y={y} width={width} height={fullHeight}>
+                <foreignObject x={x1} y={y} width={width} height={fullHeight} overflow="visible">
                     <div className="h-full relative">
                         {noteArea}
                     </div>

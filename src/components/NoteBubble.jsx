@@ -127,7 +127,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                             position: 'absolute',
                             left: `${calculateHoveredNotePosition()}%`,
                             bottom: 50,
-                            zIndex: 100,
+                            zIndex: 1000,
                         }
                     }
                     className='rounded-[5px] shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)] px-2 py-1 overflow-hidden'
@@ -137,7 +137,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
             }
             {expandedNote &&
                 <div style={{ left: `${calculateExpandedNotePosition()}%` }}
-                    className="absolute flex rounded-lg bottom-20 -bg--primary-color border-[1px] border-black">
+                    className="absolute flex rounded-lg bottom-20 -bg--primary-color border-[1px] border-gray-400 opacity-95">
                     <div className="flex flex-col">
                         <div className="flex justify-between gap-3 border-black border-b-[1px] ">
                             <div className=" font-medium px-2">{format(noteFrom, 'dd.LL')} - {format(noteTo, 'dd.LL')}</div>
