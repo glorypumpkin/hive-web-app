@@ -55,6 +55,7 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
         <>
             <LineChart
                 id='detailed-graph'
+                overflow='visible'
                 data={relevantData}
                 //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
                 margin={{

@@ -60,7 +60,7 @@ export default function DetailedGraph({ data }) {
     return (
         <div className="-bg--primary-color flex w-[100vw] h-[100vh]">
             <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} />
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 overflow-visible">
                 <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive}></GraphExtra>
                 <div style={{
                     width: '1300px',

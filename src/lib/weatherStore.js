@@ -1,8 +1,8 @@
-import { createClient, kv } from "@vercel/kv";
+import { createClient } from "redis";
 import { differenceInDays, addDays, subDays, format } from "date-fns";
+import { getRedisClient } from "./redis";
 
 const weater_set = 'weather';
-
 
 // yyyy-mm-dd
 function getRequestURL(date) {
@@ -10,19 +10,34 @@ function getRequestURL(date) {
 }
 
 export async function getAllData() {
+    // client 
+    const kv = getRedisClient();
     // get from KV
-    const dateFrom = await kv.zrange(weater_set, 0, -1);
+    const dateFrom = await kv.zRange(weater_set, 0, -1);
     // console.log('dateFrom', dateFrom);
     // if not in KV, fetch from API
 }
 export async function getWeatherFromDB(fromTimestamp, toTimestamp) {
     // get from KV
-    const data = await kv.zrange(weater_set, fromTimestamp, toTimestamp, { byScore: true });
+    const kv = getRedisClient();
+    // console.log('db args', fromTimestamp, toTimestamp, {
+    //     byscore: true,
+    // });
+    // https://github.com/redis/node-redis/blob/dbf8f59/packages/client/lib/commands/ZRANGE.ts#L17
+    const data = await kv.zRange(weater_set, fromTimestamp, toTimestamp, {
+        BY: 'SCORE'
+    });
+    // console.log('data from DB', data);
+    // map to objects
+    for (let i = 0; i < data.length; i++) {
+        data[i] = JSON.parse(data[i]);
+    }
     return data;
 }
 
 export async function deleteWeatherData() {
     // delete from KV
+    const kv = getRedisClient();
     await kv.del(weater_set);
 }
 
@@ -34,21 +49,24 @@ export async function saveWeatherData(apiObjects) {
         const current = apiObjects[i];
         const datetime = current.datetime;
         const timestamp = new Date(datetime).getTime();
-        toInsert.push({ score: timestamp, member: JSON.stringify(current) });
+        toInsert.push({ score: timestamp, value: JSON.stringify(current) });
     }
     // save to KV
-    console.log('storing data', toInsert);
-    const res = await kv.zadd(weater_set, ...toInsert);
-    console.log('res', res);
+    // console.log('storing data', toInsert);
+    const kv = getRedisClient();
+    // stringify the items
+    const res = await kv.zAdd(weater_set, toInsert);
+    // console.log('res', res);
 }
 // date objects
 export async function getWeatherData(from, to) {
     // convert to timestamp
     const fromTimestamp = from.getTime();
     const toTimestamp = to.getTime();
-
+    console.log('calling getWeatherData')
     // load from KV
     const data = await getWeatherFromDB(fromTimestamp, toTimestamp);
+    // console.log('data from KV', data);
     // data: Array<{datetime: string, datetimeepoch: number, ...}>
     // datetime: "2022-01-01"
     // console.log('data from DB', data);
@@ -91,8 +109,11 @@ export async function getWeatherData(from, to) {
             if (fetched !== null) {
                 fetchedData.push(fetched);
             }
+            if (fetched === null) {
+                throw new Error('Error fetching data from the API');
+            }
         }
-        console.log('fetchedData', fetchedData);
+        // console.log('fetchedData', fetchedData);
 
         // save to KV 
         if (fetchedData.length !== 0) {

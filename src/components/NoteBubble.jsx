@@ -2,12 +2,12 @@ import { format } from "date-fns";
 import { Fragment, useState } from "react";
 import { useUserNotes } from "@/lib/useUserNotes";
 
-export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, floorHeight, index }) {
+export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, floorHeight, noteIdOpened, setNoteIdOpened }) {
     const [showNoteText, setShowNoteText] = useState(false);
     const [hoveredNote, setHoveredNote] = useState(null);
-    const [expandedNote, setExpandedNote] = useState(false);
     const [noteTextChanged, setNoteTextChanged] = useState('');
     const { allNotes, setAllNotes, deleteNote } = useUserNotes();
+
 
     const noteFrom = note.dateFrom
     const noteTo = note.dateTo;
@@ -16,6 +16,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
     const noteFloor = note.floor;
     const noteID = note.id;
 
+    const expandedNote = noteIdOpened === noteID;
     // const graphWidth = (dateToMilliseconds - dateFromMilliseconds);
     // console.log(graphWidth)
 
@@ -38,25 +39,25 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
     const zIndex = 100 - noteFloor;
 
 
-    const calculateExpandedNotePosition = () => {
-        // if the remaining width is less than 17, move the note to the left
-        if (remainingWidth < 17) {
-            return noteTextStartOffset - 17
-        } else {
-            return noteTextStartOffset;
-        }
-    }
+    // const calculateExpandedNotePosition = () => {
+    //     // if the remaining width is less than 17, move the note to the left
+    //     if (remainingWidth < 17) {
+    //         return noteTextStartOffset - 17
+    //     } else {
+    //         return noteTextStartOffset;
+    //     }
+    // }
 
     const noteTextStartOffset = noteStartOffset + 1;
-    const calculateHoveredNotePosition = () => {
-        // if the remaining width is less than 10, move the note to the left
-        if (remainingWidth < 10) {
-            return noteTextStartOffset - 10;
-        } else {
-            return noteTextStartOffset;
-        }
+    // const calculateHoveredNotePosition = () => {
+    //     // if the remaining width is less than 10, move the note to the left
+    //     if (remainingWidth < 10) {
+    //         return noteTextStartOffset - 10;
+    //     } else {
+    //         return noteTextStartOffset;
+    //     }
 
-    }
+    // }
 
     console.log('allNotes', allNotes)
 
@@ -73,7 +74,12 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
 
     // if the note is clicked, expand the note
     const handleNoteClick = () => {
-        setExpandedNote(!expandedNote);
+        if (expandedNote) {
+            setNoteIdOpened(null);
+        } else {
+            setNoteIdOpened(noteID);
+        }
+
     }
 
     const handleNoteTextChange = (e) => {
@@ -96,7 +102,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
     }
 
     return (
-        <Fragment key={index}>
+        <Fragment>
             <div style={
                 {
                     backgroundColor: backgroundColor,
@@ -107,7 +113,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                     bottom: 0,
                     zIndex: zIndex,
                 }
-            } key={index}
+            }
                 className=" rounded-t-[5px]"
                 onMouseEnter={handleMouseEnter(noteText)}
                 onMouseLeave={handleMouseLeave}
@@ -125,7 +131,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                             // minWidth: `${noteWidth / 2}%`,
                             backgroundColor: 'white',
                             position: 'absolute',
-                            left: `${calculateHoveredNotePosition()}%`,
+                            left: `${noteTextStartOffset}%`,
                             bottom: 50,
                             zIndex: 1000,
                         }
@@ -136,7 +142,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                 </div>
             }
             {expandedNote &&
-                <div style={{ left: `${calculateExpandedNotePosition()}%` }}
+                <div style={{ left: `${noteStartOffset}%` }}
                     className="absolute flex rounded-lg bottom-20 -bg--primary-color border-[1px] border-gray-400 opacity-95">
                     <div className="flex flex-col">
                         <div className="flex justify-between gap-3 border-black border-b-[1px] ">

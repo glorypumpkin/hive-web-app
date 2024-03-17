@@ -8,19 +8,38 @@ export function dataComparison(weights, weather) {
     // find the same dates
     // if the date is the same, merge the objects
     var answer = [], i = 0, j = 0;
-    while (i < weights.length && j < weather.length) {
-        if (weights[i].timestamp === weather[j].timestamp) {
-            console.log('same date')
-            answer.push({ ...weights[i], ...weather[j] });
-            i++;
-            j++;
-        } else if (weights[i].timestamp < weather[j].timestamp) {
+    while (i < weights.length || j < weather.length) {
+        const iStamp = weights[i]?.timestamp;
+        const jStamp = weather[j]?.timestamp;
+        if (iStamp !== undefined && jStamp !== undefined) {
+            if (iStamp === jStamp) {
+                console.log('same date')
+
+                answer.push({ ...weights[i], ...weather[j] });
+                i++;
+                j++;
+
+            } else if (iStamp < jStamp) {
+                answer.push({ ...weights[i] });
+                i++;
+            } else {
+                answer.push({ ...weather[j] });
+                j++;
+            }
+            continue;
+        }
+
+        if (iStamp !== undefined) {
             answer.push({ ...weights[i] });
             i++;
-        } else {
+        }
+
+        if (jStamp !== undefined) {
+            answer.push({ ...weather[j] });
             j++;
         }
     }
 
+    console.log('after merge', answer)
     return answer;
 }

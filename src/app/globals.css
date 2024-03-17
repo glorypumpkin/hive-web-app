@@ -119,4 +119,5 @@
     .extra-buttons {
         @apply hover:-bg--hover-color rounded-3xl px-1
     }
+
 }

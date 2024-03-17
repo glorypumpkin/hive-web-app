@@ -7,6 +7,7 @@ import { useUserNotes } from "@/lib/useUserNotes";
 export function NoteAreaGraph({ dateFrom, dateTo }) {
     const [line, setLine] = useState(null);
     const { allNotes } = useUserNotes();
+    const [noteIdOpened, setNoteIdOpened] = useState(null);
 
     // Get the line element from the graph
     // line = dom element of the line in the graph
@@ -53,7 +54,7 @@ export function NoteAreaGraph({ dateFrom, dateTo }) {
 
     const noteArea = relevantNotes.map((note, index) => {
         return (
-            <NoteBubble note={note} dateFromMilliseconds={dateFromMilliseconds} dateToMilliseconds={dateToMilliseconds} floorHeight={floorHeight} key={index} />
+            <NoteBubble note={note} dateFromMilliseconds={dateFromMilliseconds} dateToMilliseconds={dateToMilliseconds} floorHeight={floorHeight} key={index} noteIdOpened={noteIdOpened} setNoteIdOpened={setNoteIdOpened} />
         )
     })
 
