@@ -1,8 +1,8 @@
+import { addHours } from "date-fns";
+import fs from 'fs';
 
 // Parametros: fileContents: string
 
-import { parse, startOfDay, addHours } from "date-fns";
-import { da } from "date-fns/locale";
 
 // Retorno: Array<{}>
 export function convertor(fileContents) {
@@ -26,8 +26,6 @@ export function parseLine(line) {
 
     const current = new Date(2000 + parseInt(datum.slice(6, 8)), parseInt(datum.slice(3, 5)) - 1, parseInt(datum.slice(0, 2)), parseInt(cas), 0, 0, 0);
 
-    // const midnight = startOfDay(current);
-    // change timezone of the date to local time
     const localDateObject = addHours(current, -current.getTimezoneOffset() / 60);
     const timestamp = localDateObject.getTime();
 
@@ -44,3 +42,13 @@ export function parseLine(line) {
         temperature: teplFloat
     };
 }
+
+
+export function convertFromFile() {
+    const fileContents = fs.readFileSync("public/2022data.txt", 'utf8')
+    // console.log(fileContents);
+    const data = convertor(fileContents);
+    console.log(data);
+}
+
+// convertFromFile();

@@ -87,8 +87,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
     }
 
     function onCheckClick() {
-        setExpandedNote(false);
-        console.log(allNotes)
+        // console.log(allNotes)
         // only update the note that was changed
         // explanation: map through all notes, if the noteText is the same as the noteText of the note that was changed, return the note with the new noteText, else return the note
         setAllNotes(allNotes.map(n => {

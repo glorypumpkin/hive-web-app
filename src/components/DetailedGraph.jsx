@@ -53,7 +53,7 @@ export default function DetailedGraph({ data }) {
     const dateToYearAgo = sub(new Date(dateTo), { years: 1 });
 
     const dataToCompare = getDataWithDayAndHour(data, dateFromYearAgo, dateToYearAgo);
-    console.log('dataToCompare', dataToCompare)
+    // console.log('dataToCompare', dataToCompare)
 
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
 
