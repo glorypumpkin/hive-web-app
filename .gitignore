@@ -36,3 +36,7 @@ next-env.d.ts
 
 service.keys.json
 .env
+
+model/venv
+model/__pycache__
+model/model.pth
