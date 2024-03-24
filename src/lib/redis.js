@@ -1,4 +1,4 @@
-import { createClient, RedisClientType } from "redis";
+import { createClient } from "redis";
 
 const REDIS_CONFIG = {
     url: process.env.KV_URL,

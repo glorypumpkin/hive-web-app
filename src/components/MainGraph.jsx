@@ -72,10 +72,10 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
                 {/* the right graph type is rendered based on the activeType state, which is set by the user */}
                 <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} domain={['dataMin', 'dataMax']} type='number' />
                 <XAxis dataKey='timestamp' orientation='top' domain={['dataMin', 'dataMax']} type='number' xAxisId='compare' hide></XAxis>
-                <YAxis yAxisId="kg" domain={['dataMin-1', 'dataMax+1']} />
+                <YAxis yAxisId="kg" domain={['dataMin', 'dataMax']} />
                 {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
                 {/* domain is used to set the range of the y-axis */}
-                <YAxis yAxisId="C" orientation="right" domain={['dataMin-1', 'dataMax+1']} />
+                <YAxis yAxisId="C" orientation="right" />
                 {showTooltip && !showDots && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
                 {/* if showTooltip is true, show tooltip */}
                 <Legend />

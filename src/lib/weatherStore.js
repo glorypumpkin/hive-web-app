@@ -1,30 +1,20 @@
-import { createClient } from "redis";
-import { differenceInDays, addDays, subDays, format } from "date-fns";
 import { getRedisClient } from "./redis";
 
-const weater_set = 'weather';
+//TODO: rename everything
 
 // yyyy-mm-dd
 function getRequestURL(date) {
     return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia/${date}?unitGroup=metric&include=days&key=${process.env.WEATHER_API_KEY}&contentType=json`
 }
 
-export async function getAllData() {
-    // client 
-    const kv = getRedisClient();
-    // get from KV
-    const dateFrom = await kv.zRange(weater_set, 0, -1);
-    // console.log('dateFrom', dateFrom);
-    // if not in KV, fetch from API
-}
-export async function getWeatherFromDB(fromTimestamp, toTimestamp) {
+export async function getWeatherFromDB(set, fromTimestamp, toTimestamp) {
     // get from KV
     const kv = getRedisClient();
     // console.log('db args', fromTimestamp, toTimestamp, {
     //     byscore: true,
     // });
     // https://github.com/redis/node-redis/blob/dbf8f59/packages/client/lib/commands/ZRANGE.ts#L17
-    const data = await kv.zRange(weater_set, fromTimestamp, toTimestamp, {
+    const data = await kv.zRange(set, fromTimestamp, toTimestamp, {
         BY: 'SCORE'
     });
     // console.log('data from DB', data);
@@ -35,95 +25,42 @@ export async function getWeatherFromDB(fromTimestamp, toTimestamp) {
     return data;
 }
 
-export async function deleteWeatherData() {
-    // delete from KV
-    const kv = getRedisClient();
-    await kv.del(weater_set);
-}
-
 // apiObjects: Array<{datetime: string, ...}>
-export async function saveWeatherData(apiObjects) {
+export async function saveWeatherData(set, apiObjects, extractTimestamp) {
     // convert to score, member
     const toInsert = [];
     for (let i = 0; i < apiObjects.length; i++) {
         const current = apiObjects[i];
-        const datetime = current.datetime;
-        const timestamp = new Date(datetime).getTime();
+        const timestamp = extractTimestamp(current);
         toInsert.push({ score: timestamp, value: JSON.stringify(current) });
     }
     // save to KV
     // console.log('storing data', toInsert);
     const kv = getRedisClient();
     // stringify the items
-    const res = await kv.zAdd(weater_set, toInsert);
+    const res = await kv.zAdd(set, toInsert);
     // console.log('res', res);
 }
-// date objects
-export async function getWeatherData(from, to) {
+
+export async function genericGetData({ set, from, to, extractTimestamp, getAndFetchMissing }) {
     // convert to timestamp
     const fromTimestamp = from.getTime();
     const toTimestamp = to.getTime();
-    console.log('calling getWeatherData')
-    // load from KV
-    const data = await getWeatherFromDB(fromTimestamp, toTimestamp);
-    // console.log('data from KV', data);
-    // data: Array<{datetime: string, datetimeepoch: number, ...}>
-    // datetime: "2022-01-01"
-    // console.log('data from DB', data);
+    // get from KV
+    const data = await getWeatherFromDB(set, fromTimestamp, toTimestamp);
 
-    // find missing dates
-    const knownDates = [];
-    for (let i = 0; i < data.length; i++) {
-        const current = data[i];
-        const currentDate = new Date(current.datetime);
-        knownDates.push(currentDate);
-    }
+    // find and get missing data
+    const newData = await getAndFetchMissing({ set, from, to, data });
 
-    // add new object at the beginning of the array
-    knownDates.unshift(subDays(from, 1));
-    knownDates.push(addDays(to, 1));
-    // console.log('knownDates', knownDates);
-
-    // invariant: db returns sorted data
-    const missingDates = [];
-    for (let i = 0; i < knownDates.length - 1; i++) {
-        const current = knownDates[i];
-        const next = knownDates[i + 1];
-        const diff = differenceInDays(next, current);
-        if (diff > 1) {
-            for (let j = 1; j < diff; j++) {
-                const missingDate = addDays(current, j);
-                const missingDateFormated = format(missingDate, 'yyyy-LL-dd')
-                missingDates.push(missingDateFormated);
-            }
-        }
-    }
-    // console.log('missingDates', missingDates);
-    // fetch missing dates from API 
-    if (missingDates.length !== 0) {
-
-        const fetchedData = [];
-        for (let i = 0; i < missingDates.length; i++) {
-            const date = missingDates[i];
-            const fetched = await getWeatherOn(date);
-            if (fetched !== null) {
-                fetchedData.push(fetched);
-            }
-            if (fetched === null) {
-                throw new Error('Error fetching data from the API');
-            }
-        }
-        // console.log('fetchedData', fetchedData);
-
-        // save to KV 
-        if (fetchedData.length !== 0) {
-            await saveWeatherData(fetchedData);
-        }
+    // add to existing data in db
+    if (newData.length !== 0) {
+        await saveWeatherData(set, newData, extractTimestamp);
     }
 
     // return all data
-    return await getWeatherFromDB(fromTimestamp, toTimestamp);
+    return await getWeatherFromDB(set, fromTimestamp, toTimestamp);
 }
+
 
 // format yyyy-mm-dd
 export async function getWeatherOn(date) {

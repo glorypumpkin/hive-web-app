@@ -1,8 +1,6 @@
 import { google } from 'googleapis';
-import path from 'path';
 import { convertor } from './convertor';
 
-const FOLDER_ID_TEST = '1mo1WOEb1ZIwGHrEvTa2GQbZbnoNa6Ifi'
 const FOLDER_ID = "1nJ_jKKuf4x8dbDZ7lwUmV5Jv3dWMGfqm"
 
 export async function getBeeData() {
@@ -11,7 +9,7 @@ export async function getBeeData() {
     return data;
 }
 
-async function dataFetching() {
+export async function dataFetching() {
 
     // const auth = await authenticate({
     //     keyfilePath: path.join(__dirname, './oauth2.keys.json'),

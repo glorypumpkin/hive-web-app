@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "seed": "node ./scripts/seedWeight.js"
   },
   "dependencies": {
     "@vercel/kv": "^1.0.1",

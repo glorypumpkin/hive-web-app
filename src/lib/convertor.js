@@ -1,5 +1,4 @@
 import { addHours } from "date-fns";
-import fs from 'fs';
 
 // Parametros: fileContents: string
 
@@ -42,13 +41,3 @@ export function parseLine(line) {
         temperature: teplFloat
     };
 }
-
-
-export function convertFromFile() {
-    const fileContents = fs.readFileSync("public/2022data.txt", 'utf8')
-    // console.log(fileContents);
-    const data = convertor(fileContents);
-
-}
-
-// convertFromFile();

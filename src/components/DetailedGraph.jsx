@@ -4,23 +4,21 @@ import { useState } from 'react';
 import { Calendar } from './Calendar';
 import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
-import { getRangeToDisplay, getDataWithDayAndHour } from '@/lib/dateFiltering';
+import { getRangeToDisplay, getDataWithDayAndHour, getDateInterval } from '@/lib/dateFiltering';
 import { NoteAreaGraph } from './NoteAreaGraph';
 import Link from 'next/link'
 import useSWR from 'swr';
 import { format, sub } from 'date-fns';
 import { dataComparison } from '@/lib/dataComparison';
-import { useUserNotes } from '@/lib/useUserNotes';
 import { MainGraph } from './MainGraph';
 import { GraphExtra } from './GraphExtra';
 import { ExtraGraphs } from './ExtraGraphs';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export default function DetailedGraph({ data }) {
+export default function DetailedGraph() {
     const [showDots, setShowDots] = useState(false);
     const [activeType, setActiveType] = useState(['weight']);
-    const { allNotes, setAllNotes, deleteAllNotes } = useUserNotes();
     const [showTooltip, setShowTooltip] = useState(true);
     const [showDot, setShowDot] = useState(false);
     const [activePeriodButton, setActivePeriodButton] = useState("Year");
@@ -30,29 +28,65 @@ export default function DetailedGraph({ data }) {
     const [extraGraphs, setExtraGraphs] = useState(false);
     // deleteAllNotes();
 
-    const { dateFrom, dateTo } = getRangeToDisplay(activePeriodButton, new Date(data[0].timestamp), new Date(data[data.length - 1].timestamp), activeShowButton ? range : undefined);
+    const dataRange = activeShowButton ? range : getDateInterval(activePeriodButton);
+    console.log('dataRange', dataRange)
 
-    const dateFromFormatted = format(dateFrom, 'yyyy-LL-dd');
-    const dateToFormatted = format(dateTo, 'yyyy-LL-dd');
+    const dataRangeFormatted = {
+        from: format(dataRange.from, 'yyyy-LL-dd'),
+        to: format(dataRange.to, 'yyyy-LL-dd')
+    }
 
-    // console.log('allNotes', allNotes)
+    console.log('dataRangeFormatted', dataRangeFormatted)
+
+    const { data: weightDataFetched, error: errorWeight, isLoading: isLoadingWeight, isValidating: isValidatingWeight } = useSWR(`/api/fetch-hive-data?&from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}`, fetcher, {
+        revalidateIfStale: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        keepPreviousData: true
+    });
 
     const weatherDataNeeded = activeType.includes('weather');
 
-    const { data: dataFromWeather, error, isLoading } = useSWR(weatherDataNeeded ? `/api/weather-history?&from=${dateFromFormatted}&to=${dateToFormatted}` : null, fetcher, {
+    const { data: dataFromWeatherFetched, error, isLoading, isValidating } = useSWR(weatherDataNeeded ? `/api/weather-history?&from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}` : null, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
-        revalidateOnReconnect: false
+        revalidateOnReconnect: false,
+        keepPreviousData: true
     });
+
+    const weightData = weightDataFetched ?? [];
+    const dataFromWeather = dataFromWeatherFetched ?? [];
+
+    console.log('weightData', weightData)
+
+    let dateFrom = dataRange.from;
+    let dateTo = dataRange.to;
+
+    if (weightData.length !== 0) {
+        const filtered = getRangeToDisplay(activePeriodButton, new Date(weightData[0].timestamp), new Date(weightData[weightData.length - 1].timestamp), activeShowButton ? range : undefined);
+
+        dateFrom = filtered.dateFrom;
+        dateTo = filtered.dateTo;
+    }
+
     const weatherDataLoaded = dataFromWeather !== undefined
 
     //TODO: isLoadind and error handling
-    const dataWithDayAndHour = getDataWithDayAndHour(data, dateFrom, dateTo);
+    const dataWithDayAndHour = getDataWithDayAndHour(weightData, dateFrom, dateTo);
 
     const dateFromYearAgo = sub(new Date(dateFrom), { years: 1 });
     const dateToYearAgo = sub(new Date(dateTo), { years: 1 });
+    const dateFromYearAgoFormatted = format(dateFromYearAgo, 'yyyy-LL-dd');
+    const dateToYearAgoFormatted = format(dateToYearAgo, 'yyyy-LL-dd');
 
-    const dataToCompare = getDataWithDayAndHour(data, dateFromYearAgo, dateToYearAgo);
+    const { data: dataToCompareFetched, error: errorComparisom, isLoading: isLoadingCompare } = useSWR(compareActive ? `/api/fetch-hive-data?&from=${dateFromYearAgoFormatted}&to=${dateToYearAgoFormatted}` : null, fetcher, {
+        revalidateIfStale: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        keepPreviousData: true
+    });
+
+    const dataToCompare = getDataWithDayAndHour(dataToCompareFetched ?? [], dateFromYearAgo, dateToYearAgo);
     // console.log('dataToCompare', dataToCompare)
 
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;

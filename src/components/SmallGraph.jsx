@@ -37,17 +37,6 @@ export function SmallGraph({ data, graphType }) {
         temperature: '#82ca9d'
     }
 
-    // const CustomTooltip = ({ active, payload, label }) => {
-    //     if (active) {
-    //         return (
-    //             <div className="custom-tooltip">
-    //                 <p>{`${payload[0].payload.day}, ${payload[0].payload.hour}`}</p>
-    //                 <p>{`${graphType}: ${payload[0].value}`}</p>
-    //             </div>
-    //         );
-    //     }
-    //     return null;
-    // };
     const activeType = [graphType]
     const units = { weight: 'kg', temperature: '°C' }
     return (
@@ -59,7 +48,7 @@ export function SmallGraph({ data, graphType }) {
                         <LineChart id="small-weight-graph" width={800} height={300} data={dataWithDayAndHour}>
                             <Line type="monotone" dataKey={graphType} stroke={lineColors[graphType]} dot={false} />
                             <XAxis dataKey="day" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
-                            <YAxis tick={{ fontSize: 10 }} domain={['dataMin-0.5', 'dataMax +0.5']} />
+                            <YAxis tick={{ fontSize: 10 }} domain={['dataMin', 'dataMax']} />
                             <Tooltip content={(props) => CustomTooltip({ ...props, activeType, units })}></Tooltip>
                         </LineChart>
                     </ResponsiveContainer>
