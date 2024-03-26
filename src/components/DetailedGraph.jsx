@@ -12,20 +12,18 @@ import { format, sub } from 'date-fns';
 import { dataComparison } from '@/lib/dataComparison';
 import { MainGraph } from './MainGraph';
 import { GraphExtra } from './GraphExtra';
-import { ExtraGraphs } from './ExtraGraphs';
+// import { ExtraGraphs } from './ExtraGraphs';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function DetailedGraph() {
-    const [showDots, setShowDots] = useState(false);
     const [activeType, setActiveType] = useState(['weight']);
     const [showTooltip, setShowTooltip] = useState(true);
-    const [showDot, setShowDot] = useState(false);
     const [activePeriodButton, setActivePeriodButton] = useState("Year");
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState(undefined);
     const [compareActive, setCompareActive] = useState(false);
-    const [extraGraphs, setExtraGraphs] = useState(false);
+    // const [extraGraphs, setExtraGraphs] = useState(false);
     // deleteAllNotes();
 
     const dataRange = activeShowButton ? range : getDateInterval(activePeriodButton);
@@ -47,7 +45,7 @@ export default function DetailedGraph() {
 
     const weatherDataNeeded = activeType.includes('weather');
 
-    const { data: dataFromWeatherFetched, error, isLoading, isValidating } = useSWR(weatherDataNeeded ? `/api/weather-history?&from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}` : null, fetcher, {
+    const { data: dataFromWeatherFetched, error, isLoading: isLoadindWeather, isValidating: isValidatingWeather } = useSWR(weatherDataNeeded ? `/api/weather-history?&from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}` : null, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -100,7 +98,7 @@ export default function DetailedGraph() {
                     width: '1300px',
                     height: '800px',
                 }}>
-                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} showDot={showDot} showDots={showDots} setShowDots={setShowDots} dataToCompare={dataToCompare} compareActive={compareActive} extraGraphs={extraGraphs} />
+                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} dataToCompare={dataToCompare} compareActive={compareActive} />
                 </div>
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip} setActiveShowButton={setActiveShowButton} activeShowButton={activeShowButton}></HistoryLine>
             </div>
@@ -120,7 +118,7 @@ export default function DetailedGraph() {
                 <div className=" flex flex-col items-center gap-6">
                     <Calendar activeShowButton={activeShowButton} setActiveShowButton={setActiveShowButton} range={range} setRange={setRange}
                     ></Calendar>
-                    <ExtraGraphs setExtraGraphs={setExtraGraphs} extraGraphs={extraGraphs}></ExtraGraphs>
+                    {/* <ExtraGraphs setExtraGraphs={setExtraGraphs} extraGraphs={extraGraphs}></ExtraGraphs> */}
                 </div>
             </div>
         </div>

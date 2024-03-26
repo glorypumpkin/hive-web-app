@@ -7,6 +7,9 @@ export async function GET(request) {
         response = await fetch(APIForecast, {
             next: {
                 revalidate: 43200 // 12 hours
+            },
+            headers: {
+                'Cache-Control': 'max-age=3600' // Cache for 1 hour
             }
         });
     }

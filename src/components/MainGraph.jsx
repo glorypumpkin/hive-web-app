@@ -1,9 +1,8 @@
 import { Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, LineChart, Brush } from 'recharts';
 import { useState, useEffect } from 'react';
 import { CustomTooltip } from './CustomTooltip';
-import { CustomDot } from './CustomDot';
 
-export function MainGraph({ relevantData, activeMeasurements, showDot, showDots, setShowDots, showTooltip, dataToCompare, compareActive, extraGraphs }) {
+export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataToCompare, compareActive }) {
 
     // Do not render on the server
     const [hydrated, setHydrated] = useState(false);
@@ -36,18 +35,17 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
             type="monotone"
             dataKey={type} //dataKey is used to set the data to the right type (weight, temperature or weather)
             stroke={strokeColors[type]}
-            dot={showDot ? <CustomDot showDots={showDots} setShowDots={setShowDots} type={type} /> : false}
-            // if showDot is true, show dot
+            dot={false}
             yAxisId={units[type]}
             connectNulls
         />
     ));
 
-    const selectExtraGraphsType = extraGraphs ? (
-        <div>
-            {/* TODO */}
-        </div>
-    ) : null;
+    // const selectExtraGraphsType = extraGraphs ? (
+    //     <div>
+    //         {/* TODO */}
+    //     </div>
+    // ) : null;
 
     // console.log('relevantData', relevantData)
 
@@ -76,13 +74,13 @@ export function MainGraph({ relevantData, activeMeasurements, showDot, showDots,
                 {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
                 {/* domain is used to set the range of the y-axis */}
                 <YAxis yAxisId="C" orientation="right" />
-                {showTooltip && !showDots && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
+                {showTooltip && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
                 {/* if showTooltip is true, show tooltip */}
                 <Legend />
                 {/* <Brush dataKey='day' height={30} stroke="#8884d8"/> */}
                 {/* Brush is used to set the range of the x-axis */}
             </LineChart>
-            {selectExtraGraphsType}
+            {/* {selectExtraGraphsType} */}
         </>
     )
 }
