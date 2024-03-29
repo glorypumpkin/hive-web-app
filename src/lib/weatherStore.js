@@ -67,12 +67,13 @@ export async function genericGetData({ set, from, to, extractTimestamp, getAndFe
 export async function getWeatherOn(date) {
 
     console.info('external API call for ', date);
+    let responseBody = null;
     try {
         const response = await fetch(getRequestURL(date), {
             method: "GET",
             headers: {}
         });
-        const responseBody = await response.text();
+        responseBody = await response.text();
         const data = JSON.parse(responseBody);
         const days = data.days;
         return days[0];
