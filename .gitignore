@@ -40,3 +40,4 @@ service.keys.json
 model/venv
 model/__pycache__
 model/model_first_version.pth
+model/model.pth

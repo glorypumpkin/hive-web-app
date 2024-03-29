@@ -16,16 +16,18 @@ model.load_state_dict(torch.load('model.pth'))
 model.eval()
 
 # load data
-dataset = load_data()
+datasetArray = load_data()
+
+dataset = datasetArray[0]
 
 # split dataset into train and test sets
 lookback = 5
 train_size = int(len(dataset) * 0.67)
 test_size = len(dataset) - train_size
 train, test = dataset[:train_size], dataset[train_size:]
-X_train, y_train = create_dataset(train, lookback=lookback)
+X_train, y_train = create_dataset([train], lookback=lookback)
 print(X_train.shape, y_train.shape)
-X_test, y_test = create_dataset(test, lookback=lookback)
+X_test, y_test = create_dataset([test], lookback=lookback)
 # print(X_test.shape, y_test.shape)
 
 with torch.no_grad():

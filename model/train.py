@@ -10,13 +10,17 @@ import matplotlib.pyplot as plt
 def load_data():
     """Load data from a json file"""
     with open('hivedata.json', 'r') as file:
-        data = json.load(file)
-        # data is a list of dictionaries with keys: month, hour, weight, weightDiff, temperature
-        # convert to a tensor of shape (n_samples, n_features)
-        dataset = torch.tensor([[d['month'], d['hour'], d['weight'], d['temperature'], d['weightDiff']] for d in data])
-    return dataset
+        loaded = json.load(file)
+        datasetArray = []
+        for i in range(len(loaded)):
+            data = loaded[i]
+            # data is a list of dictionaries with keys: month, hour, weight, weightDiff, temperature
+            # convert to a tensor of shape (n_samples, n_features)
+            tens = torch.tensor([[d['month'], d['hour'], d['weigth'], d['tempWeigth'], d['weightDiff'], d['tempWeather'], d['precipitation']] for d in data])
+            datasetArray.append(tens)
+    return datasetArray
 
-def create_dataset(dataset, lookback):
+def create_dataset(datasetArray, lookback):
     """Transform a time series into a prediction dataset
     
     Args:
@@ -26,16 +30,18 @@ def create_dataset(dataset, lookback):
     # X: [month, hour, weight, temperature] for each time step
     # y: weightDiff for each time step
     X, y = [], []
-    for i in range(len(dataset)-lookback):
-        # feature is the first 4 columns
-        feature = dataset[i:i+lookback][:,0:4]
-        target = dataset[i+1:i+lookback+1][:,4]
-        # target is of shape (lookback,)
-        # we need to reshape it to (lookback, 1)
-        target = target.view(-1, 1)
-        # print(target)
-        X.append(feature)
-        y.append(target)
+    for j in range(len(datasetArray)):
+        dataset = datasetArray[j]
+        for i in range(len(dataset)-lookback):
+            # feature is the first 4 columns
+            feature = dataset[i:i+lookback][:,0:4]
+            target = dataset[i+1:i+lookback+1][:,4]
+            # target is of shape (lookback,)
+            # we need to reshape it to (lookback, 1)
+            target = target.view(-1, 1)
+            # print(target)
+            X.append(feature)
+            y.append(target)
     # torch.stack() converts a list of tensors to a tensor
     return torch.stack(X), torch.stack(y)
 
@@ -56,14 +62,13 @@ class BeehiveModel(nn.Module):
         x = self.linear(x)
         return x
 
-def train_model(dataset, lookback):
+def train_model(datasetArray, lookback):
     # split dataset into train and test sets
-    train_size = int(len(dataset) * 0.67)
-    test_size = len(dataset) - train_size
-    train, test = dataset[:train_size], dataset[train_size:]
-    X_train, y_train = create_dataset(train, lookback=lookback)
-    print(X_train.shape, y_train.shape)
-    X_test, y_test = create_dataset(test, lookback=lookback)
+    X, Y = create_dataset(datasetArray, lookback=lookback)
+    train_size = int(len(X) * 0.67)
+    # test_size = len(X) - train_size
+    X_train, X_test = X[:train_size], X[train_size:]
+    y_train, y_test = Y[:train_size], Y[train_size:]
     # print(X_test.shape, y_test.shape)
 
     # create data loaders
@@ -100,11 +105,11 @@ def train_model(dataset, lookback):
 
 
 def main():
-    dataset = load_data()
+    datasetArray = load_data()
     # print(dataset)
     lookback = 5
     # X, y = create_dataset(dataset, lookback)
-    train_model(dataset, lookback)
+    train_model(datasetArray, lookback)
     
 
 if __name__ == '__main__':
