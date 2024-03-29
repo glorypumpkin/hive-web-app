@@ -1,6 +1,6 @@
 import { getWeatherOn, genericGetData } from "@/lib/weatherStore";
 import { differenceInDays, addDays, subDays, format } from "date-fns";
-import { parseISO, startOfDay, addHours } from "date-fns";
+import { startOfDay, addHours, differenceInYears } from "date-fns";
 
 // export const dynamic = 'force-dynamic';
 const weatherStrategy = {
@@ -43,9 +43,9 @@ const weatherStrategy = {
                 if (fetched !== null) {
                     fetchedData.push(fetched);
                 }
-                if (fetched === null) {
-                    throw new Error('Error fetching data from the API');
-                }
+                // if (fetched === null) {
+                //     throw new Error('Error fetching data from the API');
+                // }
             }
         }
         return fetchedData;
@@ -68,6 +68,11 @@ export async function GET(request) {
     // convert to date objects
     const from = new Date(fromQuery);
     const to = new Date(toQuery);
+
+    const diffInYears = differenceInYears(from, to);
+    if (diffInYears > 4) {
+        return new Response("Date range is too large", { status: 400 });
+    }
 
     let weatherData = null;
     try {

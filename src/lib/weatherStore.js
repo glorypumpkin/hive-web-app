@@ -77,7 +77,7 @@ export async function getWeatherOn(date) {
         const days = data.days;
         return days[0];
     } catch (jsonError) {
-        console.error("JSON parsing error", jsonError);
+        console.error("could not parse JSON: ", responseBody);
         return null;
     }
 }
