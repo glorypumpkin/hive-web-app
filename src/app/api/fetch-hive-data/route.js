@@ -9,7 +9,9 @@ const weightStrategy = {
         const dataFromDrive = convertor(fileContents);
         // find differences between data and dataFromDrive
         // expect that both arrays are sorted with oldest data at the beginning
-        const newestTimestamp = data[data.length - 1].timestamp;
+        console.log('datafromdrive', dataFromDrive)
+        console.log('data length', data.length)
+        const newestTimestamp = data[data.length - 1]?.timestamp ?? 0;
         const newData = [];
         for (let i = dataFromDrive.length - 1; i >= 0; i--) {
             const current = dataFromDrive[i];
