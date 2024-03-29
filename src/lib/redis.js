@@ -2,6 +2,9 @@ import { createClient } from "redis";
 
 const REDIS_CONFIG = {
     url: process.env.KV_URL,
+    socket: {
+        tls: process.env.NODE_ENV === "production",
+    }
 };
 
 class RedisService {
