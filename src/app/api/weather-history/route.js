@@ -1,4 +1,5 @@
 import { getWeatherOn, genericGetData } from "@/lib/weatherStore";
+import { assertCorrectDateRange } from '@/lib/dataFetching';
 import { differenceInDays, addDays, subDays, format } from "date-fns";
 import { startOfDay, addHours, differenceInYears } from "date-fns";
 
@@ -55,7 +56,6 @@ const weatherStrategy = {
         const timestamp = new Date(datetime).getTime();
         return timestamp;
     }
-
 }
 
 export async function GET(request) {
@@ -69,10 +69,8 @@ export async function GET(request) {
     const from = new Date(fromQuery);
     const to = new Date(toQuery);
 
-    const diffInYears = differenceInYears(from, to);
-    if (diffInYears > 4) {
-        return new Response("Date range is too large", { status: 400 });
-    }
+    assertCorrectDateRange(from, to);
+    console.log(`Weather history data GET from ${from} (${fromQuery}) to ${to} (${toQuery})`);
 
     let weatherData = null;
     try {

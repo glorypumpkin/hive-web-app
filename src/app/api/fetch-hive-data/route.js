@@ -1,7 +1,6 @@
-import { getBeeData, dataFetching } from '@/lib/dataFetching';
+import { getBeeData, dataFetching, assertCorrectDateRange } from '@/lib/dataFetching';
 import { convertor } from '@/lib/convertor';
 import { genericGetData } from '@/lib/weatherStore';
-import { differenceInYears } from "date-fns";
 
 const weightStrategy = {
     set: 'weight_set',
@@ -40,10 +39,8 @@ export async function GET(request) {
     const from = new Date(fromQuery);
     const to = new Date(toQuery);
 
-    const diffInYears = differenceInYears(from, to);
-    if (diffInYears > 4) {
-        return new Response("Date range is too large", { status: 400 });
-    }
+    assertCorrectDateRange(from, to);
+    console.log(`Hive data GET from ${from} (${fromQuery}) to ${to} (${toQuery})`);
 
     let weightData = null;
     try {

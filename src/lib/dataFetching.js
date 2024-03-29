@@ -1,5 +1,6 @@
 import { google } from 'googleapis';
 import { convertor } from './convertor';
+import { differenceInYears } from "date-fns";
 
 const FOLDER_ID = "1nJ_jKKuf4x8dbDZ7lwUmV5Jv3dWMGfqm"
 
@@ -60,4 +61,15 @@ async function loadFile(stream) {
                 fileContents += d;
             })
     })
+}
+
+export function assertCorrectDateRange(from, to) {
+    const diffInYears = differenceInYears(from, to);
+    if (diffInYears > 4) {
+        return new Response("Date range is too large", { status: 400 });
+    }
+    // if any of the dates is before 2000
+    if (from.getFullYear() < 2000 || to.getFullYear() < 2000) {
+        return new Response("Date range is too old", { status: 400 });
+    }
 }

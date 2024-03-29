@@ -87,7 +87,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
 
 const CustomTick = (props) => {
     const { x, y, payload } = props;
-    const date = new Date(payload.value);
+    const date = new Date(payload?.value);
     const d = `${date.getDate()}.${date.getMonth() + 1}`
     return (
         <g transform={`translate(${x},${y})`}>
