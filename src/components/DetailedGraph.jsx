@@ -35,8 +35,10 @@ export default function DetailedGraph() {
     }
 
     console.log('dataRangeFormatted', dataRangeFormatted)
+    const url = `/api/fetch-hive-data?from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}`;
+    console.log('url', url)
 
-    const { data: weightDataFetched, error: errorWeight, isLoading: isLoadingWeight, isValidating: isValidatingWeight } = useSWR(`/api/fetch-hive-data?&from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}`, fetcher, {
+    const { data: weightDataFetched, error: errorWeight, isLoading: isLoadingWeight, isValidating: isValidatingWeight } = useSWR(url, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,

@@ -10,7 +10,7 @@ function getRequestURL(date) {
 export async function getWeatherFromDB(set, fromTimestamp, toTimestamp) {
     // get from KV
     const kv = getRedisClient();
-    console.log('getWeatherFromDB KV', kv)
+    // console.log('getWeatherFromDB KV', kv)
     // console.log('db args', fromTimestamp, toTimestamp, {
     //     byscore: true,
     // });
@@ -18,7 +18,7 @@ export async function getWeatherFromDB(set, fromTimestamp, toTimestamp) {
     const data = await kv.zRange(set, fromTimestamp, toTimestamp, {
         BY: 'SCORE'
     });
-    console.log('data from DB', data);
+    // console.log('data from DB', data);
     // map to objects
     for (let i = 0; i < data.length; i++) {
         data[i] = JSON.parse(data[i]);
@@ -36,11 +36,11 @@ export async function saveWeatherData(set, apiObjects, extractTimestamp) {
         toInsert.push({ score: timestamp, value: JSON.stringify(current) });
     }
     // save to KV
-    console.log('storing data', toInsert);
+    // console.log('storing data', toInsert);
     const kv = getRedisClient();
     // stringify the items
     const res = await kv.zAdd(set, toInsert);
-    console.log('res', res);
+    // console.log('res', res);
 }
 
 export async function genericGetData({ set, from, to, extractTimestamp, getAndFetchMissing }) {

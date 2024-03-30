@@ -61,7 +61,9 @@ const weatherStrategy = {
 export async function GET(request) {
     console.log('weather history GET');
     // today format yyyy-mm-dd
-    const queryParams = new URLSearchParams(request.url);
+    const url = new URL(request.url);
+    // console.log('url', url);
+    const queryParams = url.searchParams;
     const fromQuery = queryParams.get('from');
     const toQuery = queryParams.get('to');
 
@@ -69,8 +71,8 @@ export async function GET(request) {
     const from = new Date(fromQuery);
     const to = new Date(toQuery);
 
-    assertCorrectDateRange(from, to);
     console.log(`Weather history data GET from ${from} (${fromQuery}) to ${to} (${toQuery})`);
+    assertCorrectDateRange(from, to);
 
     let weatherData = null;
     try {

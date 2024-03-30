@@ -31,7 +31,13 @@ const weightStrategy = {
 }
 
 export async function GET(request) {
-    const queryParams = new URLSearchParams(request.url);
+    // console.log('GET request', request);
+    // get request parameters symbol(state)
+    const url = new URL(request.url);
+    // console.log('url', url);
+    const queryParams = url.searchParams;
+    console.log('queryParams', queryParams);
+    // const queryParams = new URLSearchParams(request.url);
     const fromQuery = queryParams.get('from');
     const toQuery = queryParams.get('to');
 
@@ -39,8 +45,8 @@ export async function GET(request) {
     const from = new Date(fromQuery);
     const to = new Date(toQuery);
 
-    assertCorrectDateRange(from, to);
     console.log(`Hive data GET from ${from} (${fromQuery}) to ${to} (${toQuery})`);
+    assertCorrectDateRange(from, to);
 
     let weightData = null;
     try {
