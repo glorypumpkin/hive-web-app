@@ -19,8 +19,10 @@ export default function MainPage({ data }) {
       className=""
     >
       <div className='overflow-hidden flex flex-col gap-5 w-full  justify-center h-[95vh] items-center'>
+        {/* <Bee></Bee> */}
         <div className=' w-[100vw] text-center'>
-          <h1 className="text-7xl font-black mb-3 h-[10vh]">Check Your Bees</h1>
+          <h1 className="text-7xl font-black mb-3 h-[10vh]">Check Your Bees
+          </h1>
         </div>
         <div className='flex flex-row'>
           <div className='flex flex-col'>
@@ -52,7 +54,7 @@ export default function MainPage({ data }) {
                 />
                 <div className='absolute inset-0'>
                   <div className='p-24 pt-16 pb-32 pl-40 pr-4 w-[90%] h-full'>
-                    <PeriodGraph data={data}>
+                    <PeriodGraph>
                     </PeriodGraph>
                   </div>
                 </div>

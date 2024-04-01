@@ -116,18 +116,19 @@ def parseWeatherData(weatherData):
         year = int(datum_parts[0])
         tempWeather = currentData['temp']
         precipitation = currentData['precip']
-        # solarenergy = currentData['solarenergy']
+        solarenergy = currentData['solarenergy']
         parsedData.append({
             'day': day,
             'month': month,
             'year': year,
             'tempWeather': tempWeather,
-            'precipitation': precipitation
+            'precipitation': precipitation,
+            'solarenergy': solarenergy
         })
     return parsedData
 
 def main ():
-    filesArray = ['zaznam2017.txt', 'zaznam2018.txt', 'zaznam2019.txt', 'zaznam2020.txt', 'zaznam2021.txt']
+    filesArray = ['zaznam2018.txt', 'zaznam2019.txt', 'zaznam2020.txt', 'zaznam2021.txt']
     data = []
     for file in filesArray:
         with open(file, 'r') as f:
@@ -145,7 +146,7 @@ def main ():
         data.append(convertedData[::-1])
 
     
-    weatherFilesArray = ['weather2017.json', 'weather2018.json', 'weather2019.json', 'weather2020.json', 'weather2021.json', 'weather2022.json', 'weather2023.json']
+    weatherFilesArray = ['weather2018.json', 'weather2019.json', 'weather2020.json', 'weather2021.json', 'weather2022.json', 'weather2023.json']
 
     for file in weatherFilesArray:
         with open(file, 'r') as f:

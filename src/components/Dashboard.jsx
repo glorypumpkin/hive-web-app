@@ -4,7 +4,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContai
 import { useState, useEffect } from 'react';
 import { SmallGraph } from './SmallGraph'
 
-export default function Dashboard({ data }) {
+export default function Dashboard() {
     return (
         <div className=" flex flex-col gap-16 w-full px-6 pt-16 pb-10 h-[94vh]">
             <div className="flex flex-row mr-1 gap-12 items-start">
@@ -12,8 +12,8 @@ export default function Dashboard({ data }) {
                 <DataPrediction> </DataPrediction>
             </div>
             <div className="flex flex-row mr-1 gap-12 items-start">
-                <SmallGraph data={data} graphType="weight"> </SmallGraph>
-                <SmallGraph data={data} graphType="temperature"> </SmallGraph>
+                <SmallGraph graphType="weight"> </SmallGraph>
+                <SmallGraph graphType="temperature"> </SmallGraph>
             </div>
         </div>
     )

@@ -12,7 +12,7 @@ from train import load_data, create_dataset, BeehiveModel
 
 # load model
 model = BeehiveModel()
-model.load_state_dict(torch.load('model.pth'))
+model.load_state_dict(torch.load('model.pt'))
 model.eval()
 
 # load data
@@ -40,7 +40,9 @@ with torch.no_grad():
     # shift test predictions for plotting
     test_plot = np.ones_like(dataset) * np.nan
     test_plot[train_size+lookback:len(dataset)] = model(X_test)[:, -1, :]
+
 # plot
+plt.figure(figsize=(12, 6))
 # plot dataset (weight and weight diff)
 plt.plot(dataset[:, 4], c='y')
 # plot weight predictions

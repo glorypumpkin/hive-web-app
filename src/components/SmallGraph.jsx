@@ -1,16 +1,39 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { dateFiltering } from '@/lib/dateFiltering';
+import useSWR from 'swr';
+import { getDataWithDayAndHour } from '@/lib/dateFiltering';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Link from 'next/link';
 import { CustomTooltip } from './CustomTooltip';
+import { format } from 'date-fns';
 
-export function SmallGraph({ data, graphType }) {
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+export function SmallGraph({ graphType }) {
     const [hydrated, setHydrated] = useState(false);
 
     // convert graphType to upper case
     const graphTypeName = graphType.charAt(0).toUpperCase() + graphType.slice(1);
+
+    const dateFrom = new Date();
+    dateFrom.setDate(dateFrom.getDate() - 21);
+    const today = new Date();
+
+    const dataRangeFormatted = {
+        from: format(dateFrom, 'yyyy-LL-dd'),
+        to: format(today, 'yyyy-LL-dd')
+    }
+    console.log('dataRangeFormatted', dataRangeFormatted)
+
+    const url = `/api/fetch-hive-data?from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}`;
+
+    const { data: weightDataFetched, error: errorWeight, isLoading: isLoadingWeight, isValidating: isValidatingWeight } = useSWR(url, fetcher, {
+        revalidateIfStale: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        keepPreviousData: true
+    });
 
     useEffect(() => {
         setHydrated(true);
@@ -19,18 +42,9 @@ export function SmallGraph({ data, graphType }) {
         return null;
     }
 
-    const dateFrom = new Date();
-    dateFrom.setDate(dateFrom.getDate() - 21);
-    const today = new Date();
-    const filterData = dateFiltering(data, dateFrom, today);
-    // map data to new array with day and hour
-    const dataWithDayAndHour = filterData.map((item) => {
-        const date = new Date(item.timestamp);
-        const day = date.getDate() + '.' + (date.getMonth() + 1);
-        const hour = date.getHours() + ':00';
-        const year = date.getFullYear();
-        return { ...item, day, hour, year };
-    })
+    const weightData = weightDataFetched ?? [];
+
+    const dataWithDayAndHour = getDataWithDayAndHour(weightData, dateFrom, today);
 
     const lineColors = {
         weight: '#8884d8',

@@ -1,12 +1,16 @@
 
 export default function Bee() {
   const css = `
+    .wrap {
+        width: 40%;
+        left: 50%;
+    }
     .bug {
         transform: rotate(-360deg);
         width: 50px;
         height: 50px;
         position: absolute;
-        animation: bee 5s linear infinite both;
+        animation: bee 5s linear 1;
       }
       .bee1 {
         width: 40px;

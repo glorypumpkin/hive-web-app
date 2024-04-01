@@ -1,6 +1,9 @@
 
 export function CustomTooltip({ active, payload, label, activeType, units }) {
     if (active) {
+        if (payload.length === 0) {
+            return null
+        }
         // console.log('payload', payload)
         // if payload[1] exists, show the tooltip for the comparison graph
         const diff = payload[0].payload.rozdil

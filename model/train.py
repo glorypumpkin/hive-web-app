@@ -101,7 +101,7 @@ def train_model(datasetArray, lookback):
         print("Epoch %d: train RMSE %.4f, test RMSE %.4f" % (epoch, train_rmse, test_rmse))
 
     # save the model
-    torch.save(model.state_dict(), 'model.pth')
+    torch.save(model.state_dict(), 'model.pt')
 
 
 def main():
