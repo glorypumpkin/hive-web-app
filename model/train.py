@@ -16,7 +16,7 @@ def load_data():
             data = loaded[i]
             # data is a list of dictionaries with keys: month, hour, weight, weightDiff, temperature
             # convert to a tensor of shape (n_samples, n_features)
-            tens = torch.tensor([[d['month'], d['hour'], d['weigth'], d['tempWeigth'], d['weightDiff'], d['tempWeather'], d['precipitation']] for d in data])
+            tens = torch.tensor([[d['month'], d['hour'], d['weigth'], d['tempWeigth'], d['tempWeather'], d['precipitation'], d['solarenergy'], d['weightDiff'],] for d in data])
             datasetArray.append(tens)
     return datasetArray
 
@@ -27,15 +27,15 @@ def create_dataset(datasetArray, lookback):
         dataset: A numpy array of time series, first dimension is the time steps
         lookback: Size of window for prediction
     """
-    # X: [month, hour, weight, temperature] for each time step
+    # X: [day, month, hour, weight, tempWeigth, tempWeather, precipitation, solarenergy]
     # y: weightDiff for each time step
     X, y = [], []
     for j in range(len(datasetArray)):
         dataset = datasetArray[j]
         for i in range(len(dataset)-lookback):
-            # feature is the first 4 columns
-            feature = dataset[i:i+lookback][:,0:4]
-            target = dataset[i+1:i+lookback+1][:,4]
+            # feature is the first 7 columns
+            feature = dataset[i:i+lookback][:,0:7]
+            target = dataset[i+1:i+lookback+1][:,7]
             # target is of shape (lookback,)
             # we need to reshape it to (lookback, 1)
             target = target.view(-1, 1)
@@ -53,7 +53,7 @@ class BeehiveModel(nn.Module):
         # hidden_size: number of hidden units
         # num_layers: number of LSTM layers
         # batch_first: input and output tensors are provided as (batch, seq, feature)
-        self.lstm = nn.LSTM(input_size=4, hidden_size=50, num_layers=1, batch_first=True)
+        self.lstm = nn.LSTM(input_size=7, hidden_size=50, num_layers=1, batch_first=True)
         self.linear = nn.Linear(50, 1)
     def forward(self, x):
         x, _ = self.lstm(x)
@@ -107,7 +107,7 @@ def train_model(datasetArray, lookback):
 def main():
     datasetArray = load_data()
     # print(dataset)
-    lookback = 5
+    lookback = 4
     # X, y = create_dataset(dataset, lookback)
     train_model(datasetArray, lookback)
     

@@ -103,6 +103,7 @@ def addWeatherData(data, weatherData):
                 if currentWeatherData['day'] == day and currentWeatherData['month'] == month and currentWeatherData['year'] == year:
                     current_data['tempWeather'] = currentWeatherData['tempWeather']
                     current_data['precipitation'] = currentWeatherData['precipitation']
+                    current_data['solarenergy'] = currentWeatherData['solarenergy']
                     break
 
 def parseWeatherData(weatherData):

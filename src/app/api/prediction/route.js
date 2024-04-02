@@ -1,3 +1,5 @@
+import { prepareData } from '@/lib/getPrediction';
+
 // import ort, { InferenceSession, Tensor } from "onnxruntime-web";
 const ort = require('onnxruntime-web');
 
@@ -13,7 +15,10 @@ export async function GET(request) {
     console.log('ort', ort);
     const session = await ort.InferenceSession.create("public/model.onnx");
     console.log("session created")
-    const inputTensor = new ort.Tensor("float32", new Float32Array(5 * 4), [5, 4]);
+    const preparedData = await prepareData();
+    console.log("preparedData", preparedData);
+    const inputTensor = new ort.Tensor("float32", preparedData, [1, 4, 7]);
+    console.log("inputTensor", inputTensor);
     const feeds = { input: inputTensor };
     const output = await session.run(feeds);
     console.log("output", output);

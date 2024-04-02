@@ -50,7 +50,7 @@ export async function GET(request) {
 
     let weightData = null;
     try {
-        weightData = await genericGetData({ ...weightStrategy, from, to });
+        weightData = await getHiveData(from, to);
     } catch (fetchError) {
         console.error("Fetch error", fetchError);
         return new Response("Error fetching data from the API", { status: 500 });
@@ -62,3 +62,7 @@ export async function GET(request) {
     return new Response(JSON.stringify(weightData), { headers: { 'Content-Type': 'application/json' } });
 }
 
+export async function getHiveData(from, to) {
+    const weightData = await genericGetData({ ...weightStrategy, from, to });
+    return weightData;
+}

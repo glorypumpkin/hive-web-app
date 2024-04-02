@@ -4,7 +4,7 @@ import { getRedisClient } from "./redis";
 
 // yyyy-mm-dd
 function getRequestURL(date) {
-    return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia/${date}?unitGroup=metric&include=days&key=${process.env.WEATHER_API_KEY}&contentType=json`
+    return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/${date}?unitGroup=metric&include=days&key=${process.env.WEATHER_API_KEY}&contentType=json`
 }
 
 export async function getWeatherFromDB(set, fromTimestamp, toTimestamp) {

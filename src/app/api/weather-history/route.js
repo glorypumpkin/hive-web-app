@@ -94,19 +94,26 @@ export async function GET(request) {
         const timestamp = localDateObject.getTime();
 
         const filtered = {
-            datatime: current.datetime,
+            datetime: current.datetime,
             timestamp: timestamp,
-            weather: current.temp,
+            tempWeather: current.temp,
             dew: current.dew,
             humidity: current.humidity,
             pressure: current.pressure,
             windSpeed: current.windspeed,
             tempmin: current.tempmin,
             tempmax: current.tempmax,
-            uvindex: current.uvindex
+            uvindex: current.uvindex,
+            solarenergy: current.solarenergy,
+            precip: current.precip,
         }
         weatherData[i] = filtered;
     }
 
     return new Response(JSON.stringify(weatherData), { headers: { 'Content-Type': 'application/json' } });
+}
+
+export async function getWeatherHistory(from, to) {
+    const weatherData = await genericGetData({ ...weatherStrategy, from, to });
+    return weatherData;
 }

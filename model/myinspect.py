@@ -12,6 +12,7 @@ from train import load_data, create_dataset, BeehiveModel
 
 # load model
 model = BeehiveModel()
+print('model loaded', model)
 model.load_state_dict(torch.load('model.pt'))
 model.eval()
 
@@ -21,7 +22,7 @@ datasetArray = load_data()
 dataset = datasetArray[0]
 
 # split dataset into train and test sets
-lookback = 5
+lookback = 4
 train_size = int(len(dataset) * 0.67)
 test_size = len(dataset) - train_size
 train, test = dataset[:train_size], dataset[train_size:]
@@ -44,7 +45,7 @@ with torch.no_grad():
 # plot
 plt.figure(figsize=(12, 6))
 # plot dataset (weight and weight diff)
-plt.plot(dataset[:, 4], c='y')
+plt.plot(dataset[:, 7], c='y')
 # plot weight predictions
 plt.plot(train_plot, c='r')
 plt.plot(test_plot, c='g')

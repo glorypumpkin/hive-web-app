@@ -32,6 +32,7 @@ export function parseLine(line) {
     const kgFloat = parseFloat(kg);
     const teplFloat = parseFloat(tepl);
 
+    // TODO: why not to convert hour here????
     return {
         datum,
         stan,

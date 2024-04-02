@@ -8,7 +8,7 @@ def main():
     model = BeehiveModel()
     model.load_state_dict(torch.load('model.pt'))
     model.eval()
-    dummy_input = torch.zeros(5, 4)
+    dummy_input = torch.zeros(1, 4, 7)
     torch.onnx.export(model, dummy_input, 'model.onnx', verbose=True, input_names=['input'], output_names=['output'])
 
 if __name__ == '__main__':

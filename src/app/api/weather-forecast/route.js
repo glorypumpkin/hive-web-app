@@ -1,25 +1,15 @@
 
-const APIForecast = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20Brno/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json&lang=id`;
+const APIForecast = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json&lang=id`;
 
 export async function GET(request) {
-    let response = null;
+    let forecast = null;
     try {
-        response = await fetch(APIForecast, {
-            next: {
-                revalidate: 43200 // 12 hours
-            },
-            headers: {
-                'Cache-Control': 'max-age=3600' // Cache for 1 hour
-            }
-        });
+        forecast = await getWeatherForecast();
     }
     catch (error) {
         console.error("Fetch error", error);
         return new Response("Error fetching data from the API", { status: 500 });
     }
-    const responseBody = await response.text();
-    const data = JSON.parse(responseBody);
-    const forecast = data.days;
     // console.log('forecast', forecast);
     // get lenght of forecast
     const totalObjects = Object.keys(forecast).length;
@@ -34,17 +24,15 @@ export async function GET(request) {
             timestamp: timestamp,
             tempmax: current.tempmax,
             tempmin: current.tempmin,
-            temp: current.temp,
+            tempWeather: current.temp,
             dew: current.dew,
             humidity: current.humidity,
-            precipprob: current.precipprob,
-            precipcover: current.precipcover,
-            preciptype: current.preciptype,
-            windspeed: current.windspeed,
+            precip: current.precip,
             pressure: current.pressure,
             cloudcover: current.cloudcover,
             visibility: current.visibility,
             uvindex: current.uvindex,
+            solarenergy: current.solarenergy,
             sunrise: current.sunrise,
             sunset: current.sunset,
             conditions: current.conditions,
@@ -57,4 +45,21 @@ export async function GET(request) {
     // console.log('forecast', forecast);
 
     return new Response(JSON.stringify(forecast), { headers: { 'Content-Type': 'application/json' } });
+}
+
+export async function getWeatherForecast() {
+    let response = null;
+
+    response = await fetch(APIForecast, {
+        next: {
+            revalidate: 43200 // 12 hours
+        },
+        headers: {
+            'Cache-Control': 'max-age=3600' // Cache for 1 hour
+        }
+    });
+    const responseBody = await response.text();
+    const data = JSON.parse(responseBody);
+    const forecast = data.days;
+    return forecast;
 }

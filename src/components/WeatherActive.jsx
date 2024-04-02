@@ -22,11 +22,11 @@ export function WeatherActive({ activeDay, forecast }) {
                 <br />
                 {description}
                 <br />
-                Temperature: {activeDayData.temp} °C
+                Temperature: {activeDayData.tempWeather} °C
                 <br />
                 Humidity: {activeDayData.humidity} %
-                <br />
-                Wind speed: {activeDayData.windspeed} m/s
+                {/* <br />
+                Wind speed: {activeDayData.windspeed} m/s */}
             </div>
         </div>
     )
