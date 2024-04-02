@@ -1,9 +1,6 @@
 'use client'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
-import useSWR from 'swr';
-import { prepareData } from '@/lib/getPrediction';
 
 const exampleData = [
     { month: 'January', weight: 2 },
@@ -28,8 +25,6 @@ export function DataPrediction() {
     useEffect(() => {
         setHydrated(true);
     }, []);
-
-    // prepareData();
 
     if (!hydrated) {
         return null;
