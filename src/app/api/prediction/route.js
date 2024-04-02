@@ -16,7 +16,7 @@ export async function GET(request) {
     const session = await ort.InferenceSession.create("public/model.onnx");
     console.log("session created")
     const preparedData = await prepareData();
-    console.log("preparedData", preparedData);
+    console.log("preparedData", preparedData.length);
     const inputTensor = new ort.Tensor("float32", preparedData, [1, 4, 7]);
     console.log("inputTensor", inputTensor);
     const feeds = { input: inputTensor };

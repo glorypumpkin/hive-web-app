@@ -35,6 +35,18 @@ export async function prepareData() {
     //combine hiveData and weatherData for yesterday (check the days are the same)
     const combinedData = combineData(hiveDataWithHour, yesterdayWeather);
     // console.log('combinedData', combinedData);
+    // make sure that combinedData has only 4 elements
+    if (combinedData.length > 4) {
+        // remove the last elements
+        combinedData.splice(4, combinedData.length - 4);
+    } else if (combinedData.length < 4) {
+        // add elements to the end
+        console.error('combinedData.length < 4, length is', combinedData.length, 'elements are', combinedData);
+        const lastElement = combinedData[combinedData.length - 1];
+        for (let i = combinedData.length; i < 4; i++) {
+            combinedData.push(lastElement);
+        }
+    }
 
     let preparedData = [];
     for (let i = 0; i < combinedData.length; i++) {
