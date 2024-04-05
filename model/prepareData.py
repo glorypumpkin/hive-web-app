@@ -21,7 +21,7 @@ def convertor(fileContents, dataType):
                     current_data['weightDiff'] = round(weigthDiff,2)
                 else:
                     current_data['weightDiff'] = 0.0
-                if abs(current_data['weightDiff']) < 2:
+                if abs(current_data['weightDiff']) < 7:
                     relevant_data.append(current_data)
     else:
         # skip first line

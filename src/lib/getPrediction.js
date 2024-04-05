@@ -59,6 +59,9 @@ function filterForecast(forecast, hours) {
                 const temp = current.temp;
                 const precip = current.precip;
                 const solarenergy = current.solarenergy;
+                const datetime = current.datetime + ' ' + currentHour.datetime;
+                const parsedDate = parse(datetime, 'yyyy-MM-dd HH:mm:ss', new Date());
+                const timestamp = parsedDate.getTime();
                 filteredForecast.push({
                     hour: hour,
                     month: month,
@@ -66,7 +69,8 @@ function filterForecast(forecast, hours) {
                     year: year,
                     tempWeather: temp,
                     precipitation: precip,
-                    solarenergy: solarenergy
+                    solarenergy: solarenergy,
+                    timestamp: timestamp
                 });
             }
         }
@@ -134,16 +138,7 @@ function combineData(hiveData, weatherData) {
     }
 }
 
-export async function getFeatures() {
-    const yesterdayData = await getYesterdayData();
-    const hours = []
-    for (const dataPoint of yesterdayData) {
-        const hour = dataPoint.hour;
-        hours.push(hour);
-    }
-
-    const forecastData = await getForecastData(hours);
-
+export async function getFeatures(yesterdayData, forecastData) {
     // return 2D array of floats (inputTensor)
     // row count is 4 (yesterdayData) + 4 * 8 (forecastData) = 36
     // column count is 7 (features)
@@ -167,7 +162,7 @@ function featurePreparation(dataPoint) {
     const features = [];
     // console.log('dataPoint', dataPoint);
     features.push(
-        dataPoint.month, dataPoint.hour, dataPoint.weigth ?? 0, dataPoint.tempWeigth ?? dataPoint.tempWeather, dataPoint.tempWeather, dataPoint.precipitation, dataPoint.solarenergy
+        dataPoint.month, dataPoint.hour, dataPoint.weight ?? 0, dataPoint.tempWeigth ?? dataPoint.tempWeather, dataPoint.tempWeather, dataPoint.precipitation, dataPoint.solarenergy
     )
     // console.log('features', features);
     return features;
