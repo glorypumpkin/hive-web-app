@@ -1,10 +1,12 @@
 
-const APIForecast = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json&lang=id`;
+const APIForecastDays = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json&lang=id`;
+
+const APIForecastHours = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/2024-04-05/2024-04-11?unitGroup=metric&include=hours%2Cdays&key=${process.env.WEATHER_API_KEY}&contentType=json`
 
 export async function GET(request) {
     let forecast = null;
     try {
-        forecast = await getWeatherForecast();
+        forecast = await getWeatherForecast('days');
     }
     catch (error) {
         console.error("Fetch error", error);
@@ -47,10 +49,10 @@ export async function GET(request) {
     return new Response(JSON.stringify(forecast), { headers: { 'Content-Type': 'application/json' } });
 }
 
-export async function getWeatherForecast() {
+export async function getWeatherForecast(type) {
     let response = null;
 
-    response = await fetch(APIForecast, {
+    response = await fetch(type === 'hours' ? APIForecastHours : APIForecastDays, {
         next: {
             revalidate: 43200 // 12 hours
         },

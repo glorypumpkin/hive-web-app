@@ -79,7 +79,7 @@ def train_model(datasetArray, lookback):
     loss_fn = nn.MSELoss()
     # create a data loader for training data with batch size 8 and shuffle the data at each epoch
     loader = data.DataLoader(data.TensorDataset(X_train, y_train), shuffle=True, batch_size=8)
-    n_epochs = 1000
+    n_epochs = 200
     for epoch in range(n_epochs):
         model.train()
         for X_batch, y_batch in loader:
