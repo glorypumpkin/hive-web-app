@@ -12,7 +12,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
     if (!hydrated) {
         return null;
     }
-
+    console.log('relevantData', relevantData)
     const comparisonLine = compareActive && activeMeasurements.map((type, index) => (
         <Line
             key={index}
@@ -33,7 +33,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
             key={type}
             data={relevantData}
             type="monotone"
-            dataKey={type} //dataKey is used to set the data to the right type (weight, temperature or weather)
+            dataKey={type === 'weather' ? 'tempWeather' : type} //dataKey is used to set the data to the right type (weight, temperature or weather)
             stroke={strokeColors[type]}
             dot={false}
             yAxisId={units[type]}

@@ -44,7 +44,7 @@ export default function DetailedGraph() {
         revalidateOnReconnect: false,
         keepPreviousData: true
     });
-
+    // TODO: change to the right key
     const weatherDataNeeded = activeType.includes('weather');
 
     const { data: dataFromWeatherFetched, error, isLoading: isLoadindWeather, isValidating: isValidatingWeather } = useSWR(weatherDataNeeded ? `/api/weather-history?&from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}` : null, fetcher, {
