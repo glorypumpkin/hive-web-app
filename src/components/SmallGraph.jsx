@@ -7,6 +7,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContai
 import Link from 'next/link';
 import { CustomTooltip } from './CustomTooltip';
 import { format } from 'date-fns';
+import { TextInfo } from './TextInfo';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -53,9 +54,13 @@ export function SmallGraph({ graphType }) {
 
     const activeType = [graphType]
     const units = { weight: 'kg', temperature: '°C' }
+    const text = `This graph shows the ${graphType} of the hive over the last 21 days.`;
     return (
         <div className="dashboard-element w-1/2 h-[380px] " >
-            <h2 className=' text-lg font-semibold'>{graphTypeName}</h2>
+            <div className='flex flex-row gap-2 items-center'>
+                <h2 className=' text-lg font-semibold'>{graphTypeName}</h2>
+                <TextInfo text={text} />
+            </div>
             <div className="flex flex-row w-full h-full">
                 {hydrated && (
                     <ResponsiveContainer width="95%" height="100%" >

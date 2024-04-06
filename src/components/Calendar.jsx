@@ -3,6 +3,7 @@ import "react-day-picker/dist/style.css"
 import { useState } from 'react';
 import { NoteAreaCalendar } from "./NoteAreaCalendar";
 import { useUserNotes } from "@/lib/useUserNotes";
+import { TextInfo } from "./TextInfo";
 
 export function Calendar({ activeShowButton, setActiveShowButton, range, setRange }) {
     // const [range, setRange] = useState();
@@ -52,11 +53,14 @@ export function Calendar({ activeShowButton, setActiveShowButton, range, setRang
             setShowNote(false);
         }
     };
-
+    const text = 'Select needed date or interval for graph display or add a note.'
     return (
         <div className="self-stretch flex flex-col gap-4 items-center">
-            <div className="text-center text-xl font-sans font-semibold">
-                Select needed date or interval
+            <div className="flex flex-row gap-2 items-center">
+                <div className="text-center text-xl font-sans font-semibold">
+                    Select needed date or interval
+                </div>
+                <TextInfo text={text}></TextInfo>
             </div>
             <div className="shadow-[11px_11px_26px_-2px_rgba(46,_55,_84,_0.08)] bg-[#1976d214] pb-4 px-6 rounded-[50px] date-picker-cont">
                 <style>{css}</style>

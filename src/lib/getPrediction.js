@@ -50,7 +50,7 @@ export async function getYesterdayData() {
 // params: array hours (for ex.) = [8, 12, 16, 20] - hours of the day to get forecast for
 export async function getForecastData(hours) {
     //get weather data for the next 7 days
-    const forecast = await getWeatherForecast('hours');
+    const { forecast, address } = await getWeatherForecast('hours');
     const next7Days = filterForecast(forecast, hours);
     return next7Days;
 }

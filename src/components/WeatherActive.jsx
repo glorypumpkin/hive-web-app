@@ -18,6 +18,8 @@ export function WeatherActive({ activeDay, forecast }) {
                 />
             </div>
             <div className="text-s col-span-3 flex items-center">
+                {forecast[0].address}
+                <br />
                 {day}
                 <br />
                 {description}

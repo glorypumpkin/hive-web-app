@@ -41,14 +41,6 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
         />
     ));
 
-    // const selectExtraGraphsType = extraGraphs ? (
-    //     <div>
-    //         {/* TODO */}
-    //     </div>
-    // ) : null;
-
-    // console.log('relevantData', relevantData)
-
     return (
         <>
             <LineChart

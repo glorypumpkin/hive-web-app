@@ -6,7 +6,7 @@ export function CustomTooltip({ active, payload, label, activeType, units }) {
         }
         // console.log('payload', payload)
         // if payload[1] exists, show the tooltip for the comparison graph
-        const diff = payload[0].payload.rozdil
+        const diff = payload[0].payload.rozdil || payload[0].payload.weightDiff
         let image = ''
         if (diff > 0) {
             image = <img src="/arrow-up.svg" alt="plus" />
