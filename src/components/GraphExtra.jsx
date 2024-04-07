@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, compareActive }) {
+export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, compareActive, predictionActive, setPredictionActive }) {
     const [isHovered, setIsHovered] = useState(false);
 
     const onTooltipButtonClick = () => {
@@ -10,6 +10,10 @@ export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, comp
 
     const onCompareButtonClick = () => {
         setCompareActive(compareActive => !compareActive);
+    }
+
+    const onPredictionButtonClick = () => {
+        setPredictionActive(predictionActive => !predictionActive);
     }
 
     console.log('isHovered', isHovered)
@@ -24,6 +28,7 @@ export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, comp
                 {/* <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button> */}
                 <button className={`extra-buttons`}>Notes</button>
                 <button className={`extra-buttons ${compareActive ? '-bg--hover-color' : ''}`} onClick={onCompareButtonClick}>Comparison</button>
+                <button className={`extra-buttons ${predictionActive ? '-bg--hover-color' : ''}`} onClick={onPredictionButtonClick}>Prediction</button>
             </div>
         </div>
     );

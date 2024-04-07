@@ -70,7 +70,7 @@ export function Calendar({ activeShowButton, setActiveShowButton, range, setRang
                     onSelect={setRange}
                     toMonth={new Date()}
                     captionLayout="dropdown-buttons"
-                    fromMonth={new Date(2021, 0)} //TODO: change later
+                    fromMonth={new Date(2022, 0)} //TODO: change later
                     showOutsideDays
                     onDayClick={handleDayClick}
                     modifiers={allNoteMatcher}

@@ -181,6 +181,7 @@ function featurePreparation(dataPoint) {
 export async function predict() {
     // console.log("GET /api/prediction", wasmPath);
     const yesterdayData = await getYesterdayData();
+    // console.log("yesterdayData", yesterdayData);
     const hours = []
     for (const dataPoint of yesterdayData) {
         const hour = dataPoint.hour;
@@ -188,7 +189,7 @@ export async function predict() {
     }
 
     const forecastData = await getForecastData(hours);
-    // console.log("forecastData", forecastData)
+    console.log("forecastData", forecastData)
     const features = await getFeatures(yesterdayData, forecastData); // 2D array of floats
     const lookback = 4;
     console.log("features", features.length, 'forecastData', forecastData.length);
@@ -207,6 +208,7 @@ export async function predict() {
         // return only last element of the output and round it to 2 decimal places
         const weightDiff = Math.round(outputData[outputData.length - 1] * 100) / 100;
         features[i][2] = features[i - 1][2] + weightDiff;
+        // console.log('prediction for:', forecastData[i - lookback])
         predictions.push({
             timestamp: forecastData[i - lookback].timestamp,
             weightDiff: weightDiff,

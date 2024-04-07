@@ -2,7 +2,7 @@ import { Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, LineChart, Brush } 
 import { useState, useEffect } from 'react';
 import { CustomTooltip } from './CustomTooltip';
 
-export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataToCompare, compareActive }) {
+export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataToCompare, compareActive, predictionActive, predictionData }) {
 
     // Do not render on the server
     const [hydrated, setHydrated] = useState(false);
@@ -41,6 +41,20 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
         />
     ));
 
+    const predictionLine = predictionActive && (
+        <Line
+            data={predictionData}
+            type="monotone"
+            dataKey='weight'
+            stroke={strokeColors.weight}
+            strokeDasharray="5 5"
+            dot={false}
+            yAxisId={units.weight}
+            connectNulls
+        />
+    );
+
+
     return (
         <>
             <LineChart
@@ -59,6 +73,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 {graphLines}
                 {comparisonLine}
+                {predictionLine}
                 {/* the right graph type is rendered based on the activeType state, which is set by the user */}
                 <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} domain={['dataMin', 'dataMax']} type='number' />
                 <XAxis dataKey='timestamp' orientation='top' domain={['dataMin', 'dataMax']} type='number' xAxisId='compare' hide></XAxis>

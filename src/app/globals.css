@@ -120,4 +120,10 @@
         @apply hover:-bg--hover-color rounded-3xl px-1
     }
 
+    .text-info {
+        top: calc(100% + 5px);
+        transform: translateX(-50%);
+        max-width: calc(100vw - 20px);
+    }
+
 }

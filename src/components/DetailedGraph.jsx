@@ -7,11 +7,11 @@ import { HistoryLine } from './HistoryLine';
 import { getRangeToDisplay, getDataWithDayAndHour, getDateInterval } from '@/lib/dateFiltering';
 import { NoteAreaGraph } from './NoteAreaGraph';
 import Link from 'next/link'
-import useSWR from 'swr';
-import { format, sub } from 'date-fns';
+import { format } from 'date-fns';
 import { dataComparison } from '@/lib/dataComparison';
 import { MainGraph } from './MainGraph';
 import { GraphExtra } from './GraphExtra';
+import { useLoadHiveData, useLoadWeatherData, useLoadComparisonData, useLoadPredictionData } from '@/lib/dataLoaders';
 // import { ExtraGraphs } from './ExtraGraphs';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -23,6 +23,7 @@ export default function DetailedGraph() {
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState(undefined);
     const [compareActive, setCompareActive] = useState(false);
+    const [predictionActive, setPredictionActive] = useState(false);
     // const [extraGraphs, setExtraGraphs] = useState(false);
     // deleteAllNotes();
 
@@ -34,28 +35,12 @@ export default function DetailedGraph() {
         to: format(dataRange.to, 'yyyy-LL-dd')
     }
 
-    console.log('dataRangeFormatted', dataRangeFormatted)
-    const url = `/api/fetch-hive-data?from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}`;
-    console.log('url', url)
+    const weightData = useLoadHiveData(dataRangeFormatted)
 
-    const { data: weightDataFetched, error: errorWeight, isLoading: isLoadingWeight, isValidating: isValidatingWeight } = useSWR(url, fetcher, {
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-        keepPreviousData: true
-    });
     // TODO: change to the right key
     const weatherDataNeeded = activeType.includes('weather');
 
-    const { data: dataFromWeatherFetched, error, isLoading: isLoadindWeather, isValidating: isValidatingWeather } = useSWR(weatherDataNeeded ? `/api/weather-history?&from=${dataRangeFormatted.from}&to=${dataRangeFormatted.to}` : null, fetcher, {
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-        keepPreviousData: true
-    });
-
-    const weightData = weightDataFetched ?? [];
-    const dataFromWeather = dataFromWeatherFetched ?? [];
+    const dataFromWeather = useLoadWeatherData(dataRangeFormatted, weatherDataNeeded);
 
     console.log('weightData', weightData)
 
@@ -72,22 +57,12 @@ export default function DetailedGraph() {
     const weatherDataLoaded = dataFromWeather !== undefined
 
     //TODO: isLoadind and error handling
+    const dataToCompare = useLoadComparisonData({ dateFrom, dateTo }, compareActive);
+    const predictionData = useLoadPredictionData(predictionActive);
+    console.log('predictionData', predictionData)
+    // console.log('dataToCompare', dataToCompare)
     const dataWithDayAndHour = getDataWithDayAndHour(weightData, dateFrom, dateTo);
 
-    const dateFromYearAgo = sub(new Date(dateFrom), { years: 1 });
-    const dateToYearAgo = sub(new Date(dateTo), { years: 1 });
-    const dateFromYearAgoFormatted = format(dateFromYearAgo, 'yyyy-LL-dd');
-    const dateToYearAgoFormatted = format(dateToYearAgo, 'yyyy-LL-dd');
-
-    const { data: dataToCompareFetched, error: errorComparisom, isLoading: isLoadingCompare } = useSWR(compareActive ? `/api/fetch-hive-data?&from=${dateFromYearAgoFormatted}&to=${dateToYearAgoFormatted}` : null, fetcher, {
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-        keepPreviousData: true
-    });
-
-    const dataToCompare = getDataWithDayAndHour(dataToCompareFetched ?? [], dateFromYearAgo, dateToYearAgo);
-    // console.log('dataToCompare', dataToCompare)
 
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
 
@@ -95,12 +70,12 @@ export default function DetailedGraph() {
         <div className="-bg--primary-color flex w-[100vw] h-[100vh]">
             <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} />
             <div className="flex flex-col gap-1 overflow-visible">
-                <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive}></GraphExtra>
+                <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive}></GraphExtra>
                 <div style={{
                     width: '1300px',
                     height: '800px',
                 }}>
-                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} dataToCompare={dataToCompare} compareActive={compareActive} />
+                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} dataToCompare={dataToCompare} compareActive={compareActive} predictionActive={predictionActive} predictionData={predictionData} />
                 </div>
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip} setActiveShowButton={setActiveShowButton} activeShowButton={activeShowButton}></HistoryLine>
             </div>

@@ -2,7 +2,7 @@ import { add } from "date-fns";
 
 const APIForecastDays = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json&lang=id`;
 
-const APIForecastHours = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/2024-04-05/2024-04-11?unitGroup=metric&include=hours%2Cdays&key=${process.env.WEATHER_API_KEY}&contentType=json`
+const APIForecastHours = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/next7days?unitGroup=metric&include=hours%2Cdays&key=${process.env.WEATHER_API_KEY}&contentType=json`
 
 export async function GET(request) {
     let res = null;
