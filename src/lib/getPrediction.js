@@ -25,8 +25,18 @@ export async function getYesterdayData() {
     yesterday.setHours(0, 0, 0, 0);
     today.setHours(0, 0, 0, 0);
 
+    let hiveData = [];
     //get hive data for yesterday GET 
-    const hiveData = await getHiveData(yesterday, today);
+    hiveData = await getHiveData(yesterday, today);
+    //if no data, get data for the day before yesterday
+    if (hiveData.length === 0) {
+        yesterday.setDate(yesterday.getDate() - 1);
+        today.setDate(today.getDate() - 1);
+        hiveData = await getHiveData(yesterday, today);
+    }
+
+    // hours = ['02:00', '08:00', '14:00', '20:00'];
+    // console.log('hiveData', hiveData);
     // Add fields like hour, month, day, year to hiveData
     const hiveDataWithHour = getDataWithDayAndHour(hiveData, yesterday, today);
 
@@ -39,7 +49,8 @@ export async function getYesterdayData() {
     const combinedData = combineData(hiveDataWithHour, yesterdayWeather);
 
     // keep only last 4 elements of the array
-    combinedData.splice(0, combineData.length - 4);
+    combinedData.splice(0, combinedData.length - 4);
+    console.log('combinedData', combinedData);
 
     //return data ready for prediction
     return combinedData
@@ -52,6 +63,7 @@ export async function getForecastData(hours) {
     //get weather data for the next 7 days
     const { forecast, address } = await getWeatherForecast('hours');
     const next7Days = filterForecast(forecast, hours);
+    // console.log('next7Days', next7Days);
     return next7Days;
 }
 
@@ -179,7 +191,7 @@ function featurePreparation(dataPoint) {
 }
 
 export async function predict() {
-    // console.log("GET /api/prediction", wasmPath);
+    console.log("GET /api/prediction", wasmPath);
     const yesterdayData = await getYesterdayData();
     // console.log("yesterdayData", yesterdayData);
     const hours = []
@@ -189,7 +201,7 @@ export async function predict() {
     }
 
     const forecastData = await getForecastData(hours);
-    console.log("forecastData", forecastData)
+    // console.log("forecastData", forecastData)
     const features = await getFeatures(yesterdayData, forecastData); // 2D array of floats
     const lookback = 4;
     console.log("features", features.length, 'forecastData', forecastData.length);

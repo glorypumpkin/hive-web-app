@@ -21,6 +21,7 @@ const weightStrategy = {
                 break;
             }
         }
+        // console.log('newData', newData);
         return newData;
     },
     extractTimestamp: (item) => {
@@ -64,5 +65,6 @@ export async function GET(request) {
 
 export async function getHiveData(from, to) {
     const weightData = await genericGetData({ ...weightStrategy, from, to });
+    // console.log('weightData', weightData);
     return weightData;
 }

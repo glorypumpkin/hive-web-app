@@ -52,12 +52,14 @@ export async function genericGetData({ set, from, to, extractTimestamp, getAndFe
 
     // find and get missing data
     const newData = await getAndFetchMissing({ set, from, to, data });
+    // console.log('newData', newData);
 
     // add to existing data in db
     if (newData.length !== 0) {
         await saveWeatherData(set, newData, extractTimestamp);
     }
-
+    const allData = await getWeatherFromDB(set, fromTimestamp, toTimestamp);
+    // console.log('allData', allData);
     // return all data
     return await getWeatherFromDB(set, fromTimestamp, toTimestamp);
 }

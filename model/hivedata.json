@@ -46124,19 +46124,6 @@
       "day": 7,
       "month": 5,
       "year": 2022,
-      "hour": 15,
-      "weigth": 62.2,
-      "weightDiff": 9.8,
-      "tempWeigth": 20.2,
-      "tempWeather": 13.1,
-      "precipitation": 0.0,
-      "solarenergy": 1.5
-    },
-    {
-      "timestamp": 1651874400,
-      "day": 7,
-      "month": 5,
-      "year": 2022,
       "hour": 18,
       "weigth": 62.7,
       "weightDiff": 0.5,
@@ -47480,19 +47467,6 @@
       "weigth": 83.8,
       "weightDiff": 0.2,
       "tempWeigth": 28.4,
-      "tempWeather": 20.3,
-      "precipitation": 9.811,
-      "solarenergy": 1.6
-    },
-    {
-      "timestamp": 1652997600,
-      "day": 20,
-      "month": 5,
-      "year": 2022,
-      "hour": 18,
-      "weigth": 92.5,
-      "weightDiff": 8.7,
-      "tempWeigth": 29.2,
       "tempWeather": 20.3,
       "precipitation": 9.811,
       "solarenergy": 1.6
@@ -50457,19 +50431,6 @@
       "weigth": 88.6,
       "weightDiff": -0.7,
       "tempWeigth": 23.2,
-      "tempWeather": 23.0,
-      "precipitation": 0.0,
-      "solarenergy": 1.6
-    },
-    {
-      "timestamp": 1655503200,
-      "day": 18,
-      "month": 6,
-      "year": 2022,
-      "hour": 12,
-      "weigth": 81.2,
-      "weightDiff": -7.4,
-      "tempWeigth": 30.9,
       "tempWeather": 23.0,
       "precipitation": 0.0,
       "solarenergy": 1.6
@@ -54022,19 +53983,6 @@
       "tempWeather": 23.1,
       "precipitation": 0.0,
       "solarenergy": 1.5
-    },
-    {
-      "timestamp": 1658527200,
-      "day": 23,
-      "month": 7,
-      "year": 2022,
-      "hour": 0,
-      "weigth": 55.6,
-      "weightDiff": 7.2,
-      "tempWeigth": 17.2,
-      "tempWeather": 21.5,
-      "precipitation": 1.0,
-      "solarenergy": 1.4
     },
     {
       "timestamp": 1658527200,
@@ -57828,19 +57776,6 @@
       "weigth": 44.3,
       "weightDiff": 0.1,
       "tempWeigth": 8.7,
-      "tempWeather": 6.9,
-      "precipitation": 3.04,
-      "solarenergy": 0.9
-    },
-    {
-      "timestamp": 1682632800,
-      "day": 28,
-      "month": 4,
-      "year": 2023,
-      "hour": 15,
-      "weigth": 53.0,
-      "weightDiff": 8.7,
-      "tempWeigth": 10.4,
       "tempWeather": 6.9,
       "precipitation": 3.04,
       "solarenergy": 0.9
@@ -66294,19 +66229,6 @@
       "tempWeather": 21.0,
       "precipitation": 0.107,
       "solarenergy": 17.9
-    },
-    {
-      "timestamp": 1689804000,
-      "day": 20,
-      "month": 7,
-      "year": 2023,
-      "hour": 0,
-      "weigth": 50.6,
-      "weightDiff": 9.1,
-      "tempWeigth": 18.2,
-      "tempWeather": 18.5,
-      "precipitation": 0.053,
-      "solarenergy": 6.4
     },
     {
       "timestamp": 1689804000,

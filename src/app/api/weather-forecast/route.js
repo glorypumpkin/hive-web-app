@@ -1,5 +1,3 @@
-import { add } from "date-fns";
-
 const APIForecastDays = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/next7days?unitGroup=metric&key=${process.env.WEATHER_API_KEY}&contentType=json&lang=id`;
 
 const APIForecastHours = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/next7days?unitGroup=metric&include=hours%2Cdays&key=${process.env.WEATHER_API_KEY}&contentType=json`
@@ -47,7 +45,7 @@ export async function GET(request) {
         forecast[i] = filtered;
     }
 
-    console.log('forecast', forecast);
+    // console.log('forecast', forecast);
 
     return new Response(JSON.stringify(forecast), { headers: { 'Content-Type': 'application/json' } });
 }

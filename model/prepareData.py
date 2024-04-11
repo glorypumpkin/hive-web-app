@@ -13,25 +13,42 @@ def convertor(fileContents, dataType):
             current_data = parseLine(line, dataType)
             next_data = parseLine(lines[i+1], dataType)
 
+            sumDiff = 0
+            # print(f'on the start sumDiff: {sumDiff}')
             # calculate weigth difference
             # Append only if parsed_data is not empty (avoids None or empty lists)
             if current_data:
+                # print(f'sumDiff in current data: {sumDiff}')
                 if next_data:
-                    weigthDiff = current_data['weigth'] - next_data['weigth']
-                    current_data['weightDiff'] = round(weigthDiff,2)
+                    # print(f'sumDiff in next data: {sumDiff}')
+                    weightDiff = current_data['weigth'] - next_data['weigth']
+                    if current_data['day'] == next_data['day'] and current_data['month'] == next_data['month'] and current_data['year'] == next_data['year']:
+                        # print(f'current_data: {current_data}')
+                        sumDiff += weightDiff
+                        # print(f'sumDiff: {sumDiff}')
+                    if abs(sumDiff) > 7 or abs(weightDiff) > 10:
+                        print(f'skipping {current_data} because sumDiff is {sumDiff}')
+                        continue
+                    current_data['weightDiff'] = round(weightDiff, 2)
                 else:
                     current_data['weightDiff'] = 0.0
-                if abs(current_data['weightDiff']) < 7:
-                    relevant_data.append(current_data)
+                relevant_data.append(current_data)
     else:
         # skip first line
-        for i in range(1, len(lines)):
+        for i in range(1, len(lines)-1):
             line = lines[i]
             # Leverage parseLine to directly filter data
             # print(f'line: {line}')
+            sumDiff = 0
             parsed_data = parseLine(line, dataType)
-            # Append only if parsed_data is not empty (avoids None or empty lists)
+            next_data = parseLine(lines[i+1], dataType)
             if parsed_data:
+                if next_data:
+                    if parsed_data['day'] == next_data['day'] and parsed_data['month'] == next_data['month'] and parsed_data['year'] == next_data['year']:
+                        sumDiff += parsed_data['weightDiff'] + next_data['weightDiff']
+                    if abs(sumDiff) > 7:
+                        continue
+                # Append only if parsed_data is not empty (avoids None or empty lists)
                 relevant_data.append(parsed_data)
 
     return relevant_data
@@ -75,7 +92,7 @@ def parseLine(line, dataType):
         hour_int = int(cas)
         rozdil_float = float(rozdil)
 
-        if abs(rozdil_float) > 10:
+        if abs(rozdil_float) > 7:
             return []
         return {
             'timestamp': timestamp,

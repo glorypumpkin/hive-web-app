@@ -14,6 +14,7 @@ def load_data():
         datasetArray = []
         for i in range(len(loaded)):
             data = loaded[i]
+            # print(f'Processing {data}')
             # data is a list of dictionaries with keys: month, hour, weight, weightDiff, temperature
             # convert to a tensor of shape (n_samples, n_features)
             tens = torch.tensor([[d['month'], d['hour'], d['weigth'], d['tempWeigth'], d['tempWeather'], d['precipitation'], d['solarenergy'], d['weightDiff'],] for d in data])
@@ -69,7 +70,7 @@ def train_model(datasetArray, lookback):
     # test_size = len(X) - train_size
     X_train, X_test = X[:train_size], X[train_size:]
     y_train, y_test = Y[:train_size], Y[train_size:]
-    # print(X_test.shape, y_test.shape)
+    print(X_test.shape, y_test.shape)
 
     # create data loaders
     model = BeehiveModel()
@@ -79,7 +80,7 @@ def train_model(datasetArray, lookback):
     loss_fn = nn.MSELoss()
     # create a data loader for training data with batch size 8 and shuffle the data at each epoch
     loader = data.DataLoader(data.TensorDataset(X_train, y_train), shuffle=True, batch_size=8)
-    n_epochs = 200
+    n_epochs = 400
     for epoch in range(n_epochs):
         model.train()
         for X_batch, y_batch in loader:

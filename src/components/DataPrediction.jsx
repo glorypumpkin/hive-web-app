@@ -19,6 +19,8 @@ export function DataPrediction() {
     const { data: fetchedPrediction, error, isLoading } = useSWR('/api/prediction', fetcher);
 
     const predictionDataLoaded = fetchedPrediction ?? [];
+    console.log('fetchedPrediction', fetchedPrediction);
+    console.log('predictionDataLoaded', predictionDataLoaded);
 
     // get date and hour from timestamp 
     const predictionData = predictionDataLoaded.map((data) => {
@@ -30,6 +32,8 @@ export function DataPrediction() {
         const weight = Math.round(data.weight * 100) / 100;
         return { day, hour, weight, timestamp: data.timestamp, year, weightDiff: data.weightDiff };
     });
+
+    console.log('predictionData', predictionData);
 
     //sum of all weight differences
     let sum = 0;
