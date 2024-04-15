@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar } from './Calendar';
 import { SelectGraphType } from './SelectGraphType';
 import { HistoryLine } from './HistoryLine';
@@ -67,14 +67,15 @@ export default function DetailedGraph() {
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
 
     return (
-        <div className="-bg--primary-color flex xl:flex-col-reverse">
+        <div className="-bg--primary-color flex xl:flex-col-reverse xl:overflow-hidden w-[100vw] h-[100vh]">
             <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} />
             <div className="flex flex-col gap-1 overflow-visible">
                 <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive}></GraphExtra>
                 <div style={{
                     width: '1300px',
                     height: '800px',
-                }}>
+                }} className='xl:relative'>
+                    <AlertToRotate />
                     <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} dataToCompare={dataToCompare} compareActive={compareActive} predictionActive={predictionActive} predictionData={predictionData} />
                 </div>
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip} setActiveShowButton={setActiveShowButton} activeShowButton={activeShowButton}></HistoryLine>
@@ -100,4 +101,30 @@ export default function DetailedGraph() {
             </div>
         </div>
     )
+}
+
+
+export function AlertToRotate() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setScreenWidth(window.innerWidth);
+        };
+        console.log('screenWidth', screenWidth)
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    if (screenWidth < 1300) {
+        return (
+            <div className='h-full absolute top-[30%] left-[30%]'>
+                <p className='text-lg font-semibold text-gray-700'>Please rotate your device for a better viewing experience</p>
+                {/* <img src="/rotate-device.png" className='w-1/2 h-auto' /> */}
+            </div>
+        )
+    }
 }
