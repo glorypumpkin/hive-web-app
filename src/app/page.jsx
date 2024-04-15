@@ -9,7 +9,7 @@ export default async function Home() {
   const pageName = '';
   return (
     <div className='bg-gradient-to-b from-[#d2dce2] via-[#fffae7] via-100% to-[rgba(255, 224, 205, 0)]'>
-      <RedirectIfNeeded></RedirectIfNeeded>
+      {/* <RedirectIfNeeded></RedirectIfNeeded> */}
       <Menu pageName={pageName}></Menu>
       {/* <PeriodGraph data={data}></PeriodGraph> */}
       <MainPage data={data}></MainPage>
