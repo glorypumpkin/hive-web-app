@@ -1,18 +1,16 @@
 'use client'
 import { Weather } from "./Weather"
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { useState, useEffect } from 'react';
 import { SmallGraph } from './SmallGraph'
 import { DataPrediction } from './DataPrediction'
 
 export default function Dashboard() {
     return (
-        <div className=" flex flex-col gap-16 w-full px-6 pt-16 pb-10 h-[94vh]">
-            <div className="flex flex-row mr-1 gap-12 items-start">
+        <div className=" flex flex-col gap-16 w-full px-6 pt-16 pb-10 ">
+            <div className="flex flex-row lg:flex-col mr-1 gap-12 items-start">
                 <Weather> </Weather>
                 <DataPrediction> </DataPrediction>
             </div>
-            <div className="flex flex-row mr-1 gap-12 items-start">
+            <div className="flex flex-row lg:flex-col mr-1 gap-12 items-start">
                 <SmallGraph graphType="weight"> </SmallGraph>
                 <SmallGraph graphType="temperature"> </SmallGraph>
             </div>

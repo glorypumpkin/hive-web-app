@@ -49,21 +49,21 @@ export function DataPrediction() {
     const units = { weight: 'kg' }
     const text = 'This graph shows the predicted weight of the hive change over the next 7 days.';
     return (
-        <div className="dashboard-element w-full max-w-2xl md:w-2/5 h-[340px] rounded-[50px] mx-auto md:mx-0">
-            <div className='flex flex-row gap-2 items-center'>
+        <div className="dashboard-element w-1/2 h-[340px] rounded-[50px] lg:w-full">
+            <div className='flex flex-row gap-2 items-center lg:pt-2'>
                 <h2 className='text-lg font-semibold'>Data Prediction
                 </h2>
                 <TextInfo text={text} />
             </div>
-            <div className=' flex flex-row h-full pr-4'>
-                <div className="w-full md:w-[30%] mb-4 md:mb-0 md:ml-5">
+            <div className=' flex flex-row h-full pr-4 lg:flex-col lg:items-center lg:w-full'>
+                <div className="text-center">
                     <p>
                         Expected weight change: {sum.toFixed(2)} kg
                     </p>
                 </div>
-                <div className=" h-[200px] md:h-full md:w-[80%]">
+                <div className="w-full h-full">
                     {hydrated && (
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer >
                             <LineChart id="data-prediction-graph" data={predictionData}>
                                 <Line type="monotone" dataKey="weight" stroke="#8884d8" />
                                 <XAxis dataKey="day" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />

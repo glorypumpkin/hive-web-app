@@ -1,4 +1,4 @@
-import { Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, LineChart, Brush } from 'recharts';
+import { Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, LineChart, Brush, ResponsiveContainer } from 'recharts';
 import { useState, useEffect } from 'react';
 import { CustomTooltip } from './CustomTooltip';
 
@@ -56,7 +56,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
 
 
     return (
-        <>
+        <ResponsiveContainer>
             <LineChart
                 id='detailed-graph'
                 overflow='visible'
@@ -68,7 +68,6 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
                     left: 0,
                     bottom: 5
                 }}
-                width={1300} height={800}
             >
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 {graphLines}
@@ -88,7 +87,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
                 {/* Brush is used to set the range of the x-axis */}
             </LineChart>
             {/* {selectExtraGraphsType} */}
-        </>
+        </ResponsiveContainer>
     )
 }
 

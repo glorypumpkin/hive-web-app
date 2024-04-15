@@ -56,7 +56,7 @@ export function SmallGraph({ graphType }) {
     const units = { weight: 'kg', temperature: '°C' }
     const text = `This graph shows the ${graphType} of the hive over the last 21 days.`;
     return (
-        <div className="dashboard-element w-1/2 h-[380px] " >
+        <div className="dashboard-element w-1/2 h-[380px] lg:w-full" >
             <div className='flex flex-row gap-2 items-center'>
                 <h2 className=' text-lg font-semibold'>{graphTypeName}</h2>
                 <TextInfo text={text} />

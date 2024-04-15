@@ -35,7 +35,7 @@ export function Weather() {
 
     return (
         <div
-            className="shadow-[10px_10px_20px_5px_#4541332e] -bg--primary-color grid w-3/5 rounded-[50px] h-[340px]"
+            className="shadow-[10px_10px_20px_5px_#4541332e] -bg--primary-color grid w-3/5 lg:w-full rounded-[50px] h-[340px] lg:h-[300px] "
             style={{
                 gridTemplateRows: 'auto max-content',
             }}
@@ -46,7 +46,7 @@ export function Weather() {
             />
             <div
                 id="WeatherPrediction"
-                className="grid grid-cols-8 gap-2 mx-2 mb-2">
+                className="grid grid-cols-8 gap-2 mx-2 mb-2 lg:pb-2">
                 {forecastNext7Days && forecastNext7Days.map((day, index) => (
                     <WeatherElement
                         key={index}

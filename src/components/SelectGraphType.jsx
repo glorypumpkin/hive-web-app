@@ -14,7 +14,7 @@ export function SelectGraphType({ activeType, setActiveType }) {
     }
     const text = 'Select the type of graph you want to see. It can be a multiple selection.';
     return (
-        <div className="flex flex-col gap-6 w-2/5">
+        <div className="flex flex-col gap-6 ">
             <div className="flex flex-row gap-2 items-center">
                 <div className="text-center text-xl font-sans font-semibold">
                     Select graph type

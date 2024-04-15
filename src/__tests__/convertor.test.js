@@ -8,17 +8,17 @@ test('positive', () => {
     expect(convertor(input)).toEqual([
         {
             stan: '1221601',
-            timestamp: 1697385600000,
-            weight: 43.6,
-            rozdil: 0,
-            temperature: 4.9
-        },
-        {
-            stan: '1221601',
             timestamp: 1697364000000,
             weight: 43.6,
             rozdil: 0,
             temperature: 10.4
+        },
+        {
+            stan: '1221601',
+            timestamp: 1697385600000,
+            weight: 43.6,
+            rozdil: 0,
+            temperature: 4.9
         }
     ]);
 });
@@ -31,17 +31,17 @@ test('negativeEmptyLine', () => {
     expect(convertor(input)).toEqual([
         {
             stan: '1221601',
+            timestamp: 1697371200000,
+            weight: 43.6,
+            rozdil: 0,
+            temperature: 10.4
+        },
+        {
+            stan: '1221601',
             timestamp: 1697385600000,
             weight: 43.6,
             rozdil: 0,
             temperature: -4.9
-        },
-        {
-            stan: '1221601',
-            timestamp: 1697364000000,
-            weight: 43.6,
-            rozdil: 0,
-            temperature: 10.4
         }
     ]);
 });

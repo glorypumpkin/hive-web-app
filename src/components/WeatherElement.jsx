@@ -12,14 +12,14 @@ export function WeatherElement({ forecastForOneDay, setActiveDay }) {
     }
 
     return (
-        <button onClick={handleClick} className='hover:-bg--hover-color hover:overflow-hidden rounded-[48px] border-2 -border--hover-color h-32'>
+        <button onClick={handleClick} className='hover:-bg--hover-color hover:overflow-hidden rounded-[48px] border-2 -border--hover-color h-32 lg:h-20'>
             <div className="flex flex-col items-center">
                 <img
                     src={icon}
                     alt={description}
-                    className="w-16 h-16"
+                    className="w-16 h-16 lg:w-8 lg:h-8"
                 />
-                <div>
+                <div className='lg:hidden'>
                     {day}
                 </div>
             </div>

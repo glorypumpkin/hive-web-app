@@ -67,7 +67,7 @@ export default function DetailedGraph() {
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
 
     return (
-        <div className="-bg--primary-color flex w-[100vw] h-[100vh]">
+        <div className="-bg--primary-color flex xl:flex-col-reverse">
             <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} />
             <div className="flex flex-col gap-1 overflow-visible">
                 <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive}></GraphExtra>
