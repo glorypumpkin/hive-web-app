@@ -55,10 +55,7 @@ export async function getWeatherForecast(type) {
 
     response = await fetch(type === 'hours' ? APIForecastHours : APIForecastDays, {
         next: {
-            revalidate: 43200 // 12 hours
-        },
-        headers: {
-            'Cache-Control': 'max-age=3600' // Cache for 1 hour
+            revalidate: 3600 // revalidate every hour
         }
     });
     const responseBody = await response.text();

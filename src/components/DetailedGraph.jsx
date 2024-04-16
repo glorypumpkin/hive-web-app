@@ -67,20 +67,20 @@ export default function DetailedGraph() {
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
 
     return (
-        <div className="-bg--primary-color flex xl:flex-col-reverse xl:overflow-hidden w-[100vw] h-[100vh]">
+        <div className="-bg--primary-color flex xl:flex-col-reverse min-h-screen gap-10">
             <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} />
-            <div className="flex flex-col gap-1 overflow-visible">
+            <div className="flex flex-col gap-1 overflow-visible flex-grow pb-2">
                 <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive}></GraphExtra>
-                <div style={{
-                    width: '1300px',
-                    height: '800px',
-                }} className='xl:relative'>
-                    <AlertToRotate />
+                <div
+                    // className='w-full h-full'
+                    className='w-full h-80 flex-grow'
+                >
+                    {/* <AlertToRotate /> */}
                     <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} dataToCompare={dataToCompare} compareActive={compareActive} predictionActive={predictionActive} predictionData={predictionData} />
                 </div>
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip} setActiveShowButton={setActiveShowButton} activeShowButton={activeShowButton}></HistoryLine>
             </div>
-            <div className="flex flex-col gap-16 w-full items-center">
+            <div className="flex flex-col gap-16 items-center pr-10">
                 <div className='flex flex-row w-full justify-end pt-1'>
                     <Link href="/dashboard" className=' bg-transparent h-12 rounded-[50px] common-button flex px-3'>
                         <img src="/dashboard-icon.png"

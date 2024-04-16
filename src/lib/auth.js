@@ -17,7 +17,7 @@ export const authOptions = {
     session: {
         strategy: "jwt",
         // maxAge 30 minutes
-        maxAge: 30 * 60
+        maxAge: 10 * 60
     },
     callbacks: {
         async redirect() {

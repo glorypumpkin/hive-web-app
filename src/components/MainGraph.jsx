@@ -61,13 +61,8 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
                 id='detailed-graph'
                 overflow='visible'
                 data={relevantData}
-                //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 0,
-                    bottom: 5
-                }}
+            //the data prop gets the data from the dataWithDayAndHour array, which is filtered by date
+
             >
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 {graphLines}

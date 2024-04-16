@@ -7,7 +7,7 @@ export default async function DashboardPage() {
     const data = await getBeeData();
     const pageName = 'Dashboard';
     return (
-        <div className='bg-[#1976d214]'>
+        <div className='bg-[#1976d214] min-h-screen'>
             <AccessHandler></AccessHandler>
             <Menu pageName={pageName}></Menu>
             <Dashboard data={data}></Dashboard>

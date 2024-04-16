@@ -50,7 +50,7 @@
     }
 
     .common-button {
-        @apply overflow-hidden cursor-pointer justify-center hover:-bg--hover-color -bg--primary-color items-center
+        @apply cursor-pointer justify-center hover:-bg--hover-color -bg--primary-color items-center
     }
 
     /* shadow-[15px_15px_35px_-3px_#4541332e] */
