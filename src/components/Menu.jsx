@@ -1,6 +1,7 @@
 'use client'
 
 import { signIn, signOut, useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 export default function Menu({ pageName }) {
   const { data: session, status } = useSession()
@@ -33,6 +34,19 @@ export default function Menu({ pageName }) {
               signIn('google')
             }}
           >Login</button>
+        )}
+        {loggedIn && (
+          <Link href="/dashboard" className='rounded-[50px] flex flex-col w-10 h-10 justify-center items-center hover:-bg--hover-color '>
+            <img src="/dashboard-icon.png"
+              className='w-8 h-8 shrink-0'
+            />
+          </Link>
+        )}
+        {loggedIn && (
+          <Link href='/dashboard/detailed-graph' className='rounded-[50px] flex flex-col w-10 h-10 justify-center items-center hover:-bg--hover-color '>
+            <img src="/line-chart.svg"
+              className='w-8 h-8 shrink-0' />
+          </Link>
         )}
         <div
           id="Profile"
