@@ -36,28 +36,35 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, setActiveShowBu
             noteText: noteText
         };
         setNotesAndPersist([...allNotes, note]);
+        setShowNote(false);
 
     }
     function onShowOnGraphClick() {
         setActiveShowButton(!activeShowButton);
     }
 
+    function onTextChange(e) {
+        setNoteText(e.target.value);
+    }
+
     const noteArea = (
         <div>
             <textarea className="flex rounded-[15px] pl-1 resize-both" placeholder="Add a note..."
-                onChange={(e) => setNoteText(e.target.value)} value={noteText}
+                onChange={onTextChange} value={noteText}
             ></textarea>
             <div className="flex flex-row items-center justify-between">
-                <div className="flex justify-between gap-2 pl-1">
+                <div className="flex justify-between gap-2 pl-1 items-center">
                     {Object.entries(colors).map(([color, colorClass]) => (
-                        <button
-                            key={color}
-                            className={`${colorClass} color-note-button`}
-                            onClick={() => handleColorClick(color)}
-                        ></button>))}
+                        <input type="radio" key={color} className={`${colorClass} checked:w-3 checked:h-3 checked:border-solid checked:border checked:border-gray-300 color-note-button`} name="color" value={color} onClick={() => handleColorClick(color)} />
+                        // <button
+                        //     key={color}
+                        //     className={`${colorClass} color-note-button`}
+                        //     onClick={() => handleColorClick(color)}
+                        // ></button>
+                    ))}
                     {/* TODO: change to radio buttons */}
                 </div>
-                <button className="bg-[#1976d214] rounded-[15px] px-2 mt-1 font-semibold"
+                <button className="bg-[#1976d214] rounded-[15px] px-2 mt-1 font-semibold hover:-bg--hover-color"
                     onClick={onSaveClick}
                 >Save</button>
             </div>

@@ -63,7 +63,7 @@
     }
 
     .color-note-button {
-        @apply rounded-3xl w-4 h-4
+        @apply rounded-3xl w-4 h-4 appearance-none cursor-pointer
     }
 
     /* Hexagon style */
@@ -124,6 +124,24 @@
         top: calc(100% + 5px);
         transform: translateX(-50%);
         max-width: calc(100vw - 20px);
+    }
+
+    .btn-clicked {
+        animation: pulse 0.5s;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.2);
+        }
+
+        100% {
+            transform: scale(1);
+        }
     }
 
 }

@@ -24,6 +24,7 @@ export default function DetailedGraph() {
     const [range, setRange] = useState(undefined);
     const [compareActive, setCompareActive] = useState(false);
     const [predictionActive, setPredictionActive] = useState(false);
+    const [isNoteActive, setIsNoteActive] = useState(true);
     // const [extraGraphs, setExtraGraphs] = useState(false);
     // deleteAllNotes();
 
@@ -68,9 +69,9 @@ export default function DetailedGraph() {
 
     return (
         <div className="-bg--primary-color flex xl:flex-col-reverse min-h-screen gap-10">
-            <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} />
+            <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} isNoteActive={isNoteActive} />
             <div className="flex flex-col gap-1 overflow-visible flex-grow pb-2">
-                <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive}></GraphExtra>
+                <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive} isNoteActive={isNoteActive} setIsNoteActive={setIsNoteActive}></GraphExtra>
                 <div
                     // className='w-full h-full'
                     className='w-full h-80 flex-grow'

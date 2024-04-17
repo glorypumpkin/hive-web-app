@@ -6,7 +6,8 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
     const [showNoteText, setShowNoteText] = useState(false);
     const [hoveredNote, setHoveredNote] = useState(null);
     const [noteTextChanged, setNoteTextChanged] = useState('');
-    const { allNotes, setAllNotes, deleteNote } = useUserNotes();
+    const { allNotes, setNotesAndPersist, deleteNote } = useUserNotes();
+    const [isClicked, setIsClicked] = useState(false);
 
 
     const noteFrom = note.dateFrom
@@ -33,31 +34,10 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
     const noteStartOffset = (noteFrom - dateFromMilliseconds) / (dateToMilliseconds - dateFromMilliseconds) * 100;
     const noteWidth = (noteTo - noteFrom) / (dateToMilliseconds - dateFromMilliseconds) * 100;
 
-    const remainingWidth = 100 - (noteStartOffset + noteWidth);
-
     const renderedHeight = (noteFloor + 1) * floorHeight;
     const zIndex = 100 - noteFloor;
 
-
-    // const calculateExpandedNotePosition = () => {
-    //     // if the remaining width is less than 17, move the note to the left
-    //     if (remainingWidth < 17) {
-    //         return noteTextStartOffset - 17
-    //     } else {
-    //         return noteTextStartOffset;
-    //     }
-    // }
-
     const noteTextStartOffset = noteStartOffset + 1;
-    // const calculateHoveredNotePosition = () => {
-    //     // if the remaining width is less than 10, move the note to the left
-    //     if (remainingWidth < 10) {
-    //         return noteTextStartOffset - 10;
-    //     } else {
-    //         return noteTextStartOffset;
-    //     }
-
-    // }
 
     console.log('allNotes', allNotes)
 
@@ -90,7 +70,8 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
         // console.log(allNotes)
         // only update the note that was changed
         // explanation: map through all notes, if the noteText is the same as the noteText of the note that was changed, return the note with the new noteText, else return the note
-        setAllNotes(allNotes.map(n => {
+        setIsClicked(true);
+        setNotesAndPersist(allNotes.map(n => {
             if (n.noteText === noteText) {
                 return { ...n, noteText: noteTextChanged }
             } else {
@@ -98,6 +79,9 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
             }
         }
         ));
+        setTimeout(() => {
+            setIsClicked(false);
+        }, 1000)
     }
 
     return (
@@ -147,7 +131,7 @@ export function NoteBubble({ note, dateFromMilliseconds, dateToMilliseconds, flo
                         <div className="flex justify-between gap-3 border-black border-b-[1px] ">
                             <div className=" font-medium px-2">{format(noteFrom, 'dd.LL')} - {format(noteTo, 'dd.LL')}</div>
                             <div className="flex gap-1 px-2">
-                                <button onClick={onCheckClick}>
+                                <button onClick={onCheckClick} className={isClicked ? "btn-clicked" : ""}>
                                     <img src="/check.svg" className="w-6 h-6" />
                                 </button>
                                 <button onClick={() => deleteNote(noteID)}>

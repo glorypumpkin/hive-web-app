@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { NoteBubble } from "./NoteBubble";
 import { useUserNotes } from "@/lib/useUserNotes";
 
-export function NoteAreaGraph({ dateFrom, dateTo }) {
+export function NoteAreaGraph({ dateFrom, dateTo, isNoteActive }) {
     const [line, setLine] = useState(null);
     const { allNotes } = useUserNotes();
     const [noteIdOpened, setNoteIdOpened] = useState(null);
@@ -62,7 +62,7 @@ export function NoteAreaGraph({ dateFrom, dateTo }) {
         <>
             {notesParent && createPortal(
                 <foreignObject x={x1} y={y} width={width} height={fullHeight} overflow="visible">
-                    <div className="h-full relative">
+                    <div className={`h-full relative ${isNoteActive ? '' : 'hidden'} `}>
                         {noteArea}
                     </div>
                 </foreignObject>
