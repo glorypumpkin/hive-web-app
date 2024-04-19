@@ -6,52 +6,47 @@ import datetime
 def convertor(fileContents, dataType):
     lines = fileContents.split('\n')
     relevant_data = []
-    if dataType == 'older':
-        for i in range(1, len(lines) - 1):
-            line = lines[i]
-            # Leverage parseLine to directly filter data
-            current_data = parseLine(line, dataType)
-            next_data = parseLine(lines[i+1], dataType)
-
-            sumDiff = 0
-            # print(f'on the start sumDiff: {sumDiff}')
-            # calculate weigth difference
-            # Append only if parsed_data is not empty (avoids None or empty lists)
-            if current_data:
-                # print(f'sumDiff in current data: {sumDiff}')
-                if next_data:
-                    # print(f'sumDiff in next data: {sumDiff}')
-                    weightDiff = current_data['weigth'] - next_data['weigth']
-                    if current_data['day'] == next_data['day'] and current_data['month'] == next_data['month'] and current_data['year'] == next_data['year']:
-                        # print(f'current_data: {current_data}')
-                        sumDiff += weightDiff
-                        # print(f'sumDiff: {sumDiff}')
-                    if abs(sumDiff) > 7 or abs(weightDiff) > 10:
-                        print(f'skipping {current_data} because sumDiff is {sumDiff}')
-                        continue
-                    current_data['weightDiff'] = round(weightDiff, 2)
-                else:
-                    current_data['weightDiff'] = 0.0
-                relevant_data.append(current_data)
-    else:
-        # skip first line
-        for i in range(1, len(lines)-1):
-            line = lines[i]
-            # Leverage parseLine to directly filter data
-            # print(f'line: {line}')
-            sumDiff = 0
-            parsed_data = parseLine(line, dataType)
-            next_data = parseLine(lines[i+1], dataType)
-            if parsed_data:
-                if next_data:
-                    if parsed_data['day'] == next_data['day'] and parsed_data['month'] == next_data['month'] and parsed_data['year'] == next_data['year']:
-                        sumDiff += parsed_data['weightDiff'] + next_data['weightDiff']
-                    if abs(sumDiff) > 7:
-                        continue
-                # Append only if parsed_data is not empty (avoids None or empty lists)
-                relevant_data.append(parsed_data)
-
+    for i in range(1, len(lines) - 1):
+        line = lines[i]
+        # Leverage parseLine to directly filter data
+        current_data = parseLine(line, dataType)
+        if current_data is not None:
+            relevant_data.append(current_data)
     return relevant_data
+
+def dayDataIsValid(dayData):
+    return abs(dayData[-1]['weigth'] - dayData[0]['weigth']) < 7
+
+def filterData(data):
+    filteredData = []
+    temp = []
+    day = None
+    for measurement in data:
+        thisDay = measurement['day']
+        if day != thisDay:
+            if len(temp) > 0 and dayDataIsValid(temp):
+                filteredData.extend(temp)
+            temp = []
+            day = thisDay
+
+        temp.append(measurement)
+
+    return filteredData
+
+def countWeightDiff(data):
+    result = []
+    for i in range(len(data)-1):
+        now = data[i]['weigth']
+        next = data[i+1]['weigth']
+        diff = round(next - now, 2)
+        if abs(diff) > 10:
+            diff = 0
+        data[i+1]['weightDiff'] = diff
+        result.append(data[i])
+    result[0]['weightDiff'] = 0
+    return result
+
+
 
 def parseLine(line, dataType):
     if dataType == 'older':
@@ -70,7 +65,7 @@ def parseLine(line, dataType):
     
     timestamp = int(datetime.datetime.strptime(datum, "%d/%m/%Y").timestamp())
     if not (4 <= month <= 7):  # Check for relevant months
-        return []  # Return an empty list for irrelevant data
+        return None  # Return an empty list for irrelevant data
 
     kg_float = float(kg)
     tepl_float = float(tepl)
@@ -91,9 +86,6 @@ def parseLine(line, dataType):
     else:
         hour_int = int(cas)
         rozdil_float = float(rozdil)
-
-        if abs(rozdil_float) > 7:
-            return []
         return {
             'timestamp': timestamp,
             'day': day,
@@ -152,16 +144,21 @@ def main ():
         with open(file, 'r') as f:
             print(f'Processing {file}')
             fileContents = f.read()
+            converted = convertor(fileContents, 'older')
+            # print(f'converted: {converted}')
+            filtered = filterData(converted)
+            counted = countWeightDiff(filtered)
             # print(f'fileContents: {fileContents}')
             # data += convertor(fileContents, 'older')
-            data.append(convertor(fileContents, 'older'))
+            data.append(counted)
     with open('hivedata.txt', 'r') as file:
         print(f'Processing hivedata.txt')
         fileContents = file.read()
+        converted = convertor(fileContents, 'newer')
+        filtered = filterData(converted)
         # data += convertor(fileContents, 'newer')
         # reverse the order of the data
-        convertedData = convertor(fileContents, 'newer')
-        data.append(convertedData[::-1])
+        data.append(filtered[::-1])
 
     
     weatherFilesArray = ['weather2018.json', 'weather2019.json', 'weather2020.json', 'weather2021.json', 'weather2022.json', 'weather2023.json']

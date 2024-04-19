@@ -44,6 +44,8 @@ async function writeNoteContent(drive, fileId, content) {
         fileId: fileId,
         media: media
     });
+    // console.log('result', result)
+    // console.log('media', media)
     console.log('updated file')
     return result.data.id;
 }
@@ -83,6 +85,8 @@ export async function GET(request) {
         });
         const fileId = await getNotesFileId(drive);
         const content = await readNoteContent(drive, fileId);
+        console.log('content', content)
+        console.log('this is get request')
         return new Response(content);
         // return new Response('test');
     }
@@ -106,6 +110,7 @@ export async function POST(request) {
         });
         const fileId = await getNotesFileId(drive);
         await writeNoteContent(drive, fileId, content);
+        console.log('this is post request')
         return new Response("OK");
         // return new Response('test');
     }
