@@ -49,7 +49,7 @@ export function DataPrediction() {
     const units = { weight: 'kg' }
     const text = 'This graph shows the predicted weight of the hive change over the next 7 days.';
     return (
-        <div className="dashboard-element w-1/2 h-[340px] rounded-[50px] lg:w-full">
+        <div className="dashboard-element w-1/2 rounded-[50px] lg:w-full">
             <div className='flex flex-row gap-2 items-center lg:pt-2'>
                 <h2 className='text-lg font-semibold'>Data Prediction
                 </h2>

@@ -74,14 +74,14 @@ export default function DetailedGraph() {
                 <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive} isNoteActive={isNoteActive} setIsNoteActive={setIsNoteActive}></GraphExtra>
                 <div
                     // className='w-full h-full'
-                    className='w-full h-80 flex-grow'
+                    className='w-full flex-grow'
                 >
                     {/* <AlertToRotate /> */}
                     <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} dataToCompare={dataToCompare} compareActive={compareActive} predictionActive={predictionActive} predictionData={predictionData} />
                 </div>
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip} setActiveShowButton={setActiveShowButton} activeShowButton={activeShowButton}></HistoryLine>
             </div>
-            <div className="flex flex-col gap-16 items-center pr-10">
+            <div className="flex flex-col gap-10 items-center pr-10">
                 <div className='flex flex-row w-full justify-end pt-1'>
                     <Link href="/dashboard" className=' bg-transparent h-12 rounded-[50px] common-button flex px-3'>
                         <img src="/dashboard-icon.png"

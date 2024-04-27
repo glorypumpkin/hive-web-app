@@ -29,11 +29,11 @@ export async function getYesterdayData() {
     //get hive data for yesterday GET 
     hiveData = await getHiveData(yesterday, today);
     //if no data, get data for the day before yesterday
-    if (hiveData.length === 0) {
-        yesterday.setDate(yesterday.getDate() - 1);
-        today.setDate(today.getDate() - 1);
-        hiveData = await getHiveData(yesterday, today);
-    }
+    // if (hiveData.length === 0) {
+    //     yesterday.setDate(yesterday.getDate() - 1);
+    //     today.setDate(today.getDate() - 1);
+    //     hiveData = await getHiveData(yesterday, today);
+    // }
 
     // hours = ['02:00', '08:00', '14:00', '20:00'];
     // console.log('hiveData', hiveData);

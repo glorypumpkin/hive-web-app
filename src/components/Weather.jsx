@@ -35,7 +35,7 @@ export function Weather() {
 
     return (
         <div
-            className="shadow-[10px_10px_20px_5px_#4541332e] -bg--primary-color grid w-3/5 lg:w-full rounded-[50px] h-[340px] lg:h-[300px] "
+            className="shadow-[10px_10px_20px_5px_#4541332e] -bg--primary-color grid w-3/5 lg:w-full rounded-[50px] "
             style={{
                 gridTemplateRows: 'auto max-content',
             }}
