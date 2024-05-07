@@ -12,6 +12,7 @@ import { dataComparison } from '@/lib/dataComparison';
 import { MainGraph } from './MainGraph';
 import { GraphExtra } from './GraphExtra';
 import { useLoadHiveData, useLoadWeatherData, useLoadComparisonData, useLoadPredictionData } from '@/lib/dataLoaders';
+import { data } from 'autoprefixer';
 // import { ExtraGraphs } from './ExtraGraphs';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -19,7 +20,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function DetailedGraph() {
     const [activeType, setActiveType] = useState(['weight']);
     const [showTooltip, setShowTooltip] = useState(true);
-    const [activePeriodButton, setActivePeriodButton] = useState("Year");
+    const [activePeriodButton, setActivePeriodButton] = useState("Rok");
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState(undefined);
     const [compareActive, setCompareActive] = useState(false);
@@ -29,11 +30,25 @@ export default function DetailedGraph() {
     // deleteAllNotes();
 
     const dataRange = activeShowButton ? range : getDateInterval(activePeriodButton);
+
     console.log('dataRange', dataRange)
 
-    const dataRangeFormatted = {
-        from: format(dataRange.from, 'yyyy-LL-dd'),
-        to: format(dataRange.to, 'yyyy-LL-dd')
+    let dataRangeFormatted;
+    if (dataRange.from === undefined) {
+        dataRangeFormatted = {
+            from: format(dataRange.to, 'yyyy-LL-dd'),
+            to: format(dataRange.to, 'yyyy-LL-dd')
+        }
+    } else if (dataRange.to === undefined) {
+        dataRangeFormatted = {
+            from: format(dataRange.from, 'yyyy-LL-dd'),
+            to: format(dataRange.from, 'yyyy-LL-dd')
+        }
+    } else {
+        dataRangeFormatted = {
+            from: format(dataRange.from, 'yyyy-LL-dd'),
+            to: format(dataRange.to, 'yyyy-LL-dd')
+        }
     }
 
     const weightData = useLoadHiveData(dataRangeFormatted)
@@ -60,7 +75,7 @@ export default function DetailedGraph() {
     //TODO: isLoadind and error handling
     const dataToCompare = useLoadComparisonData({ dateFrom, dateTo }, compareActive);
     const predictionData = useLoadPredictionData(predictionActive);
-    console.log('predictionData', predictionData)
+    // console.log('predictionData', predictionData)
     // console.log('dataToCompare', dataToCompare)
     const dataWithDayAndHour = getDataWithDayAndHour(weightData, dateFrom, dateTo);
 
@@ -75,8 +90,8 @@ export default function DetailedGraph() {
                 <div
                     // className='w-full h-full'
                     className='w-full flex-grow'
+
                 >
-                    {/* <AlertToRotate /> */}
                     <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} dataToCompare={dataToCompare} compareActive={compareActive} predictionActive={predictionActive} predictionData={predictionData} />
                 </div>
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip} setActiveShowButton={setActiveShowButton} activeShowButton={activeShowButton}></HistoryLine>
@@ -97,7 +112,6 @@ export default function DetailedGraph() {
                 <div className=" flex flex-col items-center gap-6">
                     <Calendar activeShowButton={activeShowButton} setActiveShowButton={setActiveShowButton} range={range} setRange={setRange}
                     ></Calendar>
-                    {/* <ExtraGraphs setExtraGraphs={setExtraGraphs} extraGraphs={extraGraphs}></ExtraGraphs> */}
                 </div>
             </div>
         </div>
@@ -105,27 +119,3 @@ export default function DetailedGraph() {
 }
 
 
-export function AlertToRotate() {
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setScreenWidth(window.innerWidth);
-        };
-        console.log('screenWidth', screenWidth)
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    if (screenWidth < 1300) {
-        return (
-            <div className='h-full absolute top-[30%] left-[30%]'>
-                <p className='text-lg font-semibold text-gray-700'>Please rotate your device for a better viewing experience</p>
-                {/* <img src="/rotate-device.png" className='w-1/2 h-auto' /> */}
-            </div>
-        )
-    }
-}

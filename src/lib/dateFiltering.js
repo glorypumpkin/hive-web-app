@@ -8,24 +8,24 @@ export function getDateInterval(period) {
     const lastYear = new Date(now.getFullYear() - 1, 0, 1);
     const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7, 0, 0, 0);
     switch (period) {
-        case 'This day':
+        case 'Tento den':
             // TODO: fix this
             return {
                 from: new Date(to.setDate(now.getDate() - 1, 0, 0, 0)),
                 to: now
             };
-        case '7 days':
+        case '7 dní':
             // console.log("weekAgo", weekAgo);
             return {
                 from: weekAgo,
                 to: now
             };
-        case '21 days':
+        case '21 dní':
             return {
                 from: new Date(to.setDate(now.getDate() - 21, 0, 0, 0)),
                 to: now
             };
-        case 'Month':
+        case 'Měsíc':
             return {
                 from: new Date(to.setDate(now.getDate() - 30, 0, 0, 0)),
                 to: now
@@ -77,7 +77,7 @@ export function getDateInterval(period) {
                     to: new Date(firstOfJanuary.setMonth(12))
                 }
             }
-        case 'Year':
+        case 'Rok':
             // console.log(now.getFullYear());
             // console.log(now.getFullYear() - 1);
             // console.log(new Date(to.setFullYear(now.getFullYear() - 1)));

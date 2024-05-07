@@ -28,12 +28,12 @@ export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, comp
                 data-hovered={isHovered}
                 className='flex gap-2 transition-all duration-500 ease-in-out -bg--primary-color rounded-r-3xl h-8 px-2'
             >
-                <button className={`extra-buttons ${showTooltip ? '-bg--hover-color' : ''}`} onClick={onTooltipButtonClick} title='Turn on or off the tooltip'>Tooltip</button>
+                <button className={`extra-buttons ${showTooltip ? '-bg--hover-color' : ''}`} onClick={onTooltipButtonClick} title='Zapněte nebo vypněte nápovědu'>Tooltip</button>
                 {/* <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button> */}
-                <button className={`extra-buttons`} title='Turn on or off the notes' onClick={onNoteButtonClick}>Notes</button>
+                <button className={`extra-buttons`} title='Zapněte nebo vypněte poznámky' onClick={onNoteButtonClick}>Poznámky</button>
                 <button className={`extra-buttons ${compareActive ? '-bg--hover-color' : ''}`} onClick={onCompareButtonClick}
-                    title='Show comparison to the last year'>Comparison</button>
-                <button className={`extra-buttons ${predictionActive ? '-bg--hover-color' : ''}`} onClick={onPredictionButtonClick} title='Show prediction for next 7 days'>Prediction</button>
+                    title='Zobrazit srovnání s minulým rokem'>Srovnání</button>
+                <button className={`extra-buttons ${predictionActive ? '-bg--hover-color' : ''}`} onClick={onPredictionButtonClick} title='Zobrazit predikce hmotnosti na dalších 7 dní'>Prediction</button>
             </div>
         </div>
     );

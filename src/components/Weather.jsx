@@ -14,9 +14,9 @@ export function Weather() {
 
     const { data: forecast, error, isLoading } = useSWR('/api/weather-forecast', fetcher);
 
-    if (isLoading) return <div>Loading...</div>
+    if (isLoading) return <div>Předpověď počasí se načítá...</div>
 
-    if (error) return <div>Error loading weather forecast</div>
+    if (error) return <div>Chyba při načítání předpovědi počasí</div>
 
     console.log('forecast', forecast);
     console.log('activeDay', activeDay); // activeDay is a timestamp

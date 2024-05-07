@@ -28,6 +28,8 @@ export function Calendar({ activeShowButton, setActiveShowButton, range, setRang
         }
     };
 
+    console.log('range', range)
+
     const allNoteMatcher = {
         red: [],
         green: [],
@@ -53,12 +55,12 @@ export function Calendar({ activeShowButton, setActiveShowButton, range, setRang
             setShowNote(false);
         }
     };
-    const text = 'Select needed date or interval for graph display or add a note.'
+    const text = 'Vyberte potřebné datum nebo interval pro zobrazení grafu nebo přidání poznámky.'
     return (
         <div className="self-stretch flex flex-col gap-4 items-center">
             <div className="flex flex-row gap-2 items-center">
                 <div className="text-center text-xl font-sans font-semibold">
-                    Select needed date or interval
+                    Vyberte datum nebo interval
                 </div>
                 <TextInfo text={text}></TextInfo>
             </div>
@@ -70,7 +72,7 @@ export function Calendar({ activeShowButton, setActiveShowButton, range, setRang
                     onSelect={setRange}
                     toMonth={new Date()}
                     captionLayout="dropdown-buttons"
-                    fromMonth={new Date(2022, 0)} //TODO: change later
+                    fromMonth={new Date(2022, 0)}
                     showOutsideDays
                     onDayClick={handleDayClick}
                     modifiers={allNoteMatcher}

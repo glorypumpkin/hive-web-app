@@ -47,23 +47,23 @@ export function DataPrediction() {
     }
     const activeType = ['weight'];
     const units = { weight: 'kg' }
-    const text = 'This graph shows the predicted weight of the hive change over the next 7 days.';
+    const text = 'Tento graf ukazuje předpokládanou změnu hmotnosti úlu během následujících 7 dnů.';
     return (
         <div className="dashboard-element w-1/2 rounded-[50px] lg:w-full">
             <div className='flex flex-row gap-2 items-center lg:pt-2'>
-                <h2 className='text-lg font-semibold'>Data Prediction
+                <h2 className='text-lg font-semibold'>Predikce hmotnosti úlu
                 </h2>
                 <TextInfo text={text} />
             </div>
             <div className=' flex flex-row h-full pr-4 lg:flex-col lg:items-center lg:w-full'>
                 <div className="text-center">
                     <p>
-                        Expected weight change: {sum.toFixed(2)} kg
+                        Očekávaná změna hmotnosti: {sum.toFixed(2)} kg
                     </p>
                 </div>
-                <div className="w-full h-full">
+                <div className="w-full h-full min-h-[240px]">
                     {hydrated && (
-                        <ResponsiveContainer >
+                        <ResponsiveContainer w='90%' h='90%'>
                             <LineChart id="data-prediction-graph" data={predictionData}>
                                 <Line type="monotone" dataKey="weight" stroke="#8884d8" />
                                 <XAxis dataKey="day" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />

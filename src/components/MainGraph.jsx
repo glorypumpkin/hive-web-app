@@ -56,7 +56,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
 
 
     return (
-        <ResponsiveContainer>
+        <ResponsiveContainer minHeight={430}>
             <LineChart
                 id='detailed-graph'
                 overflow='visible'

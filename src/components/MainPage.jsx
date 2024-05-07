@@ -21,35 +21,35 @@ export default function MainPage() {
       <div className='overflow-hidden flex flex-col gap-5 w-full  justify-center items-center'>
         {/* <Bee></Bee> */}
         <div className='text-center'>
-          <h1 className="text-7xl font-black mb-3 ">Check Your Bees
+          <h1 className="text-7xl font-black mb-3 ">Zkontroluj své včely
           </h1>
         </div>
         <div className='flex flex-row lg:flex-col lg:gap-10'>
           <div className='flex flex-col lg:items-center '>
-            <h2 className='text-4xl font-extrabold'>What can you do?</h2>
+            <h2 className='text-4xl font-extrabold'>Co můžeš udělat?</h2>
             <div className='lg:flex lg:pl-10'>
               <div className='hex-container pt-12'>
                 <div className='hex-row'>
-                  <Hexagon text="Add notes"></Hexagon>
+                  <Hexagon text="Přidavat poznámky"></Hexagon>
                 </div>
                 <div className='hex-row'>
-                  <Hexagon text="Get predictions"></Hexagon>
+                  <Hexagon text="Získat predikce"></Hexagon>
                 </div>
                 <div className='hex-row'>
-                  <Hexagon text="Monitor your bees"></Hexagon>
+                  <Hexagon text="Monitorovat stav úlu"></Hexagon>
                 </div>
                 <div className='hex-row'>
-                  <Hexagon text="Get weather forecast"></Hexagon>
+                  <Hexagon text="Získat předpověď počasí"></Hexagon>
                 </div>
                 <div className='hex-row'>
-                  <Hexagon text="Compare your data"></Hexagon>
+                  <Hexagon text="Porovnovat svá data"></Hexagon>
                 </div>
               </div>
             </div>
           </div>
           <div className='grid'>
             <div className=' justify-self-end w-[750px] lg:w-full '>
-              <h2 className='text-4xl font-extrabold text-center pb-4'>Take a look inside</h2>
+              <h2 className='text-4xl font-extrabold text-center pl-8 pb-4'>Podívej se dovnitř</h2>
               <div className='relative lg:items-center'>
                 <img src="/bubles.svg"
                   className=' w-full lg:pl-24 pl-20'

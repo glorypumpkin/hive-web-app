@@ -14,8 +14,10 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export function SmallGraph({ graphType }) {
     const [hydrated, setHydrated] = useState(false);
 
+    const toCzech = { weight: 'hmotnost', temperature: 'teplota' }
     // convert graphType to upper case
-    const graphTypeName = graphType.charAt(0).toUpperCase() + graphType.slice(1);
+    const graphTypeTranslated = toCzech[graphType];
+    const graphTypeName = graphTypeTranslated.charAt(0).toUpperCase() + graphTypeTranslated.slice(1);
 
     const dateFrom = new Date();
     dateFrom.setDate(dateFrom.getDate() - 21);
@@ -54,14 +56,14 @@ export function SmallGraph({ graphType }) {
 
     const activeType = [graphType]
     const units = { weight: 'kg', temperature: '°C' }
-    const text = `This graph shows the ${graphType} of the hive over the last 21 days.`;
+    const text = `Tento graf ukazuje ${graphTypeTranslated} úlu za posledních 21 dní.`;
     return (
         <div className="dashboard-element w-1/2 lg:w-full" >
             <div className='flex flex-row gap-2 items-center'>
                 <h2 className=' text-lg font-semibold'>{graphTypeName}</h2>
                 <TextInfo text={text} />
             </div>
-            <div className="flex flex-row w-full h-full">
+            <div className="flex flex-row w-full h-full min-h-[240px] pr-3">
                 {hydrated && (
                     <ResponsiveContainer width="95%" height="100%" >
                         <LineChart id="small-weight-graph" width={800} height={300} data={dataWithDayAndHour}>

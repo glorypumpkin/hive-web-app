@@ -12,7 +12,7 @@ export default function Menu({ pageName }) {
 
     <div
       id="MenuRoot"
-      className="overflow-hidden flex flex-row justify-between w-full items-center px-6 py-3"
+      className="overflow-hidden flex flex-row justify-between w-full items-center px-6 py-3 gap-1"
     >
       <div className='flex justify-start'>
         <h1 className="text-4xl font-extrabold">{pageName}</h1>

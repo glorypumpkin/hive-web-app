@@ -56,17 +56,11 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, setActiveShowBu
                 <div className="flex justify-between gap-2 pl-1 items-center">
                     {Object.entries(colors).map(([color, colorClass]) => (
                         <input type="radio" key={color} className={`${colorClass} checked:w-3 checked:h-3 checked:border-solid checked:border checked:border-gray-300 color-note-button`} name="color" value={color} onClick={() => handleColorClick(color)} />
-                        // <button
-                        //     key={color}
-                        //     className={`${colorClass} color-note-button`}
-                        //     onClick={() => handleColorClick(color)}
-                        // ></button>
                     ))}
-                    {/* TODO: change to radio buttons */}
                 </div>
                 <button className="bg-[#1976d214] rounded-[15px] px-2 mt-1 font-semibold hover:-bg--hover-color"
                     onClick={onSaveClick}
-                >Save</button>
+                >Uložit</button>
             </div>
         </div>
     )
@@ -77,7 +71,7 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, setActiveShowBu
 
                 <button disabled={disabled}
                     className={disabled ? 'opacity-50' : 'opacity-100'}
-                    title="Show on graph"
+                    title="Zobrazit na grafu"
                     onClick={onShowOnGraphClick}
                 >
                     <img
@@ -87,7 +81,7 @@ export function NoteAreaCalendar({ showNote, setShowNote, range, setActiveShowBu
                 </button>
                 <button disabled={disabled}
                     className={disabled ? 'opacity-50' : 'opacity-100'}
-                    title="Add a note"
+                    title="Přidat poznámku"
                     onClick={() => setShowNote(!showNote)}
                 >
                     <img src="/note.png"

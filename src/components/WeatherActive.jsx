@@ -13,7 +13,6 @@ export function WeatherActive({ activeDay, forecast }) {
             <div className="flex items-center justify-center">
                 <img
                     src={icon}
-                    id="Sunny"
                     className="top-0 left-0 w-36"
                 />
             </div>
@@ -24,9 +23,11 @@ export function WeatherActive({ activeDay, forecast }) {
                 <br />
                 {description}
                 <br />
-                Temperature: {activeDayData.tempWeather} °C
+                Teplota: {activeDayData.tempWeather} °C
                 <br />
-                Humidity: {activeDayData.humidity} %
+                Vlhkost: {activeDayData.humidity} %
+                <br />
+                Srážky: {activeDayData.precip} mm
                 {/* <br />
                 Wind speed: {activeDayData.windspeed} m/s */}
             </div>
