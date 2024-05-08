@@ -1,7 +1,6 @@
 'use client'
 
-import PeriodGraph from '@/components/PeriodGraph.jsx'
-import Bee from '@/components/Bee.jsx'
+import PeriodGraph from '@/app/PeriodGraph.jsx'
 import { signIn } from 'next-auth/react'
 
 const Hexagon = ({ text }) => {

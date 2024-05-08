@@ -3,7 +3,7 @@ import "react-day-picker/dist/style.css"
 import { useState } from 'react';
 import { NoteAreaCalendar } from "./NoteAreaCalendar";
 import { useUserNotes } from "@/lib/useUserNotes";
-import { TextInfo } from "./TextInfo";
+import { TextInfo } from "../../../components/TextInfo";
 
 export function Calendar({ activeShowButton, setActiveShowButton, range, setRange }) {
     // const [range, setRange] = useState();

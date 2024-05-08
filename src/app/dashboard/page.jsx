@@ -1,4 +1,4 @@
-import Dashboard from '@/components/Dashboard'
+import Dashboard from './Dashboard'
 import Menu from '@/components/Menu'
 import { getBeeData } from '@/lib/dataFetching.js'
 import AccessHandler from '@/components/AccessHandler';

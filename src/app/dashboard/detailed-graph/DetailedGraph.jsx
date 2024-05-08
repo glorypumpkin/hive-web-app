@@ -12,10 +12,6 @@ import { dataComparison } from '@/lib/dataComparison';
 import { MainGraph } from './MainGraph';
 import { GraphExtra } from './GraphExtra';
 import { useLoadHiveData, useLoadWeatherData, useLoadComparisonData, useLoadPredictionData } from '@/lib/dataLoaders';
-import { data } from 'autoprefixer';
-// import { ExtraGraphs } from './ExtraGraphs';
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function DetailedGraph() {
     const [activeType, setActiveType] = useState(['weight']);
@@ -26,7 +22,6 @@ export default function DetailedGraph() {
     const [compareActive, setCompareActive] = useState(false);
     const [predictionActive, setPredictionActive] = useState(false);
     const [isNoteActive, setIsNoteActive] = useState(true);
-    // const [extraGraphs, setExtraGraphs] = useState(false);
     // deleteAllNotes();
 
     const dataRange = activeShowButton ? range : getDateInterval(activePeriodButton);
@@ -72,11 +67,8 @@ export default function DetailedGraph() {
 
     const weatherDataLoaded = dataFromWeather !== undefined
 
-    //TODO: isLoadind and error handling
     const dataToCompare = useLoadComparisonData({ dateFrom, dateTo }, compareActive);
     const predictionData = useLoadPredictionData(predictionActive);
-    // console.log('predictionData', predictionData)
-    // console.log('dataToCompare', dataToCompare)
     const dataWithDayAndHour = getDataWithDayAndHour(weightData, dateFrom, dateTo);
 
 
@@ -88,7 +80,6 @@ export default function DetailedGraph() {
             <div className="flex flex-col gap-1 overflow-visible flex-grow pb-2">
                 <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive} isNoteActive={isNoteActive} setIsNoteActive={setIsNoteActive}></GraphExtra>
                 <div
-                    // className='w-full h-full'
                     className='w-full flex-grow'
 
                 >

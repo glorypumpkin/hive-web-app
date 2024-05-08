@@ -5,9 +5,9 @@ import useSWR from 'swr';
 import { getDataWithDayAndHour } from '@/lib/dateFiltering';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Link from 'next/link';
-import { CustomTooltip } from './CustomTooltip';
+import { CustomTooltip } from '@/components/CustomTooltip';
 import { format } from 'date-fns';
-import { TextInfo } from './TextInfo';
+import { TextInfo } from '@/components/TextInfo';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 

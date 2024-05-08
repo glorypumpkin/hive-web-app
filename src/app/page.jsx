@@ -1,8 +1,6 @@
 import Menu from '@/components/Menu'
-import MainPage from '@/components/MainPage'
-import Link from 'next/link'
+import MainPage from './MainPage'
 import { getBeeData } from '@/lib/dataFetching.js'
-import RedirectIfNeeded from '@/components/RedirectIfNeeded';
 
 export default async function Home() {
   const data = await getBeeData();

@@ -1,6 +1,6 @@
 import { Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, LineChart, Brush, ResponsiveContainer } from 'recharts';
 import { useState, useEffect } from 'react';
-import { CustomTooltip } from './CustomTooltip';
+import { CustomTooltip } from '../../../components/CustomTooltip';
 
 export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataToCompare, compareActive, predictionActive, predictionData }) {
 

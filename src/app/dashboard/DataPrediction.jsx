@@ -2,8 +2,8 @@
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useState, useEffect } from 'react';
 import useSWR from 'swr';
-import { CustomTooltip } from './CustomTooltip';
-import { TextInfo } from './TextInfo';
+import { CustomTooltip } from '../../components/CustomTooltip';
+import { TextInfo } from '../../components/TextInfo';
 
 // fix data later (from main page to dashboard)
 

@@ -1,5 +1,5 @@
 import { TypeButton } from "./TypeButton";
-import { TextInfo } from "./TextInfo";
+import { TextInfo } from "../../../components/TextInfo";
 
 export function SelectGraphType({ activeType, setActiveType }) {
 

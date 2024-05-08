@@ -6,13 +6,6 @@ import { CustomTooltip } from '@/components/CustomTooltip';
 import { format } from 'date-fns';
 import useSWR from 'swr';
 
-// [{ "stan": "1221601", "timestamp": 1699182000000, "kg": 43.2, "rozdil": 0.2, "tepl": 11.4 },
-// { "stan": "1221601", "timestamp": 1699160400000, "kg": 43, "rozdil": 0.2, "tepl": 7.4 },
-// { "stan": "1221601", "timestamp": 1699138800000, "kg": 42.8, "rozdil": -0.2, "tepl": 6.2 },
-// { "stan": "1221601", "timestamp": 1699117200000, "kg": 43, "rozdil": -0.4, "tepl": 7.2 },
-// { "stan": "1221601", "timestamp": 1699095600000, "kg": 43.4, "rozdil": 0, "tepl": 8 },
-//     { "stan": "1221601", "timestamp": 1699074000000, "kg": 43.4, "rozdil": 0, "tepl": 5.2 }
-// ]
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function PeriodGraph() {
