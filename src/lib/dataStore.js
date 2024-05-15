@@ -7,13 +7,9 @@ function getRequestURL(date) {
     return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Czechia%2C%20%C5%BDebnice/${date}?unitGroup=metric&include=days&key=${process.env.WEATHER_API_KEY}&contentType=json`
 }
 
-export async function getWeatherFromDB(set, fromTimestamp, toTimestamp) {
+export async function getDataFromDB(set, fromTimestamp, toTimestamp) {
     // get from KV
     const kv = getRedisClient();
-    // console.log('getWeatherFromDB KV', kv)
-    // console.log('db args', fromTimestamp, toTimestamp, {
-    //     byscore: true,
-    // });
     // https://github.com/redis/node-redis/blob/dbf8f59/packages/client/lib/commands/ZRANGE.ts#L17
     const data = await kv.zRange(set, fromTimestamp, toTimestamp, {
         BY: 'SCORE'
@@ -27,7 +23,7 @@ export async function getWeatherFromDB(set, fromTimestamp, toTimestamp) {
 }
 
 // apiObjects: Array<{datetime: string, ...}>
-export async function saveWeatherData(set, apiObjects, extractTimestamp) {
+export async function saveData(set, apiObjects, extractTimestamp) {
     // convert to score, member
     const toInsert = [];
     for (let i = 0; i < apiObjects.length; i++) {
@@ -48,7 +44,7 @@ export async function genericGetData({ set, from, to, extractTimestamp, getAndFe
     const fromTimestamp = from.getTime();
     const toTimestamp = to.getTime();
     // get from KV
-    const data = await getWeatherFromDB(set, fromTimestamp, toTimestamp);
+    const data = await getDataFromDB(set, fromTimestamp, toTimestamp);
 
     // find and get missing data
     const newData = await getAndFetchMissing({ set, from, to, data });
@@ -56,12 +52,12 @@ export async function genericGetData({ set, from, to, extractTimestamp, getAndFe
 
     // add to existing data in db
     if (newData.length !== 0) {
-        await saveWeatherData(set, newData, extractTimestamp);
+        await saveData(set, newData, extractTimestamp);
     }
-    const allData = await getWeatherFromDB(set, fromTimestamp, toTimestamp);
+    const allData = await getDataFromDB(set, fromTimestamp, toTimestamp);
     // console.log('allData', allData);
     // return all data
-    return await getWeatherFromDB(set, fromTimestamp, toTimestamp);
+    return await getDataFromDB(set, fromTimestamp, toTimestamp);
 }
 
 

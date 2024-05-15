@@ -17,7 +17,7 @@ model.load_state_dict(torch.load('model.pt'))
 model.eval()
 
 # load data
-datasetArray = load_data()
+datasetArray = load_data('hivedata.txt')
 
 dataset = datasetArray[0]
 

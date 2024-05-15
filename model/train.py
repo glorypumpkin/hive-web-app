@@ -7,9 +7,9 @@ import json
 import matplotlib.pyplot as plt
 
 #source: https://machinelearningmastery.com/lstm-for-time-series-prediction-in-pytorch/
-def load_data():
+def load_data(fileName):
     """Load data from a json file"""
-    with open('hivedata.json', 'r') as file:
+    with open(fileName, 'r') as file:
         loaded = json.load(file)
         datasetArray = []
         for i in range(len(loaded)):
@@ -106,7 +106,7 @@ def train_model(datasetArray, lookback):
 
 
 def main():
-    datasetArray = load_data()
+    datasetArray = load_data('hivedata.json')
     # print(dataset)
     lookback = 4
     # X, y = create_dataset(dataset, lookback)

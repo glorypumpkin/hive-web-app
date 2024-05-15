@@ -15,6 +15,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
     console.log('relevantData', relevantData)
     const comparisonLine = compareActive && activeMeasurements.map((type, index) => (
         <Line
+            name={type === 'weight' ? 'hmotnost před rokem' : 'teplota před rokem'}
             key={index}
             data={dataToCompare}
             type="monotone"
@@ -30,6 +31,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
 
     const graphLines = activeMeasurements.map((type, index) => (
         <Line
+            name={type === 'weight' ? 'hmotnost' : 'teplota'}
             key={type}
             data={relevantData}
             type="monotone"
@@ -43,6 +45,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
 
     const predictionLine = predictionActive && (
         <Line
+            name='predikce hmotnosti'
             data={predictionData}
             type="monotone"
             dataKey='weight'

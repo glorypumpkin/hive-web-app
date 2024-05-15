@@ -1,6 +1,6 @@
 import { getBeeData, dataFetching, assertCorrectDateRange } from '@/lib/dataFetching';
 import { convertor } from '@/lib/convertor';
-import { genericGetData } from '@/lib/weatherStore';
+import { genericGetData } from '@/lib/dataStore';
 
 const weightStrategy = {
     set: 'weight_set',
@@ -9,8 +9,6 @@ const weightStrategy = {
         const dataFromDrive = convertor(fileContents);
         // find differences between data and dataFromDrive
         // expect that both arrays are sorted with oldest data at the beginning
-        // console.log('datafromdrive', dataFromDrive)
-        // console.log('data length', data.length)
         const newestTimestamp = data[data.length - 1]?.timestamp ?? 0;
         const newData = [];
         for (let i = dataFromDrive.length - 1; i >= 0; i--) {

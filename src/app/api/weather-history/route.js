@@ -1,4 +1,4 @@
-import { getWeatherOn, genericGetData } from "@/lib/weatherStore";
+import { getWeatherOn, genericGetData } from "@/lib/dataStore";
 import { assertCorrectDateRange } from '@/lib/dataFetching';
 import { differenceInDays, addDays, subDays, format } from "date-fns";
 import { startOfDay, addHours, differenceInYears } from "date-fns";
