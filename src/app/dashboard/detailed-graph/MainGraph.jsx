@@ -15,7 +15,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
     console.log('relevantData', relevantData)
     const comparisonLine = compareActive && activeMeasurements.map((type, index) => (
         <Line
-            name={type === 'weight' ? 'hmotnost před rokem' : 'teplota před rokem'}
+            name={type === 'weight' ? 'hmotnost před rokem' : type === 'temperature' ? 'teplota před rokem' : ''}
             key={index}
             data={dataToCompare}
             type="monotone"
