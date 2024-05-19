@@ -18,8 +18,10 @@ export function CustomTooltip({ active, payload, label, activeType, units }) {
         // if payload has a stroke value b7b5e7 or b4dfc4 (the comparison graph), show the comparison
         for (let i = 1; i < payload.length; i++) {
             // if the date in payload[i].payload.date is the same as the date in the next payload[i+1].payload.date, dont show the comparison
-            if (payload[i + 2] && payload[i].payload.year === payload[i + 2].payload.year) {
-                return null
+            const theOne = payload[i].name == "hmotnost před rokem" || payload[i].name == "teplota před rokem";
+
+            if (!theOne) {
+                continue;
             }
             return (
                 <PayloadInfo payload={payload[i].payload} units={units} activeType={activeType} />
