@@ -3,6 +3,7 @@ import { WeatherElement } from './WeatherElement';
 import { WeatherActive } from './WeatherActive';
 import { addHours, startOfDay } from 'date-fns';
 import { useState } from 'react';
+import { useLoadForecast } from '@/lib/dataLoaders';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -12,7 +13,7 @@ const localTime = addHours(today, -today.getTimezoneOffset() / 60);
 export function Weather() {
     const [activeDay, setActiveDay] = useState(localTime.getTime());
 
-    const { data: forecast, error, isLoading } = useSWR('/api/weather-forecast', fetcher);
+    const { forecast, error, isLoading } = useLoadForecast();
 
     if (isLoading) return <div>Předpověď počasí se načítá...</div>
 

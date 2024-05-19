@@ -11,7 +11,7 @@ import { format } from 'date-fns';
 import { dataComparison } from '@/lib/dataComparison';
 import { MainGraph } from './MainGraph';
 import { GraphExtra } from './GraphExtra';
-import { useLoadHiveData, useLoadWeatherData, useLoadComparisonData, useLoadPredictionData } from '@/lib/dataLoaders';
+import { useLoadHiveData, useLoadWeatherData, useLoadComparisonData, useLoadPredictionData, useLoadForecast } from '@/lib/dataLoaders';
 
 export default function DetailedGraph() {
     const [activeType, setActiveType] = useState(['weight']);
@@ -22,6 +22,7 @@ export default function DetailedGraph() {
     const [compareActive, setCompareActive] = useState(false);
     const [predictionActive, setPredictionActive] = useState(false);
     const [isNoteActive, setIsNoteActive] = useState(true);
+    const [showForecast, setShowForecast] = useState(false);
     // deleteAllNotes();
 
     const dataRange = activeShowButton ? range : getDateInterval(activePeriodButton);
@@ -49,7 +50,7 @@ export default function DetailedGraph() {
     const weightData = useLoadHiveData(dataRangeFormatted)
 
     // TODO: change to the right key
-    const weatherDataNeeded = activeType.includes('weather');
+    const weatherDataNeeded = activeType.includes('precip');
 
     const dataFromWeather = useLoadWeatherData(dataRangeFormatted, weatherDataNeeded);
 
@@ -70,6 +71,9 @@ export default function DetailedGraph() {
     const dataToCompare = useLoadComparisonData({ dateFrom, dateTo }, compareActive);
     const predictionData = useLoadPredictionData(predictionActive);
     const dataWithDayAndHour = getDataWithDayAndHour(weightData, dateFrom, dateTo);
+    const { forecast, error, isLoading } = useLoadForecast();
+
+    console.log('forecast', forecast)
 
 
     const mergedData = (weatherDataNeeded && weatherDataLoaded) ? dataComparison(dataWithDayAndHour, dataFromWeather) : dataWithDayAndHour;
@@ -78,12 +82,12 @@ export default function DetailedGraph() {
         <div className="-bg--primary-color flex xl:flex-col-reverse min-h-screen gap-10">
             <NoteAreaGraph dateFrom={dateFrom} dateTo={dateTo} isNoteActive={isNoteActive} />
             <div className="flex flex-col gap-1 overflow-visible flex-grow pb-2">
-                <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive} isNoteActive={isNoteActive} setIsNoteActive={setIsNoteActive}></GraphExtra>
+                <GraphExtra setShowTooltip={setShowTooltip} setCompareActive={setCompareActive} showTooltip={showTooltip} compareActive={compareActive} predictionActive={predictionActive} setPredictionActive={setPredictionActive} isNoteActive={isNoteActive} setIsNoteActive={setIsNoteActive} showForecast={showForecast} setShowForecast={setShowForecast}></GraphExtra>
                 <div
                     className='w-full flex-grow'
 
                 >
-                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} dataToCompare={dataToCompare} compareActive={compareActive} predictionActive={predictionActive} predictionData={predictionData} />
+                    <MainGraph relevantData={mergedData} activeMeasurements={activeType} showTooltip={showTooltip} dataToCompare={dataToCompare} compareActive={compareActive} predictionActive={predictionActive} predictionData={predictionData} forecast={forecast} showForecast={showForecast} />
                 </div>
                 <HistoryLine activePeriodButton={activePeriodButton} setActivePeriodButton={setActivePeriodButton} showTooltip={showTooltip} setActiveShowButton={setActiveShowButton} activeShowButton={activeShowButton}></HistoryLine>
             </div>

@@ -3,7 +3,14 @@ import { TextInfo } from "../../../components/TextInfo";
 
 export function SelectGraphType({ activeType, setActiveType }) {
 
+    const czechTypes = {
+        'Hmotnost': 'weight',
+        'Teplota': 'temperature',
+        'Srážky': 'precip'
+    }
+
     function onTypeClicked(type) {
+        console.log('type', type)
         if (activeType.includes(type)) {
             // If the clicked button is already active, deactivate it
             setActiveType(activeType.filter((active) => active !== type));
@@ -22,9 +29,9 @@ export function SelectGraphType({ activeType, setActiveType }) {
                 <TextInfo text={text}></TextInfo>
             </div>
             <div className="graph-type-container shadow-[15px_15px_35px_-3px_rgba(46,_55,_84,_0.08)]">
-                {['Weight', 'Temperature', 'Weather'].map((type, index) => (
-                    <TypeButton key={index} type={type} onTypeClicked={onTypeClicked} activeType={activeType} />
-                ))}
+                <TypeButton type="Hmotnost" activeType={activeType} onTypeClicked={onTypeClicked} czechTypes={czechTypes}></TypeButton>
+                <TypeButton type="Teplota" activeType={activeType} onTypeClicked={onTypeClicked} czechTypes={czechTypes}></TypeButton>
+                <TypeButton type="Srážky" activeType={activeType} onTypeClicked={onTypeClicked} czechTypes={czechTypes}></TypeButton>
             </div>
         </div>
     )

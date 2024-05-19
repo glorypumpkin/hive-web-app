@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, compareActive, predictionActive, setPredictionActive, isNoteActive, setIsNoteActive }) {
+export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, compareActive, predictionActive, setPredictionActive, isNoteActive, setIsNoteActive, showForecast, setShowForecast }) {
     const [isHovered, setIsHovered] = useState(false);
 
     const onTooltipButtonClick = () => {
@@ -20,6 +20,10 @@ export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, comp
         setIsNoteActive(isNoteActive => !isNoteActive);
     }
 
+    const onForecastButtonClick = () => {
+        setShowForecast(showForecast => !showForecast);
+    }
+
     console.log('isHovered', isHovered)
     const hoveredMenu = () => (
         <div className=" absolute top-0 left-full overflow-hidden">
@@ -29,11 +33,11 @@ export function GraphExtra({ setShowTooltip, setCompareActive, showTooltip, comp
                 className='flex gap-2 transition-all duration-500 ease-in-out -bg--primary-color rounded-r-3xl h-8 px-2'
             >
                 <button className={`extra-buttons ${showTooltip ? '-bg--hover-color' : ''}`} onClick={onTooltipButtonClick} title='Zapněte nebo vypněte nápovědu'>Tooltip</button>
-                {/* <button className=' bg-orange-200' onClick={onDotButtonClick}>Dot</button> */}
-                <button className={`extra-buttons`} title='Zapněte nebo vypněte poznámky' onClick={onNoteButtonClick}>Poznámky</button>
+                <button className={`extra-buttons ${isNoteActive ? '-bg--hover-color' : ''}`} title='Zapněte nebo vypněte poznámky' onClick={onNoteButtonClick}>Poznámky</button>
                 <button className={`extra-buttons ${compareActive ? '-bg--hover-color' : ''}`} onClick={onCompareButtonClick}
                     title='Zobrazit srovnání s minulým rokem'>Srovnání</button>
-                <button className={`extra-buttons ${predictionActive ? '-bg--hover-color' : ''}`} onClick={onPredictionButtonClick} title='Zobrazit predikce hmotnosti na dalších 7 dní'>Prediction</button>
+                <button className={`extra-buttons ${predictionActive ? '-bg--hover-color' : ''}`} onClick={onPredictionButtonClick} title='Zobrazit predikce hmotnosti na dalších 7 dní'>Predikce</button>
+                <button className={`extra-buttons ${showForecast ? '-bg--hover-color' : ''}`} onClick={onForecastButtonClick} title='Zobrazit předpověď počasí'>Předpověď</button>
             </div>
         </div>
     );

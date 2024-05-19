@@ -60,3 +60,10 @@ export function useLoadPredictionData(predictionActive) {
     return predictionData;
 
 }
+
+export function useLoadForecast() {
+    const { data: forecast, error, isLoading } = useSWR('/api/weather-forecast', fetcher, {
+        refreshInterval: 60 * 60 * 1000
+    });
+    return { forecast, error, isLoading };
+}

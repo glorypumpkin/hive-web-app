@@ -86,7 +86,7 @@ export function CustomDot(props) {
             {
                 showTooltip &&
                 <foreignObject x={tooltipPosition.x} y={tooltipPosition.y} width={tooltipWidth} height={tooltipHeight}>
-                    <div className="bg-[#1976d214] rounded-[15px] flex flex-col items-center font-sans font-light" onMouseEnter={handleTooltipEnter}
+                    <div className="bg-[#1976d214] rounded-[15px] flex flex-col items-center font-sans" onMouseEnter={handleTooltipEnter}
                         onMouseLeave={handleTooltipLeave}
                     >
                         <p className="label text-sm">

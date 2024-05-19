@@ -13,7 +13,7 @@ export function HistoryLine({ activePeriodButton, setActivePeriodButton, setActi
             <div className="  flex flex-row mx-2 rounded-[50px] h-16">
                 {periods.map((period, index) => (
 
-                    <button key={index} className={`common-button font-sans first:rounded-l-[50px] last:rounded-r-[50px] flex w-full min-w-[90px] flex-col font-light ${activePeriodButton === period && !activeShowButton ? '-bg--hover-color' : ''}`}
+                    <button key={index} className={`common-button font-sans first:rounded-l-[50px] last:rounded-r-[50px] flex w-full min-w-[90px] flex-col ${activePeriodButton === period && !activeShowButton ? '-bg--hover-color' : ''}`}
                         onClick={() => OnPeriodClicked(period)}
                     >{period}</button>
 

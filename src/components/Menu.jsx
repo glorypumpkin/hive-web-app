@@ -36,6 +36,13 @@ export default function Menu({ pageName }) {
           >Login</button>
         )}
         {loggedIn && (
+          <Link href="/" className='rounded-[50px] flex flex-col w-10 h-10 justify-center items-center hover:-bg--hover-color pt-1'>
+            <img src="/home-icon.svg"
+              className='w-9 h-9 shrink-0'
+            />
+          </Link>
+        )}
+        {loggedIn && (
           <Link href="/dashboard" className='rounded-[50px] flex flex-col w-10 h-10 justify-center items-center hover:-bg--hover-color '>
             <img src="/dashboard-icon.png"
               className='w-8 h-8 shrink-0'

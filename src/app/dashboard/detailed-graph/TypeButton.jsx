@@ -1,6 +1,6 @@
 
-export function TypeButton({ type, onTypeClicked, activeType }) {
-    const typeLowerCase = type.toLowerCase();
+export function TypeButton({ type, onTypeClicked, activeType, czechTypes }) {
+    const typeLowerCase = czechTypes[type].toLowerCase();
     return (
         <div className="graph-checkbox">
             <input
@@ -9,7 +9,7 @@ export function TypeButton({ type, onTypeClicked, activeType }) {
                 onChange={() => { onTypeClicked(typeLowerCase) }
                 }
             ></input>
-            <div className="font-sans font-light">{type}</div>
+            <div className="font-sans">{type}</div>
         </div>
     )
 }

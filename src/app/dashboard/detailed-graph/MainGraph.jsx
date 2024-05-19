@@ -2,7 +2,7 @@ import { Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, LineChart, Brush, R
 import { useState, useEffect } from 'react';
 import { CustomTooltip } from '../../../components/CustomTooltip';
 
-export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataToCompare, compareActive, predictionActive, predictionData }) {
+export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataToCompare, compareActive, predictionActive, predictionData, forecast, showForecast }) {
 
     // Do not render on the server
     const [hydrated, setHydrated] = useState(false);
@@ -31,11 +31,11 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
 
     const graphLines = activeMeasurements.map((type, index) => (
         <Line
-            name={type === 'weight' ? 'hmotnost' : 'teplota'}
+            name={type === 'precip' ? 'srážky' : type === 'weight' ? 'hmotnost' : 'teplota'}
             key={type}
             data={relevantData}
             type="monotone"
-            dataKey={type === 'weather' ? 'tempWeather' : type} //dataKey is used to set the data to the right type (weight, temperature or weather)
+            dataKey={type} //dataKey is used to set the data to the right type (weight, temperature or weather)
             stroke={strokeColors[type]}
             dot={false}
             yAxisId={units[type]}
@@ -57,6 +57,19 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
         />
     );
 
+    const forecastLine = showForecast && (
+        <Line
+            name='předpověď teploty'
+            data={forecast}
+            type="monotone"
+            dataKey='tempWeather'
+            stroke={strokeColors.weather}
+            strokeDasharray="5 5"
+            dot={false}
+            yAxisId={units.weather}
+            connectNulls
+        />
+    );
 
     return (
         <ResponsiveContainer minHeight={430}>
@@ -71,6 +84,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
                 {graphLines}
                 {comparisonLine}
                 {predictionLine}
+                {forecastLine}
                 {/* the right graph type is rendered based on the activeType state, which is set by the user */}
                 <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} domain={['dataMin', 'dataMax']} type='number' />
                 <XAxis dataKey='timestamp' orientation='top' domain={['dataMin', 'dataMax']} type='number' xAxisId='compare' hide></XAxis>
@@ -79,6 +93,7 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
                 {/* domain is used to set the range of the y-axis */}
                 <YAxis yAxisId="C" orientation="right" />
                 {showTooltip && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
+                {activeMeasurements.includes('precip') && <YAxis yAxisId='mm' orientation='right' type='number' ></YAxis>}
                 {/* if showTooltip is true, show tooltip */}
                 <Legend />
                 {/* <Brush dataKey='day' height={30} stroke="#8884d8"/> */}
@@ -105,7 +120,8 @@ const CustomTick = (props) => {
 const strokeColors = {
     weight: '#7a76c2',
     temperature: '#75b58d',
-    weather: '#ff7300'
+    weather: '#ff7300',
+    precip: '#f5554a'
 };
 
 const strokeColorsCompare = {
@@ -116,5 +132,6 @@ const strokeColorsCompare = {
 const units = {
     weight: 'kg',
     temperature: 'C',
-    weather: 'C'
+    weather: 'C',
+    precip: 'mm'
 };
