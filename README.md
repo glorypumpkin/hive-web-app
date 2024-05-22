@@ -38,7 +38,7 @@ Postup:
 | `GG_ID` | ID klienta OAuth |
 | `GG_SECRET` | Tajemství klienta OAuth |
 
-Postup:
+[Postup](https://medium.com/@vi.nhon.53th/next-js-v13-demo-login-with-github-and-google-31cd56e547de):
 1. Vygenerujte náhodné tajemství (např. příkazem `openssl rand -base64 32`) a uložte ho do proměnné prostředí `NEXTAUTH_SECRET`.
 2. Nastavte adresu aplikace (např. `http://localhost:3000`) do proměnné prostředí `NEXTAUTH_URL`.
 Google Cloud, skece OAuth:

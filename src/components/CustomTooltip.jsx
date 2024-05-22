@@ -62,9 +62,17 @@ function PayloadInfo({ payload, image, units, activeType }) {
                     return null
                 }
                 return (
-                    <p key={index}>{`${type}: ${payload[type]} ${units[type]}`}</p>
+                    <p key={index}>{`${typeCzech[type]}: ${payload[type]} ${units[type]}`}</p>
                 );
             })}
         </div>
     );
 }
+
+
+const typeCzech = {
+    weight: 'hmotnost',
+    temperature: 'teplota',
+    weather: 'počasí',
+    precip: 'srážky'
+};

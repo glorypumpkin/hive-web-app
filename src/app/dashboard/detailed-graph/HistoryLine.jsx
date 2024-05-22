@@ -1,4 +1,4 @@
-const periods = ['Tento den', '7 dní', '21 dní', 'Měsíc', '1 kvartal', '2 kvartal', '3 kvartal', '4 kvartal', 'Rok'];
+const periods = ['24 hodiny', '7 dní', '21 dní', 'Měsíc', '1. kvartál', '2. kvartál', '3. kvartál', '4. kvartál', 'Rok'];
 
 export function HistoryLine({ activePeriodButton, setActivePeriodButton, setActiveShowButton, activeShowButton }) {
 

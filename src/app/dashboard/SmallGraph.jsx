@@ -69,7 +69,7 @@ export function SmallGraph({ graphType }) {
                         <LineChart id="small-weight-graph" width={800} height={300} data={dataWithDayAndHour}>
                             <Line type="monotone" dataKey={graphType} stroke={lineColors[graphType]} dot={false} />
                             <XAxis dataKey="day" angle={-35} textAnchor="end" tick={{ fontSize: 8 }} />
-                            <YAxis tick={{ fontSize: 10 }} domain={['dataMin', 'dataMax']} />
+                            <YAxis tick={{ fontSize: 10 }} unit={units[graphType]} domain={['dataMin', 'dataMax']} />
                             <Tooltip content={(props) => CustomTooltip({ ...props, activeType, units })}></Tooltip>
                         </LineChart>
                     </ResponsiveContainer>

@@ -8,7 +8,7 @@ export function getDateInterval(period) {
     const lastYear = new Date(now.getFullYear() - 1, 0, 1);
     const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7, 0, 0, 0);
     switch (period) {
-        case 'Tento den':
+        case '24 hodiny':
             // TODO: fix this
             return {
                 from: new Date(to.setDate(now.getDate() - 1, 0, 0, 0)),
@@ -30,13 +30,13 @@ export function getDateInterval(period) {
                 from: new Date(to.setDate(now.getDate() - 30, 0, 0, 0)),
                 to: now
             };
-        case '1 kvartal':
+        case '1. kvartál':
             // return first 3 months of the year
             return {
                 from: new Date(firstOfJanuary.setMonth(0)),
                 to: new Date(firstOfJanuary.setMonth(3))
             };
-        case '2 kvartal':
+        case '2. kvartál':
             // return second 3 months of the year
             // TODO: if there is no data for the second 3 months of the year, return first 3 months of the year
             if (now.getMonth() < 3) {
@@ -51,7 +51,7 @@ export function getDateInterval(period) {
                 }
             }
 
-        case '3 kvartal':
+        case '3. kvartál':
             // return third 3 months of the year
             if (now.getMonth() < 6) {
                 return {
@@ -64,7 +64,7 @@ export function getDateInterval(period) {
                     to: new Date(firstOfJanuary.setMonth(9))
                 }
             }
-        case '4 kvartal':
+        case '4. kvartál':
             // return fourth 3 months of the year
             if (now.getMonth() < 9) {
                 return {

@@ -88,12 +88,12 @@ export function MainGraph({ relevantData, activeMeasurements, showTooltip, dataT
                 {/* the right graph type is rendered based on the activeType state, which is set by the user */}
                 <XAxis dataKey='timestamp' angle={-35} textAnchor="end" scale={'linear'} tick={<CustomTick />} domain={['dataMin', 'dataMax']} type='number' />
                 <XAxis dataKey='timestamp' orientation='top' domain={['dataMin', 'dataMax']} type='number' xAxisId='compare' hide></XAxis>
-                <YAxis yAxisId="kg" domain={['dataMin', 'dataMax']} />
+                <YAxis yAxisId="kg" unit='kg' domain={['dataMin', 'dataMax']} />
                 {/* yAxisId is used to set y-axis to the right values (kg or celsius) */}
                 {/* domain is used to set the range of the y-axis */}
-                <YAxis yAxisId="C" orientation="right" />
+                <YAxis yAxisId="C" unit='°C' orientation="right" />
                 {showTooltip && <Tooltip content={(props) => CustomTooltip({ ...props, activeType: activeMeasurements, units })} />}
-                {activeMeasurements.includes('precip') && <YAxis yAxisId='mm' orientation='right' type='number' ></YAxis>}
+                {activeMeasurements.includes('precip') && <YAxis yAxisId='mm' unit='mm' orientation='right' type='number' ></YAxis>}
                 {/* if showTooltip is true, show tooltip */}
                 <Legend />
                 {/* <Brush dataKey='day' height={30} stroke="#8884d8"/> */}

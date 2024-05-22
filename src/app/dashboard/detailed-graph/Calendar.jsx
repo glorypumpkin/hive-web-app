@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { NoteAreaCalendar } from "./NoteAreaCalendar";
 import { useUserNotes } from "@/lib/useUserNotes";
 import { TextInfo } from "../../../components/TextInfo";
+import { cs } from "date-fns/locale";
 
 export function Calendar({ activeShowButton, setActiveShowButton, range, setRange }) {
     // const [range, setRange] = useState();
@@ -14,6 +15,7 @@ export function Calendar({ activeShowButton, setActiveShowButton, range, setRang
     .date-picker-cont * {
         --rdp-accent-color: #95b1c8;
         --rdp-background-color: #95b1c8;
+        text-transform: capitalize;
     }`
 
     const allNotesStyle = {
@@ -67,6 +69,7 @@ export function Calendar({ activeShowButton, setActiveShowButton, range, setRang
             <div className="shadow-[11px_11px_26px_-2px_rgba(46,_55,_84,_0.08)] bg-[#1976d214] pb-4 px-6 rounded-[50px] date-picker-cont">
                 <style>{css}</style>
                 <DayPicker
+                    locale={cs}
                     mode="range"
                     selected={range}
                     onSelect={setRange}
