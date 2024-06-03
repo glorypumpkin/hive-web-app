@@ -8,7 +8,7 @@ export function getDateInterval(period) {
     const lastYear = new Date(now.getFullYear() - 1, 0, 1);
     const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7, 0, 0, 0);
     switch (period) {
-        case '24 hodiny':
+        case '24 hodin':
             // TODO: fix this
             return {
                 from: new Date(to.setDate(now.getDate() - 1, 0, 0, 0)),

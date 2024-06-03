@@ -1,7 +1,7 @@
 'use client'
 
 import PeriodGraph from '@/app/PeriodGraph.jsx'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 const Hexagon = ({ text }) => {
   return (
@@ -12,6 +12,17 @@ const Hexagon = ({ text }) => {
 }
 
 export default function MainPage() {
+  const { data: session, status } = useSession()
+
+  const loggedIn = session ? true : false
+
+  const onSighUpClick = () => {
+    if (!loggedIn) {
+      signIn('google')
+    } else {
+      window.location.href = '/dashboard'
+    }
+  }
   return (
     <div
       id="FrontPageRoot"
@@ -69,9 +80,7 @@ export default function MainPage() {
                 <button
                   id="SignUpButtonRoot"
                   className="shadow-[0px_0px_15px_3px_rgba(0,_0,_0,_0.12)] bg-[#fce07c] h-16 rounded-[50px] w-[600px] lg:w-64"
-                  onClick={() => {
-                    signIn('google')
-                  }}
+                  onClick={onSighUpClick}
                 >
                   <div className="text-center text-3xl font-semibold ">
                     Start beeing

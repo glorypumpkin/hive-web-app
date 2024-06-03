@@ -16,7 +16,7 @@ import { useLoadHiveData, useLoadWeatherData, useLoadComparisonData, useLoadPred
 export default function DetailedGraph() {
     const [activeType, setActiveType] = useState(['weight']);
     const [showTooltip, setShowTooltip] = useState(true);
-    const [activePeriodButton, setActivePeriodButton] = useState("Rok");
+    const [activePeriodButton, setActivePeriodButton] = useState("21 dní");
     const [activeShowButton, setActiveShowButton] = useState(false);
     const [range, setRange] = useState(undefined);
     const [compareActive, setCompareActive] = useState(false);

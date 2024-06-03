@@ -1,4 +1,4 @@
-const periods = ['24 hodiny', '7 dní', '21 dní', 'Měsíc', '1. kvartál', '2. kvartál', '3. kvartál', '4. kvartál', 'Rok'];
+const periods = ['24 hodin', '7 dní', '21 dní', 'Měsíc', '1. kvartál', '2. kvartál', '3. kvartál', '4. kvartál', 'Rok'];
 
 export function HistoryLine({ activePeriodButton, setActivePeriodButton, setActiveShowButton, activeShowButton }) {
 
